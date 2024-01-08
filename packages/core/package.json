@@ -1,0 +1,76 @@
+{
+  "name": "directive-splitter",
+  "version": "0.0.0",
+  "type": "module",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "license": "MIT",
+  "keywords": [
+    "pridepack"
+  ],
+  "devDependencies": {
+    "@types/babel__core": "^7.20.5",
+    "@types/babel__generator": "^7.6.8",
+    "@types/babel__helper-module-imports": "^7.18.3",
+    "@types/babel__traverse": "^7.20.4",
+    "@types/node": "^20.10.6",
+    "pridepack": "2.5.1",
+    "tslib": "^2.6.2",
+    "typescript": "^5.3.3",
+    "vitest": "^1.1.0"
+  },
+  "dependencies": {
+    "@babel/core": "^7.23.7",
+    "@babel/generator": "^7.23.6",
+    "@babel/helper-module-imports": "^7.22.15",
+    "@babel/traverse": "^7.23.7",
+    "@babel/types": "^7.23.6"
+  },
+  "scripts": {
+    "prepublishOnly": "pridepack clean && pridepack build",
+    "build": "pridepack build",
+    "type-check": "pridepack check",
+    "lint": "pridepack lint",
+    "clean": "pridepack clean",
+    "watch": "pridepack watch",
+    "start": "pridepack start",
+    "dev": "pridepack dev",
+    "test": "vitest"
+  },
+  "description": "Universal \"use-server\" functions",
+  "repository": {
+    "url": "https://github.com/lxsmnsyc/directive-splitter.git",
+    "type": "git"
+  },
+  "homepage": "https://github.com/lxsmnsyc/directive-splitter/tree/main/packages/core",
+  "bugs": {
+    "url": "https://github.com/lxsmnsyc/directive-splitter/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "Alexis Munsayac",
+  "private": false,
+  "typesVersions": {
+    "*": {}
+  },
+  "exports": {
+    ".": {
+      "development": {
+        "require": "./dist/cjs/development/index.cjs",
+        "import": "./dist/esm/development/index.mjs"
+      },
+      "require": "./dist/cjs/production/index.cjs",
+      "import": "./dist/esm/production/index.mjs",
+      "types": "./dist/types/index.d.ts"
+    }
+  },
+  "types": "./dist/types/index.d.ts",
+  "main": "./dist/cjs/production/index.cjs",
+  "module": "./dist/esm/production/index.mjs"
+}
