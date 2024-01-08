@@ -20,7 +20,7 @@ exports[`DoWhileStatement > client > should skip server do-while statements in n
     ],
     "sourceRoot": undefined,
     "sources": [
-      "example.ts",
+      "/path/to/example.ts",
     ],
     "sourcesContent": [
       "
@@ -49,11 +49,11 @@ do {
   }
 } while (cond());",
   "entries": [
-    "example.ts?directive=2.ts",
+    "/path/to/example.ts?directive=2.ts",
   ],
   "files": Map {
-    "example.ts?directive=0.ts" => "export const value = 'foo bar';",
-    "example.ts?directive=1.ts" => "export default (async function () {
+    "/path/to/example.ts?directive=0.ts" => "export const value = 'foo bar';",
+    "/path/to/example.ts?directive=1.ts" => "export default (async function () {
   try {
     await doStuff(value);
   } catch (_error) {
@@ -61,8 +61,8 @@ do {
   }
   return [3];
 });",
-    "example.ts?directive=2.ts" => "import { server as _entry } from "directive-splitter/example-client";
-export default _entry("bb5fd6ee-0-anonymous");",
+    "/path/to/example.ts?directive=2.ts" => "import { server as _entry } from "directive-splitter/example-client";
+export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
     "file": undefined,
@@ -77,7 +77,7 @@ export default _entry("bb5fd6ee-0-anonymous");",
     ],
     "sourceRoot": undefined,
     "sources": [
-      "example.ts",
+      "/path/to/example.ts",
     ],
     "sourcesContent": [
       "
@@ -91,7 +91,7 @@ export default _entry("bb5fd6ee-0-anonymous");",
     "version": 3,
   },
   "roots": [
-    "example.ts?directive=1.ts",
+    "/path/to/example.ts?directive=1.ts",
   ],
 }
 `;
@@ -108,10 +108,10 @@ exports[`DoWhileStatement > client > should transform break statements 1`] = `
   }
 } while (cond());",
   "entries": [
-    "example.ts?directive=1.ts",
+    "/path/to/example.ts?directive=1.ts",
   ],
   "files": Map {
-    "example.ts?directive=0.ts" => "export default (async function () {
+    "/path/to/example.ts?directive=0.ts" => "export default (async function () {
   try {
     if (cond()) {
       await doStuff(value);
@@ -124,8 +124,8 @@ exports[`DoWhileStatement > client > should transform break statements 1`] = `
   }
   return [3];
 });",
-    "example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-client";
-export default _entry("bb5fd6ee-0-anonymous");",
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-client";
+export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
     "file": undefined,
@@ -140,7 +140,7 @@ export default _entry("bb5fd6ee-0-anonymous");",
     ],
     "sourceRoot": undefined,
     "sources": [
-      "example.ts",
+      "/path/to/example.ts",
     ],
     "sourcesContent": [
       "
@@ -158,7 +158,7 @@ export default _entry("bb5fd6ee-0-anonymous");",
     "version": 3,
   },
   "roots": [
-    "example.ts?directive=0.ts",
+    "/path/to/example.ts?directive=0.ts",
   ],
 }
 `;
@@ -175,10 +175,10 @@ exports[`DoWhileStatement > client > should transform continue statements 1`] = 
   }
 } while (cond());",
   "entries": [
-    "example.ts?directive=1.ts",
+    "/path/to/example.ts?directive=1.ts",
   ],
   "files": Map {
-    "example.ts?directive=0.ts" => "export default (async function () {
+    "/path/to/example.ts?directive=0.ts" => "export default (async function () {
   try {
     if (cond()) {
       await doStuff(value);
@@ -191,8 +191,8 @@ exports[`DoWhileStatement > client > should transform continue statements 1`] = 
   }
   return [3];
 });",
-    "example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-client";
-export default _entry("bb5fd6ee-0-anonymous");",
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-client";
+export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
     "file": undefined,
@@ -207,7 +207,7 @@ export default _entry("bb5fd6ee-0-anonymous");",
     ],
     "sourceRoot": undefined,
     "sources": [
-      "example.ts",
+      "/path/to/example.ts",
     ],
     "sourcesContent": [
       "
@@ -225,7 +225,7 @@ export default _entry("bb5fd6ee-0-anonymous");",
     "version": 3,
   },
   "roots": [
-    "example.ts?directive=0.ts",
+    "/path/to/example.ts?directive=0.ts",
   ],
 }
 `;
@@ -244,10 +244,10 @@ exports[`DoWhileStatement > client > should transform labeled break statements 1
   }
 } while (cond());",
   "entries": [
-    "example.ts?directive=1.ts",
+    "/path/to/example.ts?directive=1.ts",
   ],
   "files": Map {
-    "example.ts?directive=0.ts" => "export default (async function () {
+    "/path/to/example.ts?directive=0.ts" => "export default (async function () {
   try {
     if (cond()) {
       await doStuff(value);
@@ -260,8 +260,8 @@ exports[`DoWhileStatement > client > should transform labeled break statements 1
   }
   return [3];
 });",
-    "example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-client";
-export default _entry("bb5fd6ee-0-anonymous");",
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-client";
+export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
     "file": undefined,
@@ -277,7 +277,7 @@ export default _entry("bb5fd6ee-0-anonymous");",
     ],
     "sourceRoot": undefined,
     "sources": [
-      "example.ts",
+      "/path/to/example.ts",
     ],
     "sourcesContent": [
       "
@@ -295,7 +295,7 @@ export default _entry("bb5fd6ee-0-anonymous");",
     "version": 3,
   },
   "roots": [
-    "example.ts?directive=0.ts",
+    "/path/to/example.ts?directive=0.ts",
   ],
 }
 `;
@@ -314,10 +314,10 @@ exports[`DoWhileStatement > client > should transform labeled continue statement
   }
 } while (cond());",
   "entries": [
-    "example.ts?directive=1.ts",
+    "/path/to/example.ts?directive=1.ts",
   ],
   "files": Map {
-    "example.ts?directive=0.ts" => "export default (async function () {
+    "/path/to/example.ts?directive=0.ts" => "export default (async function () {
   try {
     if (cond()) {
       await doStuff(value);
@@ -330,8 +330,8 @@ exports[`DoWhileStatement > client > should transform labeled continue statement
   }
   return [3];
 });",
-    "example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-client";
-export default _entry("bb5fd6ee-0-anonymous");",
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-client";
+export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
     "file": undefined,
@@ -347,7 +347,7 @@ export default _entry("bb5fd6ee-0-anonymous");",
     ],
     "sourceRoot": undefined,
     "sources": [
-      "example.ts",
+      "/path/to/example.ts",
     ],
     "sourcesContent": [
       "
@@ -365,7 +365,7 @@ export default _entry("bb5fd6ee-0-anonymous");",
     "version": 3,
   },
   "roots": [
-    "example.ts?directive=0.ts",
+    "/path/to/example.ts?directive=0.ts",
   ],
 }
 `;
@@ -380,10 +380,10 @@ exports[`DoWhileStatement > client > should transform valid server do-while stat
   }
 } while (cond());",
   "entries": [
-    "example.ts?directive=1.ts",
+    "/path/to/example.ts?directive=1.ts",
   ],
   "files": Map {
-    "example.ts?directive=0.ts" => "export default (async function () {
+    "/path/to/example.ts?directive=0.ts" => "export default (async function () {
   try {
     await doStuff();
   } catch (_error) {
@@ -391,8 +391,8 @@ exports[`DoWhileStatement > client > should transform valid server do-while stat
   }
   return [3];
 });",
-    "example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-client";
-export default _entry("bb5fd6ee-0-anonymous");",
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-client";
+export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
     "file": undefined,
@@ -407,7 +407,7 @@ export default _entry("bb5fd6ee-0-anonymous");",
     ],
     "sourceRoot": undefined,
     "sources": [
-      "example.ts",
+      "/path/to/example.ts",
     ],
     "sourcesContent": [
       "
@@ -420,7 +420,7 @@ export default _entry("bb5fd6ee-0-anonymous");",
     "version": 3,
   },
   "roots": [
-    "example.ts?directive=0.ts",
+    "/path/to/example.ts?directive=0.ts",
   ],
 }
 `;
@@ -438,10 +438,10 @@ exports[`DoWhileStatement > client > should transform valid server functions wit
   } while (cond());
 }",
   "entries": [
-    "example.ts?directive=1.ts",
+    "/path/to/example.ts?directive=1.ts",
   ],
   "files": Map {
-    "example.ts?directive=0.ts" => "export default (async function (value) {
+    "/path/to/example.ts?directive=0.ts" => "export default (async function (value) {
   try {
     await doStuff(value);
   } catch (_error) {
@@ -449,8 +449,8 @@ exports[`DoWhileStatement > client > should transform valid server functions wit
   }
   return [3];
 });",
-    "example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-client";
-export default _entry("bb5fd6ee-0-foo");",
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-client";
+export default _entry("26ecc3a5-0-foo");",
   },
   "map": {
     "file": undefined,
@@ -467,7 +467,7 @@ export default _entry("bb5fd6ee-0-foo");",
     ],
     "sourceRoot": undefined,
     "sources": [
-      "example.ts",
+      "/path/to/example.ts",
     ],
     "sourcesContent": [
       "
@@ -483,7 +483,7 @@ export default _entry("bb5fd6ee-0-foo");",
     "version": 3,
   },
   "roots": [
-    "example.ts?directive=0.ts",
+    "/path/to/example.ts?directive=0.ts",
   ],
 }
 `;
@@ -508,7 +508,7 @@ exports[`DoWhileStatement > server > should skip server do-while statements in n
     ],
     "sourceRoot": undefined,
     "sources": [
-      "example.ts",
+      "/path/to/example.ts",
     ],
     "sourcesContent": [
       "
@@ -537,11 +537,11 @@ do {
   }
 } while (cond());",
   "entries": [
-    "example.ts?directive=2.ts",
+    "/path/to/example.ts?directive=2.ts",
   ],
   "files": Map {
-    "example.ts?directive=0.ts" => "export const value = 'foo bar';",
-    "example.ts?directive=1.ts" => "import { value } from "./example.ts?directive=0.ts";
+    "/path/to/example.ts?directive=0.ts" => "export const value = 'foo bar';",
+    "/path/to/example.ts?directive=1.ts" => "import { value } from "./example.ts?directive=0.ts";
 export default (async function () {
   try {
     await doStuff(value);
@@ -550,9 +550,9 @@ export default (async function () {
   }
   return [3];
 });",
-    "example.ts?directive=2.ts" => "import { server as _entry } from "directive-splitter/example-server";
+    "/path/to/example.ts?directive=2.ts" => "import { server as _entry } from "directive-splitter/example-server";
 import _root from "./example.ts?directive=1.ts";
-export default _entry("bb5fd6ee-0-anonymous", _root);",
+export default _entry("26ecc3a5-0-anonymous", _root);",
   },
   "map": {
     "file": undefined,
@@ -567,7 +567,7 @@ export default _entry("bb5fd6ee-0-anonymous", _root);",
     ],
     "sourceRoot": undefined,
     "sources": [
-      "example.ts",
+      "/path/to/example.ts",
     ],
     "sourcesContent": [
       "
@@ -581,7 +581,7 @@ export default _entry("bb5fd6ee-0-anonymous", _root);",
     "version": 3,
   },
   "roots": [
-    "example.ts?directive=1.ts",
+    "/path/to/example.ts?directive=1.ts",
   ],
 }
 `;
@@ -598,10 +598,10 @@ exports[`DoWhileStatement > server > should transform break statements 1`] = `
   }
 } while (cond());",
   "entries": [
-    "example.ts?directive=1.ts",
+    "/path/to/example.ts?directive=1.ts",
   ],
   "files": Map {
-    "example.ts?directive=0.ts" => "export default (async function () {
+    "/path/to/example.ts?directive=0.ts" => "export default (async function () {
   try {
     if (cond()) {
       await doStuff(value);
@@ -614,9 +614,9 @@ exports[`DoWhileStatement > server > should transform break statements 1`] = `
   }
   return [3];
 });",
-    "example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-server";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-server";
 import _root from "./example.ts?directive=0.ts";
-export default _entry("bb5fd6ee-0-anonymous", _root);",
+export default _entry("26ecc3a5-0-anonymous", _root);",
   },
   "map": {
     "file": undefined,
@@ -631,7 +631,7 @@ export default _entry("bb5fd6ee-0-anonymous", _root);",
     ],
     "sourceRoot": undefined,
     "sources": [
-      "example.ts",
+      "/path/to/example.ts",
     ],
     "sourcesContent": [
       "
@@ -649,7 +649,7 @@ export default _entry("bb5fd6ee-0-anonymous", _root);",
     "version": 3,
   },
   "roots": [
-    "example.ts?directive=0.ts",
+    "/path/to/example.ts?directive=0.ts",
   ],
 }
 `;
@@ -666,10 +666,10 @@ exports[`DoWhileStatement > server > should transform continue statements 1`] = 
   }
 } while (cond());",
   "entries": [
-    "example.ts?directive=1.ts",
+    "/path/to/example.ts?directive=1.ts",
   ],
   "files": Map {
-    "example.ts?directive=0.ts" => "export default (async function () {
+    "/path/to/example.ts?directive=0.ts" => "export default (async function () {
   try {
     if (cond()) {
       await doStuff(value);
@@ -682,9 +682,9 @@ exports[`DoWhileStatement > server > should transform continue statements 1`] = 
   }
   return [3];
 });",
-    "example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-server";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-server";
 import _root from "./example.ts?directive=0.ts";
-export default _entry("bb5fd6ee-0-anonymous", _root);",
+export default _entry("26ecc3a5-0-anonymous", _root);",
   },
   "map": {
     "file": undefined,
@@ -699,7 +699,7 @@ export default _entry("bb5fd6ee-0-anonymous", _root);",
     ],
     "sourceRoot": undefined,
     "sources": [
-      "example.ts",
+      "/path/to/example.ts",
     ],
     "sourcesContent": [
       "
@@ -717,7 +717,7 @@ export default _entry("bb5fd6ee-0-anonymous", _root);",
     "version": 3,
   },
   "roots": [
-    "example.ts?directive=0.ts",
+    "/path/to/example.ts?directive=0.ts",
   ],
 }
 `;
@@ -736,10 +736,10 @@ exports[`DoWhileStatement > server > should transform labeled break statements 1
   }
 } while (cond());",
   "entries": [
-    "example.ts?directive=1.ts",
+    "/path/to/example.ts?directive=1.ts",
   ],
   "files": Map {
-    "example.ts?directive=0.ts" => "export default (async function () {
+    "/path/to/example.ts?directive=0.ts" => "export default (async function () {
   try {
     if (cond()) {
       await doStuff(value);
@@ -752,9 +752,9 @@ exports[`DoWhileStatement > server > should transform labeled break statements 1
   }
   return [3];
 });",
-    "example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-server";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-server";
 import _root from "./example.ts?directive=0.ts";
-export default _entry("bb5fd6ee-0-anonymous", _root);",
+export default _entry("26ecc3a5-0-anonymous", _root);",
   },
   "map": {
     "file": undefined,
@@ -770,7 +770,7 @@ export default _entry("bb5fd6ee-0-anonymous", _root);",
     ],
     "sourceRoot": undefined,
     "sources": [
-      "example.ts",
+      "/path/to/example.ts",
     ],
     "sourcesContent": [
       "
@@ -788,7 +788,7 @@ export default _entry("bb5fd6ee-0-anonymous", _root);",
     "version": 3,
   },
   "roots": [
-    "example.ts?directive=0.ts",
+    "/path/to/example.ts?directive=0.ts",
   ],
 }
 `;
@@ -807,10 +807,10 @@ exports[`DoWhileStatement > server > should transform labeled continue statement
   }
 } while (cond());",
   "entries": [
-    "example.ts?directive=1.ts",
+    "/path/to/example.ts?directive=1.ts",
   ],
   "files": Map {
-    "example.ts?directive=0.ts" => "export default (async function () {
+    "/path/to/example.ts?directive=0.ts" => "export default (async function () {
   try {
     if (cond()) {
       await doStuff(value);
@@ -823,9 +823,9 @@ exports[`DoWhileStatement > server > should transform labeled continue statement
   }
   return [3];
 });",
-    "example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-server";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-server";
 import _root from "./example.ts?directive=0.ts";
-export default _entry("bb5fd6ee-0-anonymous", _root);",
+export default _entry("26ecc3a5-0-anonymous", _root);",
   },
   "map": {
     "file": undefined,
@@ -841,7 +841,7 @@ export default _entry("bb5fd6ee-0-anonymous", _root);",
     ],
     "sourceRoot": undefined,
     "sources": [
-      "example.ts",
+      "/path/to/example.ts",
     ],
     "sourcesContent": [
       "
@@ -859,7 +859,7 @@ export default _entry("bb5fd6ee-0-anonymous", _root);",
     "version": 3,
   },
   "roots": [
-    "example.ts?directive=0.ts",
+    "/path/to/example.ts?directive=0.ts",
   ],
 }
 `;
@@ -874,10 +874,10 @@ exports[`DoWhileStatement > server > should transform valid server do-while stat
   }
 } while (cond());",
   "entries": [
-    "example.ts?directive=1.ts",
+    "/path/to/example.ts?directive=1.ts",
   ],
   "files": Map {
-    "example.ts?directive=0.ts" => "export default (async function () {
+    "/path/to/example.ts?directive=0.ts" => "export default (async function () {
   try {
     await doStuff();
   } catch (_error) {
@@ -885,9 +885,9 @@ exports[`DoWhileStatement > server > should transform valid server do-while stat
   }
   return [3];
 });",
-    "example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-server";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-server";
 import _root from "./example.ts?directive=0.ts";
-export default _entry("bb5fd6ee-0-anonymous", _root);",
+export default _entry("26ecc3a5-0-anonymous", _root);",
   },
   "map": {
     "file": undefined,
@@ -902,7 +902,7 @@ export default _entry("bb5fd6ee-0-anonymous", _root);",
     ],
     "sourceRoot": undefined,
     "sources": [
-      "example.ts",
+      "/path/to/example.ts",
     ],
     "sourcesContent": [
       "
@@ -915,7 +915,7 @@ export default _entry("bb5fd6ee-0-anonymous", _root);",
     "version": 3,
   },
   "roots": [
-    "example.ts?directive=0.ts",
+    "/path/to/example.ts?directive=0.ts",
   ],
 }
 `;
@@ -933,10 +933,10 @@ exports[`DoWhileStatement > server > should transform valid server functions wit
   } while (cond());
 }",
   "entries": [
-    "example.ts?directive=1.ts",
+    "/path/to/example.ts?directive=1.ts",
   ],
   "files": Map {
-    "example.ts?directive=0.ts" => "export default (async function (value) {
+    "/path/to/example.ts?directive=0.ts" => "export default (async function (value) {
   try {
     await doStuff(value);
   } catch (_error) {
@@ -944,9 +944,9 @@ exports[`DoWhileStatement > server > should transform valid server functions wit
   }
   return [3];
 });",
-    "example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-server";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-server";
 import _root from "./example.ts?directive=0.ts";
-export default _entry("bb5fd6ee-0-foo", _root);",
+export default _entry("26ecc3a5-0-foo", _root);",
   },
   "map": {
     "file": undefined,
@@ -963,7 +963,7 @@ export default _entry("bb5fd6ee-0-foo", _root);",
     ],
     "sourceRoot": undefined,
     "sources": [
-      "example.ts",
+      "/path/to/example.ts",
     ],
     "sourcesContent": [
       "
@@ -979,7 +979,7 @@ export default _entry("bb5fd6ee-0-foo", _root);",
     "version": 3,
   },
   "roots": [
-    "example.ts?directive=0.ts",
+    "/path/to/example.ts?directive=0.ts",
   ],
 }
 `;

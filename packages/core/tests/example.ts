@@ -28,4 +28,4 @@ export const CLIENT: compiler.Options = {
   mode: 'client',
   env: 'development',
 };
-export const ID = 'example.ts';
+export const ID = '/path/to/example.ts';
