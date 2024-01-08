@@ -1,0 +1,473 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`TryStatement > client > should skip server try statements in non-async functions 1`] = `
+{
+  "code": "const example = () => {
+  try {
+    'use server';
+    doStuff();
+  } catch (err) {
+    report(err);
+  }
+};",
+  "entries": [],
+  "files": Map {},
+  "map": {
+    "file": undefined,
+    "mappings": "AACM,MAAMA,OAAO,GAAGA,CAAA,KAAM;EACpB,IAAI;IACF,YAAY;IACZC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG,EAAE;IACZC,MAAM,CAACD,GAAG,CAAC;EACb;AACF,CAAC",
+    "names": [
+      "example",
+      "doStuff",
+      "err",
+      "report",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "example.ts",
+    ],
+    "sourcesContent": [
+      "
+      const example = () => {
+        try {
+          'use server';
+          doStuff();
+        } catch (err) {
+          report(err);
+        }
+      };
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [],
+}
+`;
+
+exports[`TryStatement > client > should skip top-level values for scope 1`] = `
+{
+  "code": "import { value } from "./example.ts?directive=0.ts";
+try {
+  const _block = (await import("./example.ts?directive=2.ts")).default;
+  const [_type, _result, _mutations] = await _block();
+  if (_type === 4) {
+    throw _result;
+  }
+} catch (err) {
+  report(err);
+}",
+  "entries": [
+    "example.ts?directive=2.ts",
+  ],
+  "files": Map {
+    "example.ts?directive=0.ts" => "export const value = 'foo bar';",
+    "example.ts?directive=1.ts" => "export default (async function () {
+  try {
+    await doStuff(value);
+  } catch (_error) {
+    return [4, _error];
+  }
+  return [3];
+});",
+    "example.ts?directive=2.ts" => "import { server as _entry } from "directive-splitter/example-client";
+export default _entry("bb5fd6ee-0-anonymous");",
+  },
+  "map": {
+    "file": undefined,
+    "mappings": ";AAEM;EAAA,MAAAA,MAAA,iDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA,EAGE,OAAOE,GAAG,EAAE;EACZC,MAAM,CAACD,GAAG,CAAC;AACb",
+    "names": [
+      "_block",
+      "default",
+      "_type",
+      "_result",
+      "_mutations",
+      "err",
+      "report",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "example.ts",
+    ],
+    "sourcesContent": [
+      "
+      const value = 'foo bar';
+      try {
+        'use server';
+        await doStuff(value);
+      } catch (err) {
+        report(err);
+      }
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "example.ts?directive=1.ts",
+  ],
+}
+`;
+
+exports[`TryStatement > client > should transform valid server functions with scope 1`] = `
+{
+  "code": "async function foo() {
+  const value = 'foo bar';
+  try {
+    const _block = (await import("./example.ts?directive=1.ts")).default;
+    const [_type, _result, _mutations] = await _block(value);
+    if (_type === 4) {
+      throw _result;
+    }
+  } catch (err) {
+    report(err);
+  }
+}",
+  "entries": [
+    "example.ts?directive=1.ts",
+  ],
+  "files": Map {
+    "example.ts?directive=0.ts" => "export default (async function (value) {
+  try {
+    await doStuff(value);
+  } catch (_error) {
+    return [4, _error];
+  }
+  return [3];
+});",
+    "example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-client";
+export default _entry("bb5fd6ee-0-foo");",
+  },
+  "map": {
+    "file": undefined,
+    "mappings": "AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB;IAAA,MAAAC,MAAA,iDAAAC,OAAA;IAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA,CADMD,KAAK;IAAA,IAAAG,KAAA;MAAA,MAAAC,OAAA;IAAA;EAAA,EAIT,OAAOE,GAAG,EAAE;IACZC,MAAM,CAACD,GAAG,CAAC;EACb;AACF",
+    "names": [
+      "foo",
+      "value",
+      "_block",
+      "default",
+      "_type",
+      "_result",
+      "_mutations",
+      "err",
+      "report",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "example.ts",
+    ],
+    "sourcesContent": [
+      "
+      async function foo() {
+        const value = 'foo bar';
+        try {
+          'use server';
+          await doStuff(value);
+        } catch (err) {
+          report(err);
+        }
+      }
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "example.ts?directive=0.ts",
+  ],
+}
+`;
+
+exports[`TryStatement > client > should transform valid server try statements 1`] = `
+{
+  "code": "try {
+  const _block = (await import("./example.ts?directive=1.ts")).default;
+  const [_type, _result, _mutations] = await _block();
+  if (_type === 4) {
+    throw _result;
+  }
+} catch (err) {
+  report(err);
+}",
+  "entries": [
+    "example.ts?directive=1.ts",
+  ],
+  "files": Map {
+    "example.ts?directive=0.ts" => "export default (async function () {
+  try {
+    await doStuff();
+  } catch (_error) {
+    return [4, _error];
+  }
+  return [3];
+});",
+    "example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-client";
+export default _entry("bb5fd6ee-0-anonymous");",
+  },
+  "map": {
+    "file": undefined,
+    "mappings": "AACM;EAAA,MAAAA,MAAA,iDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA,EAGE,OAAOE,GAAG,EAAE;EACZC,MAAM,CAACD,GAAG,CAAC;AACb",
+    "names": [
+      "_block",
+      "default",
+      "_type",
+      "_result",
+      "_mutations",
+      "err",
+      "report",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "example.ts",
+    ],
+    "sourcesContent": [
+      "
+      try {
+        'use server';
+        await doStuff();
+      } catch (err) {
+        report(err);
+      }
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "example.ts?directive=0.ts",
+  ],
+}
+`;
+
+exports[`TryStatement > server > should skip server try statements in non-async functions 1`] = `
+{
+  "code": "const example = () => {
+  try {
+    'use server';
+    doStuff();
+  } catch (err) {
+    report(err);
+  }
+};",
+  "entries": [],
+  "files": Map {},
+  "map": {
+    "file": undefined,
+    "mappings": "AACM,MAAMA,OAAO,GAAGA,CAAA,KAAM;EACpB,IAAI;IACF,YAAY;IACZC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG,EAAE;IACZC,MAAM,CAACD,GAAG,CAAC;EACb;AACF,CAAC",
+    "names": [
+      "example",
+      "doStuff",
+      "err",
+      "report",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "example.ts",
+    ],
+    "sourcesContent": [
+      "
+      const example = () => {
+        try {
+          'use server';
+          doStuff();
+        } catch (err) {
+          report(err);
+        }
+      };
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [],
+}
+`;
+
+exports[`TryStatement > server > should skip top-level values for scope 1`] = `
+{
+  "code": "import { value } from "./example.ts?directive=0.ts";
+try {
+  const _block = (await import("./example.ts?directive=2.ts")).default;
+  const [_type, _result, _mutations] = await _block();
+  if (_type === 4) {
+    throw _result;
+  }
+} catch (err) {
+  report(err);
+}",
+  "entries": [
+    "example.ts?directive=2.ts",
+  ],
+  "files": Map {
+    "example.ts?directive=0.ts" => "export const value = 'foo bar';",
+    "example.ts?directive=1.ts" => "import { value } from "./example.ts?directive=0.ts";
+export default (async function () {
+  try {
+    await doStuff(value);
+  } catch (_error) {
+    return [4, _error];
+  }
+  return [3];
+});",
+    "example.ts?directive=2.ts" => "import { server as _entry } from "directive-splitter/example-server";
+import _root from "./example.ts?directive=1.ts";
+export default _entry("bb5fd6ee-0-anonymous", _root);",
+  },
+  "map": {
+    "file": undefined,
+    "mappings": ";AAEM;EAAA,MAAAA,MAAA,iDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA,EAGE,OAAOE,GAAG,EAAE;EACZC,MAAM,CAACD,GAAG,CAAC;AACb",
+    "names": [
+      "_block",
+      "default",
+      "_type",
+      "_result",
+      "_mutations",
+      "err",
+      "report",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "example.ts",
+    ],
+    "sourcesContent": [
+      "
+      const value = 'foo bar';
+      try {
+        'use server';
+        await doStuff(value);
+      } catch (err) {
+        report(err);
+      }
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "example.ts?directive=1.ts",
+  ],
+}
+`;
+
+exports[`TryStatement > server > should transform valid server functions with scope 1`] = `
+{
+  "code": "async function foo() {
+  const value = 'foo bar';
+  try {
+    const _block = (await import("./example.ts?directive=1.ts")).default;
+    const [_type, _result, _mutations] = await _block(value);
+    if (_type === 4) {
+      throw _result;
+    }
+  } catch (err) {
+    report(err);
+  }
+}",
+  "entries": [
+    "example.ts?directive=1.ts",
+  ],
+  "files": Map {
+    "example.ts?directive=0.ts" => "export default (async function (value) {
+  try {
+    await doStuff(value);
+  } catch (_error) {
+    return [4, _error];
+  }
+  return [3];
+});",
+    "example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-server";
+import _root from "./example.ts?directive=0.ts";
+export default _entry("bb5fd6ee-0-foo", _root);",
+  },
+  "map": {
+    "file": undefined,
+    "mappings": "AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB;IAAA,MAAAC,MAAA,iDAAAC,OAAA;IAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA,CADMD,KAAK;IAAA,IAAAG,KAAA;MAAA,MAAAC,OAAA;IAAA;EAAA,EAIT,OAAOE,GAAG,EAAE;IACZC,MAAM,CAACD,GAAG,CAAC;EACb;AACF",
+    "names": [
+      "foo",
+      "value",
+      "_block",
+      "default",
+      "_type",
+      "_result",
+      "_mutations",
+      "err",
+      "report",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "example.ts",
+    ],
+    "sourcesContent": [
+      "
+      async function foo() {
+        const value = 'foo bar';
+        try {
+          'use server';
+          await doStuff(value);
+        } catch (err) {
+          report(err);
+        }
+      }
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "example.ts?directive=0.ts",
+  ],
+}
+`;
+
+exports[`TryStatement > server > should transform valid server try statements 1`] = `
+{
+  "code": "try {
+  const _block = (await import("./example.ts?directive=1.ts")).default;
+  const [_type, _result, _mutations] = await _block();
+  if (_type === 4) {
+    throw _result;
+  }
+} catch (err) {
+  report(err);
+}",
+  "entries": [
+    "example.ts?directive=1.ts",
+  ],
+  "files": Map {
+    "example.ts?directive=0.ts" => "export default (async function () {
+  try {
+    await doStuff();
+  } catch (_error) {
+    return [4, _error];
+  }
+  return [3];
+});",
+    "example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-server";
+import _root from "./example.ts?directive=0.ts";
+export default _entry("bb5fd6ee-0-anonymous", _root);",
+  },
+  "map": {
+    "file": undefined,
+    "mappings": "AACM;EAAA,MAAAA,MAAA,iDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA,EAGE,OAAOE,GAAG,EAAE;EACZC,MAAM,CAACD,GAAG,CAAC;AACb",
+    "names": [
+      "_block",
+      "default",
+      "_type",
+      "_result",
+      "_mutations",
+      "err",
+      "report",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "example.ts",
+    ],
+    "sourcesContent": [
+      "
+      try {
+        'use server';
+        await doStuff();
+      } catch (err) {
+        report(err);
+      }
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "example.ts?directive=0.ts",
+  ],
+}
+`;
