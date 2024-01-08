@@ -37,8 +37,6 @@ export interface StateContext {
   path: path.ParsedPath;
   imports: Map<string, t.Identifier>;
   virtual: {
-    // key: path, value: content
-    files: Map<string, string>;
     count: number;
   };
   blocks: {
@@ -47,4 +45,6 @@ export interface StateContext {
   };
   bindings: Map<string, ModuleDefinition>;
   options: Options;
+  onVirtualFile: (path: string, content: string) => void;
+  onEntryFile: (path: string) => void;
 }

@@ -9,6 +9,7 @@ export interface Output {
   code: babel.BabelFileResult['code'];
   map: babel.BabelFileResult['map'];
   files: Map<string, string>;
+  entries: string[];
 }
 
 export {
@@ -26,11 +27,13 @@ export async function compile(
 ): Promise<Output> {
   const parsedPath = path.parse(id);
 
+  const entries: string[] = [];
+  const files = new Map<string, string>();
+
   const ctx: StateContext = {
     path: parsedPath,
     imports: new Map(),
     virtual: {
-      files: new Map(),
       count: 0,
     },
     options,
@@ -38,6 +41,12 @@ export async function compile(
     blocks: {
       hash: xxHash32(id).toString(16),
       count: 0,
+    },
+    onVirtualFile(current, content) {
+      files.set(path.join(parsedPath.dir, current), content);
+    },
+    onEntryFile(current) {
+      entries.push(path.join(parsedPath.dir, current));
     },
   };
 
@@ -62,15 +71,10 @@ export async function compile(
 
   assert(result, 'invariant');
 
-  const files = new Map();
-
-  for (const [key, value] of ctx.virtual.files) {
-    files.set(path.join(parsedPath.dir, key), value);
-  }
-
   return {
     code: result.code,
     map: result.map,
     files,
+    entries,
   };
 }

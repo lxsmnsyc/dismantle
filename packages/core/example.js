@@ -3,11 +3,14 @@ import { compile } from 'directive-splitter';
 const code = `
 const foo = 'foo';
 const bar = 'bar';
-const message = foo + bar;
 
-async function log(prefix) {
+async function logFoo(prefix) {
   'use server';
-  console.log(prefix, message);
+  console.log(prefix, foo);
+}
+async function logBar(prefix) {
+  'use server';
+  console.log(prefix, bar);
 }
 `;
 
@@ -32,8 +35,11 @@ const result = await compile(code, 'example.ts', {
 console.log('ENTRY');
 console.log(result.code);
 
-console.log('VIRTUALS');
+console.log('\nVIRTUALS');
 for (const [name, content] of result.files) {
-  console.log(name);
+  console.log('FILE', name);
   console.log(content);
 }
+
+console.log('\nENTRIES');
+console.log(result.entries);

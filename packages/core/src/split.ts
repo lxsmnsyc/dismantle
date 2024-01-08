@@ -4,7 +4,6 @@ import { DirectiveDefinition, ModuleDefinition, StateContext } from './types';
 import getForeignBindings from './utils/get-foreign-bindings';
 import { Binding, BindingKind } from '@babel/traverse';
 import { getDescriptiveName } from './utils/get-descriptive-name';
-import { getImportIdentifier } from './utils/get-import-identifier';
 import generator from './utils/generator-shim';
 import { getRootStatementPath } from './utils/get-root-statement-path';
 import { getModuleDefinition } from './utils/get-module-definition';
@@ -107,15 +106,17 @@ function registerBinding(
   }
 }
 
+interface ExtractedBindings {
+  modules: ModuleDefinition[];
+  locals: t.Identifier[];
+  mutations: t.Identifier[];
+}
+
 function extractBindings(
   ctx: StateContext,
   path: babel.NodePath,
   bindings: Set<string>,
-): {
-  modules: ModuleDefinition[];
-  locals: t.Identifier[];
-  mutations: t.Identifier[];
-} {
+): ExtractedBindings {
   const modules: ModuleDefinition[] = [];
   const locals: t.Identifier[] = [];
   const mutations: t.Identifier[] = [];
@@ -146,7 +147,7 @@ function splitFunctionDeclaration(
       t.exportDefaultDeclaration(path.node),
     ]),
   );
-  ctx.virtual.files.set(file, compiled.code);
+  ctx.onVirtualFile(file, compiled.code);
 
   const statement = getRootStatementPath(path);
 
@@ -188,7 +189,7 @@ function splitVariableDeclarator(
       t.exportNamedDeclaration(t.variableDeclaration(parent.kind, [path.node])),
     ]),
   );
-  ctx.virtual.files.set(file, compiled.code);
+  ctx.onVirtualFile(file, compiled.code);
   const definitions: ModuleDefinition[] = getIdentifiersFromLVal(
     path.node.id,
   ).map(name => ({
@@ -481,59 +482,55 @@ function getGeneratorReplacementForServerBlock(
   return [replacement, step];
 }
 
-interface ReplaceBlockResult {
-  module: ModuleDefinition;
-  replacement: t.Expression;
-}
-
 function replaceBlock(
   ctx: StateContext,
   path: babel.NodePath<t.BlockStatement>,
   directive: DirectiveDefinition,
-  locals: t.Identifier[],
-  mutations: t.Identifier[],
-): ReplaceBlockResult {
+  bindings: ExtractedBindings,
+): void {
   // Transform all control statements
-  const halting = transformHalting(path, mutations);
-  const blockID = path.scope.generateUidIdentifier('block');
+  const halting = transformHalting(path, bindings.mutations);
   // Create an ID
   let id = `${ctx.blocks.hash}-${ctx.blocks.count++}`;
   if (ctx.options.env !== 'production') {
     id += `-${getDescriptiveName(path, 'anonymous')}`;
   }
-  const contentID = path.scope.generateUidIdentifier('content');
-  const result: ReplaceBlockResult = {
-    module: {
-      kind: 'default',
-      source: ctx.options.getVirtualFileName(ctx.path, ctx.virtual.count++),
-      local: contentID.name,
-    },
-    replacement: t.functionExpression(
-      undefined,
-      locals,
-      t.blockStatement(path.node.body),
-      halting.hasYield,
-      true,
-    ),
-  };
   const args: t.Expression[] = [t.stringLiteral(id)];
   if (ctx.options.mode === 'server') {
-    args.push(contentID);
+    args.push(
+      t.functionExpression(
+        undefined,
+        bindings.locals,
+        t.blockStatement(path.node.body),
+        halting.hasYield,
+        true,
+      ),
+    );
   }
   // Create the registration call
-  const register = t.callExpression(
-    getImportIdentifier(ctx, path, directive.import),
-    args,
+  const registrationFile = ctx.options.getVirtualFileName(
+    ctx.path,
+    ctx.virtual.count++,
   );
-  // Locate root statement (the top-level statement)
-  const rootStatement = getRootStatementPath(path);
-  // Push the declaration
-  rootStatement.insertBefore(
-    moduleDefinitionToImportDeclaration(result.module),
+  const registerID = path.scope.generateUidIdentifier('register');
+  const registrationContent = generator(
+    t.program([
+      ...(ctx.options.mode === 'server'
+        ? moduleDefinitionsToImportDeclarations(bindings.modules)
+        : []),
+      moduleDefinitionToImportDeclaration({
+        kind: directive.import.kind,
+        source: directive.import.source,
+        local: registerID.name,
+        imported:
+          directive.import.kind === 'named' ? directive.import.name : undefined,
+      }),
+      t.exportDefaultDeclaration(t.callExpression(registerID, args)),
+    ]),
   );
-  rootStatement.insertBefore(
-    t.variableDeclaration('const', [t.variableDeclarator(blockID, register)]),
-  );
+  ctx.onEntryFile(registrationFile);
+  ctx.onVirtualFile(registrationFile, registrationContent.code);
+
   // Move to the replacement for the server block,
   // declare the type and result based from transformHalting
   const returnType = path.scope.generateUidIdentifier('type');
@@ -572,40 +569,58 @@ function replaceBlock(
       check,
     );
   }
+
+  const blockID = path.scope.generateUidIdentifier('block');
   // If the server block happens to be declared in a generator
-  let replacement: t.Statement[];
+  const replacement: t.Statement[] = [
+    t.variableDeclaration('const', [
+      t.variableDeclarator(
+        blockID,
+        t.memberExpression(
+          t.awaitExpression(
+            t.importExpression(t.stringLiteral(registrationFile)),
+          ),
+          t.identifier('default'),
+        ),
+      ),
+    ]),
+  ];
   if (halting.hasYield) {
     const [reps, step] = getGeneratorReplacementForServerBlock(
       path,
       blockID,
-      locals,
+      bindings.locals,
     );
-    replacement = [
-      ...reps,
+    for (let i = 0, len = reps.length; i < len; i++) {
+      replacement.push(reps[i]);
+    }
+    replacement.push(
       t.variableDeclaration('const', [
         t.variableDeclarator(
           t.arrayPattern([returnType, returnResult, returnMutations]),
           t.memberExpression(step, t.identifier('value')),
         ),
       ]),
-    ];
+    );
   } else {
-    replacement = [
+    replacement.push(
       t.variableDeclaration('const', [
         t.variableDeclarator(
           t.arrayPattern([returnType, returnResult, returnMutations]),
-          t.awaitExpression(t.callExpression(blockID, locals)),
+          t.awaitExpression(t.callExpression(blockID, bindings.locals)),
         ),
       ]),
-    ];
+    );
   }
-  if (mutations.length) {
+  if (bindings.mutations.length) {
     replacement.push(
       t.expressionStatement(
         t.assignmentExpression(
           '=',
           t.objectPattern(
-            mutations.map(item => t.objectProperty(item, item, false, true)),
+            bindings.mutations.map(item =>
+              t.objectProperty(item, item, false, true),
+            ),
           ),
           returnMutations,
         ),
@@ -616,7 +631,6 @@ function replaceBlock(
     replacement.push(check);
   }
   path.replaceWith(t.blockStatement(replacement));
-  return result;
 }
 
 export function splitBlock(
@@ -624,14 +638,10 @@ export function splitBlock(
   path: babel.NodePath<t.BlockStatement>,
   directive: DirectiveDefinition,
 ): void {
-  const bindings = getForeignBindings(path, 'block');
-  const { modules, locals, mutations } = extractBindings(ctx, path, bindings);
-  const result = replaceBlock(ctx, path, directive, locals, mutations);
-  const compiled = generator(
-    t.program([
-      ...moduleDefinitionsToImportDeclarations(modules),
-      t.exportDefaultDeclaration(result.replacement),
-    ]),
+  replaceBlock(
+    ctx,
+    path,
+    directive,
+    extractBindings(ctx, path, getForeignBindings(path, 'block')),
   );
-  ctx.virtual.files.set(result.module.source, compiled.code);
 }
