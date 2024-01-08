@@ -4,13 +4,15 @@ const code = `
 const foo = 'foo';
 const bar = 'bar';
 
-async function logFoo(prefix) {
+async function log(prefix) {
   'use server';
-  console.log(prefix, foo);
-}
-async function logBar(prefix) {
-  'use server';
-  console.log(prefix, bar);
+  if (prefix === 'foo') {
+    'use server';
+    console.log(prefix, foo);
+  } else {
+    'use server';
+    console.log(prefix, bar);
+  }
 }
 `;
 
@@ -27,9 +29,6 @@ const result = await compile(code, 'example.ts', {
       },
     },
   ],
-  getVirtualFileName(parsed, count) {
-    return `./${parsed.base}?use-server=${count}${parsed.ext}`;
-  },
 });
 
 console.log('ENTRY');
@@ -43,3 +42,6 @@ for (const [name, content] of result.files) {
 
 console.log('\nENTRIES');
 console.log(result.entries);
+
+console.log('\nROOTs');
+console.log(result.roots);

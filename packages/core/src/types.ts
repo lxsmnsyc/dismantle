@@ -23,7 +23,6 @@ export interface Options {
   mode: 'server' | 'client';
   env: 'production' | 'development';
   directives: DirectiveDefinition[];
-  getVirtualFileName: (path: path.ParsedPath, count: number) => string;
 }
 
 export interface ModuleDefinition {
@@ -45,6 +44,9 @@ export interface StateContext {
   };
   bindings: Map<string, ModuleDefinition>;
   options: Options;
-  onVirtualFile: (path: string, content: string) => void;
-  onEntryFile: (path: string) => void;
+  onVirtualFile: (
+    path: string,
+    content: string,
+    mode: 'entry' | 'root' | 'none',
+  ) => void;
 }

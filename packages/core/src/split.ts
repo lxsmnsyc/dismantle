@@ -134,20 +134,24 @@ function extractBindings(
   };
 }
 
+function createVirtualFileName(ctx: StateContext) {
+  return `./${ctx.path.base}?directive=${ctx.virtual.count++}${ctx.path.ext}`;
+}
+
 function splitFunctionDeclaration(
   ctx: StateContext,
   path: babel.NodePath<t.FunctionDeclaration>,
 ): ModuleDefinition {
   const bindings = getForeignBindings(path, 'function');
   const { modules } = extractBindings(ctx, path, bindings);
-  const file = ctx.options.getVirtualFileName(ctx.path, ctx.virtual.count++);
+  const file = createVirtualFileName(ctx);
   const compiled = generator(
     t.program([
       ...moduleDefinitionsToImportDeclarations(modules),
       t.exportDefaultDeclaration(path.node),
     ]),
   );
-  ctx.onVirtualFile(file, compiled.code);
+  ctx.onVirtualFile(file, compiled.code, 'none');
 
   const statement = getRootStatementPath(path);
 
@@ -181,7 +185,7 @@ function splitVariableDeclarator(
         ),
       ).modules
     : [];
-  const file = ctx.options.getVirtualFileName(ctx.path, ctx.virtual.count++);
+  const file = createVirtualFileName(ctx);
   const parent = path.parentPath.node as t.VariableDeclaration;
   const compiled = generator(
     t.program([
@@ -189,7 +193,7 @@ function splitVariableDeclarator(
       t.exportNamedDeclaration(t.variableDeclaration(parent.kind, [path.node])),
     ]),
   );
-  ctx.onVirtualFile(file, compiled.code);
+  ctx.onVirtualFile(file, compiled.code, 'none');
   const definitions: ModuleDefinition[] = getIdentifiersFromLVal(
     path.node.id,
   ).map(name => ({
@@ -490,46 +494,58 @@ function replaceBlock(
 ): void {
   // Transform all control statements
   const halting = transformHalting(path, bindings.mutations);
+  const rootFile = createVirtualFileName(ctx);
+  const rootContent = generator(
+    t.program([
+      ...(ctx.options.mode === 'server'
+        ? moduleDefinitionsToImportDeclarations(bindings.modules)
+        : []),
+      t.exportDefaultDeclaration(
+        t.functionExpression(
+          undefined,
+          bindings.locals,
+          t.blockStatement(path.node.body),
+          halting.hasYield,
+          true,
+        ),
+      ),
+    ]),
+  );
+  ctx.onVirtualFile(rootFile, rootContent.code, 'root');
   // Create an ID
   let id = `${ctx.blocks.hash}-${ctx.blocks.count++}`;
   if (ctx.options.env !== 'production') {
     id += `-${getDescriptiveName(path, 'anonymous')}`;
   }
+  const entryID = path.scope.generateUidIdentifier('entry');
+  const entryImports: ModuleDefinition[] = [
+    {
+      kind: directive.import.kind,
+      source: directive.import.source,
+      local: entryID.name,
+      imported:
+        directive.import.kind === 'named' ? directive.import.name : undefined,
+    },
+  ];
   const args: t.Expression[] = [t.stringLiteral(id)];
   if (ctx.options.mode === 'server') {
-    args.push(
-      t.functionExpression(
-        undefined,
-        bindings.locals,
-        t.blockStatement(path.node.body),
-        halting.hasYield,
-        true,
-      ),
-    );
+    const rootID = path.scope.generateUidIdentifier('root');
+    entryImports.push({
+      kind: 'default',
+      source: rootFile,
+      local: rootID.name,
+    });
+    args.push(rootID);
   }
   // Create the registration call
-  const registrationFile = ctx.options.getVirtualFileName(
-    ctx.path,
-    ctx.virtual.count++,
-  );
-  const registerID = path.scope.generateUidIdentifier('register');
-  const registrationContent = generator(
+  const entryFile = createVirtualFileName(ctx);
+  const entryContent = generator(
     t.program([
-      ...(ctx.options.mode === 'server'
-        ? moduleDefinitionsToImportDeclarations(bindings.modules)
-        : []),
-      moduleDefinitionToImportDeclaration({
-        kind: directive.import.kind,
-        source: directive.import.source,
-        local: registerID.name,
-        imported:
-          directive.import.kind === 'named' ? directive.import.name : undefined,
-      }),
-      t.exportDefaultDeclaration(t.callExpression(registerID, args)),
+      ...moduleDefinitionsToImportDeclarations(entryImports),
+      t.exportDefaultDeclaration(t.callExpression(entryID, args)),
     ]),
   );
-  ctx.onEntryFile(registrationFile);
-  ctx.onVirtualFile(registrationFile, registrationContent.code);
+  ctx.onVirtualFile(entryFile, entryContent.code, 'entry');
 
   // Move to the replacement for the server block,
   // declare the type and result based from transformHalting
@@ -577,9 +593,7 @@ function replaceBlock(
       t.variableDeclarator(
         blockID,
         t.memberExpression(
-          t.awaitExpression(
-            t.importExpression(t.stringLiteral(registrationFile)),
-          ),
+          t.awaitExpression(t.importExpression(t.stringLiteral(entryFile))),
           t.identifier('default'),
         ),
       ),
