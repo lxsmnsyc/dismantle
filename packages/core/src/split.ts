@@ -93,14 +93,13 @@ function registerBinding(
   } else if (target.kind === 'param') {
     locals.push(target.identifier);
   } else {
-    const blockParent = target.path.scope.getBlockParent();
+    let blockParent = target.path.scope.getBlockParent();
     const programParent = target.path.scope.getProgramParent();
+    // a FunctionDeclaration binding refers to itself as the block parent
+    if (blockParent.path === target.path) {
+      blockParent = blockParent.parent;
+    }
     if (blockParent === programParent) {
-      registerModuleLevelBinding(ctx, modules, binding, target);
-    } else if (
-      target.path.isFunctionDeclaration() &&
-      blockParent.parent === programParent
-    ) {
       registerModuleLevelBinding(ctx, modules, binding, target);
     } else {
       locals.push(target.identifier);
