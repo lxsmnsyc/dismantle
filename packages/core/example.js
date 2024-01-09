@@ -4,14 +4,16 @@ const code = `
 const foo = 'foo';
 const bar = 'bar';
 
-async function log(prefix) {
+function log(prefix, suffix) {
+  console.log(prefix, suffix);
+}
+
+async function logPrefix(prefix) {
   'use server';
   if (prefix === 'foo') {
-    'use server';
-    console.log(prefix, foo);
+    log(prefix, foo);
   } else {
-    'use server';
-    console.log(prefix, bar);
+    log(prefix, bar);
   }
 }
 `;

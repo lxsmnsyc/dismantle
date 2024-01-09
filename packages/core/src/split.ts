@@ -97,6 +97,11 @@ function registerBinding(
     const programParent = target.path.scope.getProgramParent();
     if (blockParent === programParent) {
       registerModuleLevelBinding(ctx, modules, binding, target);
+    } else if (
+      target.path.isFunctionDeclaration() &&
+      blockParent.parent === programParent
+    ) {
+      registerModuleLevelBinding(ctx, modules, binding, target);
     } else {
       locals.push(target.identifier);
       if (isMutation(target.kind)) {
