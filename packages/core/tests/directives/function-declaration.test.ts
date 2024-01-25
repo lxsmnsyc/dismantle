@@ -1,36 +1,34 @@
 import { describe, it, expect } from 'vitest';
-import * as compiler from '../src';
+import * as compiler from '../../src';
 import { ID, CLIENT, SERVER } from './example';
 
-describe('IfStatement', () => {
+describe('FunctionDeclaration', () => {
   describe('client', () => {
-    it('should transform valid server if statements', async () => {
+    it('should transform valid server functions', async () => {
       const code = `
-      if (cond()) {
+      async function example() {
         'use server';
-        await doStuff();
+        return 'foo bar';
       }
       `;
       expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
     });
-    it('should skip server if statements in non-async functions', async () => {
+    it('should skip non-async server functions', async () => {
       const code = `
-      const example = () => {
-        if (cond()) {
-          'use server';
-          doStuff();
-        }
-      };
+      function example() {
+        'use server';
+        return 'foo bar';
+      }
       `;
       expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
     });
     it('should transform valid server functions with scope', async () => {
       const code = `
-      async function foo() {
+      const outer = () => {
         const value = 'foo bar';
-        if (cond()) {
+        async function example() {
           'use server';
-          await doStuff(value);
+          return value;
         }
       }
       `;
@@ -39,42 +37,42 @@ describe('IfStatement', () => {
     it('should skip top-level values for scope', async () => {
       const code = `
       const value = 'foo bar';
-      if (cond()) {
-        'use server';
-        await doStuff(value);
+      const outer = () => {
+        async function example() {
+          'use server';
+          return value;
+        }
       }
       `;
       expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
     });
   });
   describe('server', () => {
-    it('should transform valid server if statements', async () => {
+    it('should transform valid server functions', async () => {
       const code = `
-      if (cond()) {
+      async function example() {
         'use server';
-        await doStuff();
+        return 'foo bar';
       }
       `;
       expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();
     });
-    it('should skip server if statements in non-async functions', async () => {
+    it('should skip non-async server functions', async () => {
       const code = `
-      const example = () => {
-        if (cond()) {
-          'use server';
-          doStuff();
-        }
-      };
+      function example() {
+        'use server';
+        return 'foo bar';
+      }
       `;
       expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();
     });
     it('should transform valid server functions with scope', async () => {
       const code = `
-      async function foo() {
+      const outer = () => {
         const value = 'foo bar';
-        if (cond()) {
+        async function example() {
           'use server';
-          await doStuff(value);
+          return value;
         }
       }
       `;
@@ -83,9 +81,11 @@ describe('IfStatement', () => {
     it('should skip top-level values for scope', async () => {
       const code = `
       const value = 'foo bar';
-      if (cond()) {
-        'use server';
-        await doStuff(value);
+      const outer = () => {
+        async function example() {
+          'use server';
+          return value;
+        }
       }
       `;
       expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();

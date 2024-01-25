@@ -1,12 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import * as compiler from '../src';
+import * as compiler from '../../src';
 import { ID, CLIENT, SERVER } from './example';
 
-describe('ArrowFunctionExpression', () => {
+describe('FunctionExpression', () => {
   describe('client', () => {
     it('should transform valid server functions', async () => {
       const code = `
-      const example = async () => {
+      const example = async function () {
         'use server';
         return 'foo bar';
       };
@@ -15,7 +15,7 @@ describe('ArrowFunctionExpression', () => {
     });
     it('should skip non-async server functions', async () => {
       const code = `
-      const example = () => {
+      const example = function () {
         'use server';
         return 'foo bar';
       };
@@ -26,7 +26,7 @@ describe('ArrowFunctionExpression', () => {
       const code = `
       const outer = () => {
         const value = 'foo bar';
-        const example = async () => {
+        const example = async function () {
           'use server';
           return value;
         };
@@ -38,7 +38,7 @@ describe('ArrowFunctionExpression', () => {
       const code = `
       const value = 'foo bar';
       const outer = () => {
-        const example = async () => {
+        const example = async function () {
           'use server';
           return value;
         };
@@ -50,7 +50,7 @@ describe('ArrowFunctionExpression', () => {
   describe('server', () => {
     it('should transform valid server functions', async () => {
       const code = `
-      const example = async () => {
+      const example = async function () {
         'use server';
         return 'foo bar';
       };
@@ -59,7 +59,7 @@ describe('ArrowFunctionExpression', () => {
     });
     it('should skip non-async server functions', async () => {
       const code = `
-      const example = () => {
+      const example = function () {
         'use server';
         return 'foo bar';
       };
@@ -70,7 +70,7 @@ describe('ArrowFunctionExpression', () => {
       const code = `
       const outer = () => {
         const value = 'foo bar';
-        const example = async () => {
+        const example = async function () {
           'use server';
           return value;
         };
@@ -82,7 +82,7 @@ describe('ArrowFunctionExpression', () => {
       const code = `
       const value = 'foo bar';
       const outer = () => {
-        const example = async () => {
+        const example = async function () {
           'use server';
           return value;
         };

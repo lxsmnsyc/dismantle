@@ -1,28 +1,24 @@
 import { describe, it, expect } from 'vitest';
-import * as compiler from '../src';
+import * as compiler from '../../src';
 import { ID, CLIENT, SERVER } from './example';
 
-describe('CatchClause', () => {
+describe('LabeledStatement', () => {
   describe('client', () => {
-    it('should transform valid server try statements', async () => {
+    it('should transform valid server labeled statements', async () => {
       const code = `
-      try {
-        doStuff();
-      } catch (err) {
+      foo: {
         'use server';
-        await report(err);
+        await doStuff();
       }
       `;
       expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
     });
-    it('should skip server try statements in non-async functions', async () => {
+    it('should skip server labeled statements in non-async functions', async () => {
       const code = `
       const example = () => {
-        try {
-          doStuff();
-        } catch (err) {
+        foo: {
           'use server';
-          report(err);
+          doStuff();
         }
       };
       `;
@@ -32,11 +28,9 @@ describe('CatchClause', () => {
       const code = `
       async function foo() {
         const value = 'foo bar';
-        try {
-          doStuff();
-        } catch (err) {
+        foo: {
           'use server';
-          await report(value, err);
+          await doStuff(value);
         }
       }
       `;
@@ -45,36 +39,44 @@ describe('CatchClause', () => {
     it('should skip top-level values for scope', async () => {
       const code = `
       const value = 'foo bar';
-      try {
-        doStuff();
-      } catch (err) {
+      foo: {
         'use server';
-        await report(value, err);
+        await doStuff(value);
+      }
+      `;
+      expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
+    });
+    it('should transform break statements', async () => {
+      const code = `
+      foo: {
+        'use server';
+        if (cond()) {
+          await doStuff(value);
+        } else {
+          break foo;
+        }
+        await doMoreStuff();
       }
       `;
       expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
     });
   });
   describe('server', () => {
-    it('should transform valid server try statements', async () => {
+    it('should transform valid server labeled statements', async () => {
       const code = `
-      try {
-        doStuff();
-      } catch (err) {
+      foo: {
         'use server';
-        await report(err);
+        await doStuff();
       }
       `;
       expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();
     });
-    it('should skip server try statements in non-async functions', async () => {
+    it('should skip server labeled statements in non-async functions', async () => {
       const code = `
       const example = () => {
-        try {
-          doStuff();
-        } catch (err) {
+        foo: {
           'use server';
-          report(err);
+          doStuff();
         }
       };
       `;
@@ -84,11 +86,9 @@ describe('CatchClause', () => {
       const code = `
       async function foo() {
         const value = 'foo bar';
-        try {
-          doStuff();
-        } catch (err) {
+        foo: {
           'use server';
-          await report(err);
+          await doStuff(value);
         }
       }
       `;
@@ -97,11 +97,23 @@ describe('CatchClause', () => {
     it('should skip top-level values for scope', async () => {
       const code = `
       const value = 'foo bar';
-      try {
-        doStuff();
-      } catch (err) {
+      foo: {
         'use server';
-        await report(err);
+        await doStuff(value);
+      }
+      `;
+      expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();
+    });
+    it('should transform break statements', async () => {
+      const code = `
+      foo: {
+        'use server';
+        if (cond()) {
+          await doStuff(value);
+        } else {
+          break foo;
+        }
+        await doMoreStuff();
       }
       `;
       expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();

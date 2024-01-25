@@ -1,25 +1,25 @@
 import { describe, it, expect } from 'vitest';
-import * as compiler from '../src';
+import * as compiler from '../../src';
 import { ID, CLIENT, SERVER } from './example';
 
-describe('ForInStatement', () => {
+describe('DoWhileStatement', () => {
   describe('client', () => {
-    it('should transform valid server for-in statements', async () => {
+    it('should transform valid server do-while statements', async () => {
       const code = `
-      for (const key in items) {
+      do {
         'use server';
         await doStuff();
-      }
+      } while (cond())
       `;
       expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
     });
-    it('should skip server for-in statements in non-async functions', async () => {
+    it('should skip server do-while statements in non-async functions', async () => {
       const code = `
       const example = () => {
-        for (const key in items) {
+        do {
           'use server';
           doStuff();
-        }
+        } while (cond())
       };
       `;
       expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
@@ -28,10 +28,10 @@ describe('ForInStatement', () => {
       const code = `
       async function foo() {
         const value = 'foo bar';
-        for (const key in items) {
+        do {
           'use server';
           await doStuff(value);
-        }
+        } while (cond())
       }
       `;
       expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
@@ -39,16 +39,16 @@ describe('ForInStatement', () => {
     it('should skip top-level values for scope', async () => {
       const code = `
       const value = 'foo bar';
-      for (const key in items) {
+      do {
         'use server';
         await doStuff(value);
-      }
+      } while (cond())
       `;
       expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
     });
     it('should transform break statements', async () => {
       const code = `
-      for (const key in items) {
+      do {
         'use server';
         if (cond()) {
           await doStuff(value);
@@ -56,13 +56,13 @@ describe('ForInStatement', () => {
           break;
         }
         await doMoreStuff();
-      }
+      } while (cond())
       `;
       expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
     });
     it('should transform continue statements', async () => {
       const code = `
-      for (const key in items) {
+      do {
         'use server';
         if (cond()) {
           await doStuff(value);
@@ -70,13 +70,13 @@ describe('ForInStatement', () => {
           continue;
         }
         await doMoreStuff();
-      }
+      } while (cond())
       `;
       expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
     });
     it('should transform labeled break statements', async () => {
       const code = `
-      foo: for (const key in items) {
+      foo: do {
         'use server';
         if (cond()) {
           await doStuff(value);
@@ -84,13 +84,13 @@ describe('ForInStatement', () => {
           break foo;
         }
         await doMoreStuff();
-      }
+      } while (cond())
       `;
       expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
     });
     it('should transform labeled continue statements', async () => {
       const code = `
-      foo: for (const key in items) {
+      foo: do {
         'use server';
         if (cond()) {
           await doStuff(value);
@@ -98,28 +98,28 @@ describe('ForInStatement', () => {
           continue foo;
         }
         await doMoreStuff();
-      }
+      } while (cond())
       `;
       expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
     });
   });
   describe('server', () => {
-    it('should transform valid server for-in statements', async () => {
+    it('should transform valid server do-while statements', async () => {
       const code = `
-      for (const key in items) {
+      do {
         'use server';
         await doStuff();
-      }
+      } while (cond())
       `;
       expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();
     });
-    it('should skip server for-in statements in non-async functions', async () => {
+    it('should skip server do-while statements in non-async functions', async () => {
       const code = `
       const example = () => {
-        for (const key in items) {
+        do {
           'use server';
           doStuff();
-        }
+        } while (cond())
       };
       `;
       expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();
@@ -128,10 +128,10 @@ describe('ForInStatement', () => {
       const code = `
       async function foo() {
         const value = 'foo bar';
-        for (const key in items) {
+        do {
           'use server';
           await doStuff(value);
-        }
+        } while (cond())
       }
       `;
       expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();
@@ -139,16 +139,16 @@ describe('ForInStatement', () => {
     it('should skip top-level values for scope', async () => {
       const code = `
       const value = 'foo bar';
-      for (const key in items) {
+      do {
         'use server';
         await doStuff(value);
-      }
+      } while (cond())
       `;
       expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();
     });
     it('should transform break statements', async () => {
       const code = `
-      for (const key in items) {
+      do {
         'use server';
         if (cond()) {
           await doStuff(value);
@@ -156,13 +156,13 @@ describe('ForInStatement', () => {
           break;
         }
         await doMoreStuff();
-      }
+      } while (cond())
       `;
       expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();
     });
     it('should transform continue statements', async () => {
       const code = `
-      for (const key in items) {
+      do {
         'use server';
         if (cond()) {
           await doStuff(value);
@@ -170,13 +170,13 @@ describe('ForInStatement', () => {
           continue;
         }
         await doMoreStuff();
-      }
+      } while (cond())
       `;
       expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();
     });
     it('should transform labeled break statements', async () => {
       const code = `
-      foo: for (const key in items) {
+      foo: do {
         'use server';
         if (cond()) {
           await doStuff(value);
@@ -184,13 +184,13 @@ describe('ForInStatement', () => {
           break foo;
         }
         await doMoreStuff();
-      }
+      } while (cond())
       `;
       expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();
     });
     it('should transform labeled continue statements', async () => {
       const code = `
-      foo: for (const key in items) {
+      foo: do {
         'use server';
         if (cond()) {
           await doStuff(value);
@@ -198,7 +198,7 @@ describe('ForInStatement', () => {
           continue foo;
         }
         await doMoreStuff();
-      }
+      } while (cond())
       `;
       expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();
     });

@@ -1,4 +1,4 @@
-import type * as compiler from '../src';
+import type * as compiler from '../../src';
 
 export const SERVER: compiler.Options = {
   directives: [
