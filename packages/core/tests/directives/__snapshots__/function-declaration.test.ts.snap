@@ -35,10 +35,10 @@ exports[`FunctionDeclaration > client > should skip non-async server functions 1
 
 exports[`FunctionDeclaration > client > should skip top-level values for scope 1`] = `
 {
-  "code": "import { value } from "./example.ts?directive=0.ts";
+  "code": "import { value } from "./example.ts?my-example=0.ts";
 const outer = () => {
   async function example() {
-    const _block = (await import("./example.ts?directive=2.ts")).default;
+    const _block = (await import("./example.ts?my-example=2.ts")).default;
     const [_type, _result, _mutations] = await _block();
     if (_type === 2) {
       return _result;
@@ -48,11 +48,11 @@ const outer = () => {
   }
 };",
   "entries": [
-    "/path/to/example.ts?directive=2.ts",
+    "/path/to/example.ts?my-example=2.ts",
   ],
   "files": Map {
-    "/path/to/example.ts?directive=0.ts" => "export const value = 'foo bar';",
-    "/path/to/example.ts?directive=1.ts" => "export default (async function () {
+    "/path/to/example.ts?my-example=0.ts" => "export const value = 'foo bar';",
+    "/path/to/example.ts?my-example=1.ts" => "export default (async function () {
   try {
     return [2, value];
   } catch (_error) {
@@ -60,12 +60,12 @@ const outer = () => {
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=2.ts" => "import { server as _entry } from "my-example/client";
+    "/path/to/example.ts?my-example=2.ts" => "import { server as _entry } from "my-example/client";
 export default _entry("26ecc3a5-0-example");",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AAEM,MAAMA,KAAK,GAAGA,CAAA,KAAM;EAClB,eAAeC,OAAOA,CAAA;IAAA,MAAAC,MAAA,iDAAAC,OAAA;IAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;IAAA,IAAAE,KAAA;MAAA,OAAAC,OAAA;IAAA,WAAAD,KAAA;MAAA,MAAAC,OAAA;IAAA;EAAA;AAIxB,CAAC",
+    "mappings": ";AAEM,MAAMA,KAAK,GAAGA,CAAA,KAAM;EAClB,eAAeC,OAAOA,CAAA;IAAA,MAAAC,MAAA,kDAAAC,OAAA;IAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;IAAA,IAAAE,KAAA;MAAA,OAAAC,OAAA;IAAA,WAAAD,KAAA;MAAA,MAAAC,OAAA;IAAA;EAAA;AAIxB,CAAC",
     "names": [
       "outer",
       "example",
@@ -93,7 +93,7 @@ export default _entry("26ecc3a5-0-example");",
     "version": 3,
   },
   "roots": [
-    "/path/to/example.ts?directive=1.ts",
+    "/path/to/example.ts?my-example=1.ts",
   ],
 }
 `;
@@ -101,7 +101,7 @@ export default _entry("26ecc3a5-0-example");",
 exports[`FunctionDeclaration > client > should transform valid server functions 1`] = `
 {
   "code": "async function example() {
-  const _block = (await import("./example.ts?directive=1.ts")).default;
+  const _block = (await import("./example.ts?my-example=1.ts")).default;
   const [_type, _result, _mutations] = await _block();
   if (_type === 2) {
     return _result;
@@ -110,10 +110,10 @@ exports[`FunctionDeclaration > client > should transform valid server functions 
   }
 }",
   "entries": [
-    "/path/to/example.ts?directive=1.ts",
+    "/path/to/example.ts?my-example=1.ts",
   ],
   "files": Map {
-    "/path/to/example.ts?directive=0.ts" => "export default (async function () {
+    "/path/to/example.ts?my-example=0.ts" => "export default (async function () {
   try {
     return [2, 'foo bar'];
   } catch (_error) {
@@ -121,12 +121,12 @@ exports[`FunctionDeclaration > client > should transform valid server functions 
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/client";
+    "/path/to/example.ts?my-example=1.ts" => "import { server as _entry } from "my-example/client";
 export default _entry("26ecc3a5-0-example");",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACM,eAAeA,OAAOA,CAAA;EAAA,MAAAC,MAAA,iDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA,OAAAC,OAAA;EAAA,WAAAD,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA",
+    "mappings": "AACM,eAAeA,OAAOA,CAAA;EAAA,MAAAC,MAAA,kDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA,OAAAC,OAAA;EAAA,WAAAD,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA",
     "names": [
       "example",
       "_block",
@@ -150,7 +150,7 @@ export default _entry("26ecc3a5-0-example");",
     "version": 3,
   },
   "roots": [
-    "/path/to/example.ts?directive=0.ts",
+    "/path/to/example.ts?my-example=0.ts",
   ],
 }
 `;
@@ -160,7 +160,7 @@ exports[`FunctionDeclaration > client > should transform valid server functions 
   "code": "const outer = () => {
   const value = 'foo bar';
   async function example() {
-    const _block = (await import("./example.ts?directive=1.ts")).default;
+    const _block = (await import("./example.ts?my-example=1.ts")).default;
     const [_type, _result, _mutations] = await _block(value);
     if (_type === 2) {
       return _result;
@@ -170,10 +170,10 @@ exports[`FunctionDeclaration > client > should transform valid server functions 
   }
 };",
   "entries": [
-    "/path/to/example.ts?directive=1.ts",
+    "/path/to/example.ts?my-example=1.ts",
   ],
   "files": Map {
-    "/path/to/example.ts?directive=0.ts" => "export default (async function (value) {
+    "/path/to/example.ts?my-example=0.ts" => "export default (async function (value) {
   try {
     return [2, value];
   } catch (_error) {
@@ -181,12 +181,12 @@ exports[`FunctionDeclaration > client > should transform valid server functions 
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/client";
+    "/path/to/example.ts?my-example=1.ts" => "import { server as _entry } from "my-example/client";
 export default _entry("26ecc3a5-0-example");",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACM,MAAMA,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,eAAeC,OAAOA,CAAA;IAAA,MAAAC,MAAA,iDAAAC,OAAA;IAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA,CADhBF,KAAK;IAAA,IAAAI,KAAA;MAAA,OAAAC,OAAA;IAAA,WAAAD,KAAA;MAAA,MAAAC,OAAA;IAAA;EAAA;AAKb,CAAC",
+    "mappings": "AACM,MAAMA,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,eAAeC,OAAOA,CAAA;IAAA,MAAAC,MAAA,kDAAAC,OAAA;IAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA,CADhBF,KAAK;IAAA,IAAAI,KAAA;MAAA,OAAAC,OAAA;IAAA,WAAAD,KAAA;MAAA,MAAAC,OAAA;IAAA;EAAA;AAKb,CAAC",
     "names": [
       "outer",
       "value",
@@ -215,7 +215,7 @@ export default _entry("26ecc3a5-0-example");",
     "version": 3,
   },
   "roots": [
-    "/path/to/example.ts?directive=0.ts",
+    "/path/to/example.ts?my-example=0.ts",
   ],
 }
 `;
@@ -255,10 +255,10 @@ exports[`FunctionDeclaration > server > should skip non-async server functions 1
 
 exports[`FunctionDeclaration > server > should skip top-level values for scope 1`] = `
 {
-  "code": "import { value } from "./example.ts?directive=0.ts";
+  "code": "import { value } from "./example.ts?my-example=0.ts";
 const outer = () => {
   async function example() {
-    const _block = (await import("./example.ts?directive=2.ts")).default;
+    const _block = (await import("./example.ts?my-example=2.ts")).default;
     const [_type, _result, _mutations] = await _block();
     if (_type === 2) {
       return _result;
@@ -268,11 +268,11 @@ const outer = () => {
   }
 };",
   "entries": [
-    "/path/to/example.ts?directive=2.ts",
+    "/path/to/example.ts?my-example=2.ts",
   ],
   "files": Map {
-    "/path/to/example.ts?directive=0.ts" => "export const value = 'foo bar';",
-    "/path/to/example.ts?directive=1.ts" => "import { value } from "./example.ts?directive=0.ts";
+    "/path/to/example.ts?my-example=0.ts" => "export const value = 'foo bar';",
+    "/path/to/example.ts?my-example=1.ts" => "import { value } from "./example.ts?my-example=0.ts";
 export default (async function () {
   try {
     return [2, value];
@@ -281,13 +281,13 @@ export default (async function () {
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=2.ts" => "import { server as _entry } from "my-example/server";
-import _root from "./example.ts?directive=1.ts";
+    "/path/to/example.ts?my-example=2.ts" => "import { server as _entry } from "my-example/server";
+import _root from "./example.ts?my-example=1.ts";
 export default _entry("26ecc3a5-0-example", _root);",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AAEM,MAAMA,KAAK,GAAGA,CAAA,KAAM;EAClB,eAAeC,OAAOA,CAAA;IAAA,MAAAC,MAAA,iDAAAC,OAAA;IAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;IAAA,IAAAE,KAAA;MAAA,OAAAC,OAAA;IAAA,WAAAD,KAAA;MAAA,MAAAC,OAAA;IAAA;EAAA;AAIxB,CAAC",
+    "mappings": ";AAEM,MAAMA,KAAK,GAAGA,CAAA,KAAM;EAClB,eAAeC,OAAOA,CAAA;IAAA,MAAAC,MAAA,kDAAAC,OAAA;IAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;IAAA,IAAAE,KAAA;MAAA,OAAAC,OAAA;IAAA,WAAAD,KAAA;MAAA,MAAAC,OAAA;IAAA;EAAA;AAIxB,CAAC",
     "names": [
       "outer",
       "example",
@@ -315,7 +315,7 @@ export default _entry("26ecc3a5-0-example", _root);",
     "version": 3,
   },
   "roots": [
-    "/path/to/example.ts?directive=1.ts",
+    "/path/to/example.ts?my-example=1.ts",
   ],
 }
 `;
@@ -323,7 +323,7 @@ export default _entry("26ecc3a5-0-example", _root);",
 exports[`FunctionDeclaration > server > should transform valid server functions 1`] = `
 {
   "code": "async function example() {
-  const _block = (await import("./example.ts?directive=1.ts")).default;
+  const _block = (await import("./example.ts?my-example=1.ts")).default;
   const [_type, _result, _mutations] = await _block();
   if (_type === 2) {
     return _result;
@@ -332,10 +332,10 @@ exports[`FunctionDeclaration > server > should transform valid server functions 
   }
 }",
   "entries": [
-    "/path/to/example.ts?directive=1.ts",
+    "/path/to/example.ts?my-example=1.ts",
   ],
   "files": Map {
-    "/path/to/example.ts?directive=0.ts" => "export default (async function () {
+    "/path/to/example.ts?my-example=0.ts" => "export default (async function () {
   try {
     return [2, 'foo bar'];
   } catch (_error) {
@@ -343,13 +343,13 @@ exports[`FunctionDeclaration > server > should transform valid server functions 
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/server";
-import _root from "./example.ts?directive=0.ts";
+    "/path/to/example.ts?my-example=1.ts" => "import { server as _entry } from "my-example/server";
+import _root from "./example.ts?my-example=0.ts";
 export default _entry("26ecc3a5-0-example", _root);",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACM,eAAeA,OAAOA,CAAA;EAAA,MAAAC,MAAA,iDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA,OAAAC,OAAA;EAAA,WAAAD,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA",
+    "mappings": "AACM,eAAeA,OAAOA,CAAA;EAAA,MAAAC,MAAA,kDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA,OAAAC,OAAA;EAAA,WAAAD,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA",
     "names": [
       "example",
       "_block",
@@ -373,7 +373,7 @@ export default _entry("26ecc3a5-0-example", _root);",
     "version": 3,
   },
   "roots": [
-    "/path/to/example.ts?directive=0.ts",
+    "/path/to/example.ts?my-example=0.ts",
   ],
 }
 `;
@@ -383,7 +383,7 @@ exports[`FunctionDeclaration > server > should transform valid server functions 
   "code": "const outer = () => {
   const value = 'foo bar';
   async function example() {
-    const _block = (await import("./example.ts?directive=1.ts")).default;
+    const _block = (await import("./example.ts?my-example=1.ts")).default;
     const [_type, _result, _mutations] = await _block(value);
     if (_type === 2) {
       return _result;
@@ -393,10 +393,10 @@ exports[`FunctionDeclaration > server > should transform valid server functions 
   }
 };",
   "entries": [
-    "/path/to/example.ts?directive=1.ts",
+    "/path/to/example.ts?my-example=1.ts",
   ],
   "files": Map {
-    "/path/to/example.ts?directive=0.ts" => "export default (async function (value) {
+    "/path/to/example.ts?my-example=0.ts" => "export default (async function (value) {
   try {
     return [2, value];
   } catch (_error) {
@@ -404,13 +404,13 @@ exports[`FunctionDeclaration > server > should transform valid server functions 
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/server";
-import _root from "./example.ts?directive=0.ts";
+    "/path/to/example.ts?my-example=1.ts" => "import { server as _entry } from "my-example/server";
+import _root from "./example.ts?my-example=0.ts";
 export default _entry("26ecc3a5-0-example", _root);",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACM,MAAMA,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,eAAeC,OAAOA,CAAA;IAAA,MAAAC,MAAA,iDAAAC,OAAA;IAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA,CADhBF,KAAK;IAAA,IAAAI,KAAA;MAAA,OAAAC,OAAA;IAAA,WAAAD,KAAA;MAAA,MAAAC,OAAA;IAAA;EAAA;AAKb,CAAC",
+    "mappings": "AACM,MAAMA,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,eAAeC,OAAOA,CAAA;IAAA,MAAAC,MAAA,kDAAAC,OAAA;IAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA,CADhBF,KAAK;IAAA,IAAAI,KAAA;MAAA,OAAAC,OAAA;IAAA,WAAAD,KAAA;MAAA,MAAAC,OAAA;IAAA;EAAA;AAKb,CAAC",
     "names": [
       "outer",
       "value",
@@ -439,7 +439,7 @@ export default _entry("26ecc3a5-0-example", _root);",
     "version": 3,
   },
   "roots": [
-    "/path/to/example.ts?directive=0.ts",
+    "/path/to/example.ts?my-example=0.ts",
   ],
 }
 `;

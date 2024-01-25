@@ -1,6 +1,7 @@
 import type * as compiler from '../../src';
 
 export const SERVER: compiler.Options = {
+  key: 'my-example',
   directives: [
     {
       value: 'use server',
@@ -16,6 +17,7 @@ export const SERVER: compiler.Options = {
   env: 'development',
 };
 export const CLIENT: compiler.Options = {
+  key: 'my-example',
   directives: [
     {
       value: 'use server',
