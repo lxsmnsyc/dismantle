@@ -11,6 +11,7 @@ export const SERVER: compiler.Options = {
       },
     },
   ],
+  functions: [],
   mode: 'server',
   env: 'development',
 };
@@ -25,6 +26,7 @@ export const CLIENT: compiler.Options = {
       },
     },
   ],
+  functions: [],
   mode: 'client',
   env: 'development',
 };

@@ -1,6 +1,8 @@
 import { compile } from 'dismantle';
 
 const code = `
+import { server$ } from 'my-example';
+
 const foo = 'foo';
 const bar = 'bar';
 
@@ -8,17 +10,17 @@ function log(prefix, suffix) {
   console.log(prefix, suffix);
 }
 
-async function logPrefix(prefix) {
-  'use server';
+const logPrefix = server$((prefix) => {
   if (prefix === 'foo') {
     log(prefix, foo);
   } else {
     log(prefix, bar);
   }
-}
+});
 `;
 
 const result = await compile(code, 'example.ts', {
+  key: 'example',
   mode: 'server',
   env: 'development',
   directives: [
@@ -27,7 +29,21 @@ const result = await compile(code, 'example.ts', {
       import: {
         kind: 'named',
         name: '$$server',
-        source: 'use-server-directive',
+        source: 'my-example',
+      },
+    },
+  ],
+  functions: [
+    {
+      source: {
+        kind: 'named',
+        name: 'server$',
+        source: 'my-example',
+      },
+      target: {
+        kind: 'named',
+        name: 'server$',
+        source: 'my-example/server',
       },
     },
   ],

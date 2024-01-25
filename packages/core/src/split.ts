@@ -2,6 +2,7 @@ import * as t from '@babel/types';
 import type * as babel from '@babel/core';
 import type {
   DirectiveDefinition,
+  FunctionDefinition,
   ModuleDefinition,
   StateContext,
 } from './types';
@@ -143,7 +144,9 @@ function extractBindings(
 }
 
 function createVirtualFileName(ctx: StateContext) {
-  return `./${ctx.path.base}?directive=${ctx.virtual.count++}${ctx.path.ext}`;
+  return `./${ctx.path.base}?${ctx.options.key}=${ctx.virtual.count++}${
+    ctx.path.ext
+  }`;
 }
 
 function splitFunctionDeclaration(
@@ -665,5 +668,130 @@ export function splitBlock(
     path,
     directive,
     extractBindings(ctx, path, getForeignBindings(path, 'block')),
+  );
+}
+
+function replaceFunction(
+  ctx: StateContext,
+  path: babel.NodePath<t.ArrowFunctionExpression | t.FunctionExpression>,
+  func: FunctionDefinition,
+  bindings: ExtractedBindings,
+): t.Expression {
+  const rootFile = createVirtualFileName(ctx);
+  const rootContent = generator(
+    t.program([
+      ...(ctx.options.mode === 'server'
+        ? moduleDefinitionsToImportDeclarations(bindings.modules)
+        : []),
+      t.exportDefaultDeclaration(
+        t.isFunctionExpression(path.node)
+          ? t.functionExpression(
+              path.node.id,
+              [t.arrayPattern(bindings.locals), ...path.node.params],
+              path.node.body,
+              path.node.async,
+              path.node.generator,
+            )
+          : t.arrowFunctionExpression(
+              [t.arrayPattern(bindings.locals), ...path.node.params],
+              path.node.body,
+              path.node.async,
+            ),
+      ),
+    ]),
+  );
+  ctx.onVirtualFile(rootFile, rootContent.code, 'root');
+  // Create an ID
+  let id = `${ctx.blocks.hash}-${ctx.blocks.count++}`;
+  if (ctx.options.env !== 'production') {
+    id += `-${getDescriptiveName(path, 'anonymous')}`;
+  }
+  const entryID = path.scope.generateUidIdentifier('entry');
+  const entryImports: ModuleDefinition[] = [
+    {
+      kind: func.target.kind,
+      source: func.target.source,
+      local: entryID.name,
+      imported: func.target.kind === 'named' ? func.target.name : undefined,
+    },
+  ];
+  const args: t.Expression[] = [t.stringLiteral(id)];
+  if (ctx.options.mode === 'server') {
+    const rootID = path.scope.generateUidIdentifier('root');
+    entryImports.push({
+      kind: 'default',
+      source: rootFile,
+      local: rootID.name,
+    });
+    args.push(rootID);
+  }
+  // Create the registration call
+  const entryFile = createVirtualFileName(ctx);
+  const entryContent = generator(
+    t.program([
+      ...moduleDefinitionsToImportDeclarations(entryImports),
+      t.exportDefaultDeclaration(t.callExpression(entryID, args)),
+    ]),
+  );
+  ctx.onVirtualFile(entryFile, entryContent.code, 'entry');
+
+  const rest = path.scope.generateUidIdentifier('rest');
+  const fnID = path.scope.generateUidIdentifier('fn');
+
+  return t.arrowFunctionExpression(
+    [t.restElement(rest)],
+    t.blockStatement([
+      t.variableDeclaration('const', [
+        t.variableDeclarator(
+          fnID,
+          t.memberExpression(
+            t.awaitExpression(t.importExpression(t.stringLiteral(entryFile))),
+            t.identifier('default'),
+          ),
+        ),
+      ]),
+      t.returnStatement(
+        t.callExpression(fnID, [
+          t.arrayExpression(bindings.locals),
+          t.spreadElement(rest),
+        ]),
+      ),
+    ]),
+    true,
+  );
+}
+
+function isSkippableFunction(
+  node: t.ArrowFunctionExpression | t.FunctionExpression,
+): boolean {
+  if (node.leadingComments) {
+    for (let i = 0, len = node.leadingComments.length; i < len; i++) {
+      if (/^@dismantle skip$/.test(node.leadingComments[i].value)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+export function splitFunction(
+  ctx: StateContext,
+  path: babel.NodePath<t.ArrowFunctionExpression | t.FunctionExpression>,
+  func: FunctionDefinition,
+): void {
+  if (isSkippableFunction(path.node)) {
+    return;
+  }
+  path.replaceWith(
+    t.addComment(
+      replaceFunction(
+        ctx,
+        path,
+        func,
+        extractBindings(ctx, path, getForeignBindings(path, 'function')),
+      ),
+      'leading',
+      '@dismantle skip',
+    ),
   );
 }

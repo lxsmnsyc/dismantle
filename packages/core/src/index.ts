@@ -53,6 +53,10 @@ export async function compile(
         roots.push(filePath);
       }
     },
+    registrations: {
+      identifiers: new Map(),
+      namespaces: new Map(),
+    },
   };
 
   const plugins: babel.ParserOptions['plugins'] = ['jsx'];

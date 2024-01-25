@@ -19,10 +19,18 @@ export interface DirectiveDefinition {
   import: ImportDefinition;
 }
 
+export interface FunctionDefinition {
+  type: 'function' | 'promise';
+  source: ImportDefinition;
+  target: ImportDefinition;
+}
+
 export interface Options {
+  key: string;
   mode: 'server' | 'client';
   env: 'production' | 'development';
   directives: DirectiveDefinition[];
+  functions: FunctionDefinition[];
 }
 
 export interface ModuleDefinition {
@@ -49,4 +57,8 @@ export interface StateContext {
     content: string,
     mode: 'entry' | 'root' | 'none',
   ) => void;
+  registrations: {
+    identifiers: Map<t.Identifier, FunctionDefinition>;
+    namespaces: Map<t.Identifier, FunctionDefinition[]>;
+  };
 }
