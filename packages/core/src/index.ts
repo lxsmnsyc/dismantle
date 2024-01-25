@@ -1,5 +1,5 @@
 import * as babel from '@babel/core';
-import path from 'path';
+import path from 'node:path';
 import type { Options, StateContext } from './types';
 import assert from './utils/assert';
 import { plugin } from './plugin';

@@ -1,8 +1,8 @@
 import * as t from '@babel/types';
-import * as babel from '@babel/core';
+import type * as babel from '@babel/core';
 import assert from './assert';
 import { getImportSpecifierName } from './get-import-specifier-name';
-import { ModuleDefinition } from '../types';
+import type { ModuleDefinition } from '../types';
 import { isPathValid } from './unwrap';
 
 export function getModuleDefinition(path: babel.NodePath): ModuleDefinition {

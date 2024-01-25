@@ -1,8 +1,12 @@
 import * as t from '@babel/types';
-import * as babel from '@babel/core';
-import { DirectiveDefinition, ModuleDefinition, StateContext } from './types';
+import type * as babel from '@babel/core';
+import type {
+  DirectiveDefinition,
+  ModuleDefinition,
+  StateContext,
+} from './types';
 import getForeignBindings from './utils/get-foreign-bindings';
-import { Binding, BindingKind } from '@babel/traverse';
+import type { Binding, BindingKind } from '@babel/traverse';
 import { getDescriptiveName } from './utils/get-descriptive-name';
 import generator from './utils/generator-shim';
 import { getRootStatementPath } from './utils/get-root-statement-path';
@@ -183,7 +187,7 @@ function splitVariableDeclarator(
         getForeignBindings(
           path,
           isPathValid(init, t.isArrowFunctionExpression) ||
-          isPathValid(init, t.isFunctionExpression)
+            isPathValid(init, t.isFunctionExpression)
             ? 'function'
             : 'expression',
         ),

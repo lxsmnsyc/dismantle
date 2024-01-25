@@ -1,6 +1,6 @@
-import * as t from '@babel/types';
-import * as babel from '@babel/core';
-import { DirectiveDefinition, StateContext } from './types';
+import type * as t from '@babel/types';
+import type * as babel from '@babel/core';
+import type { DirectiveDefinition, StateContext } from './types';
 import { splitBlock } from './split';
 
 function getValidDirectiveFromString(

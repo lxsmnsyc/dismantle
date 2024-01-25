@@ -1,5 +1,5 @@
 import type * as babel from '@babel/core';
-import { StateContext } from './types';
+import type { StateContext } from './types';
 import { transformBlock } from './transform-block';
 
 interface State extends babel.PluginPass {

@@ -1,5 +1,5 @@
 import type * as t from '@babel/types';
-import type * as path from 'path';
+import type * as path from 'node:path';
 
 export interface NamedImportDefinition {
   kind: 'named';
