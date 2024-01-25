@@ -59,8 +59,26 @@ try {
     "/path/to/example.ts?my-example=2.ts",
   ],
   "files": Map {
-    "/path/to/example.ts?my-example=0.ts" => "export const value = 'foo bar';",
-    "/path/to/example.ts?my-example=1.ts" => "export default (async function () {
+    "/path/to/example.ts?my-example=0.ts" => {
+      "code": "export const value = 'foo bar';",
+      "map": {
+        "file": undefined,
+        "mappings": "aACYA,KAAK,GAAG,SAAS",
+        "names": [
+          "value",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=1.ts" => {
+      "code": "export default (async function () {
   try {
     await report(value, err);
   } catch (_error) {
@@ -68,8 +86,38 @@ try {
   }
   return [3];
 });",
-    "/path/to/example.ts?my-example=2.ts" => "import { server as _entry } from "my-example/client";
+      "map": {
+        "file": undefined,
+        "mappings": ";;IAMQ,MAAMA,MAAM,CAACC,KAAK,EAAEC,GAAG,CAAC;EAAC,SAAAC,MAAA;IAAA,WAAAA,MAAA;EAAA;EAAA;AAAA",
+        "names": [
+          "report",
+          "value",
+          "err",
+          "_error",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=2.ts" => {
+      "code": "import { server as _entry } from "my-example/client";
 export default _entry("26ecc3a5-0-anonymous");",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
   },
   "map": {
     "file": undefined,
@@ -124,7 +172,8 @@ exports[`CatchClause > client > should transform valid server functions with sco
     "/path/to/example.ts?my-example=1.ts",
   ],
   "files": Map {
-    "/path/to/example.ts?my-example=0.ts" => "export default (async function (value) {
+    "/path/to/example.ts?my-example=0.ts" => {
+      "code": "export default (async function (value) {
   try {
     await report(value, err);
   } catch (_error) {
@@ -132,8 +181,38 @@ exports[`CatchClause > client > should transform valid server functions with sco
   }
   return [3];
 });",
-    "/path/to/example.ts?my-example=1.ts" => "import { server as _entry } from "my-example/client";
+      "map": {
+        "file": undefined,
+        "mappings": "gCAEcA,KAAK;EAAA;IAKT,MAAMC,MAAM,CAACD,KAAK,EAAEE,GAAG,CAAC;EAAC,SAAAC,MAAA;IAAA,WAAAA,MAAA;EAAA;EAAA;AAAA",
+        "names": [
+          "value",
+          "report",
+          "err",
+          "_error",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=1.ts" => {
+      "code": "import { server as _entry } from "my-example/client";
 export default _entry("26ecc3a5-0-foo");",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
   },
   "map": {
     "file": undefined,
@@ -189,7 +268,8 @@ exports[`CatchClause > client > should transform valid server try statements 1`]
     "/path/to/example.ts?my-example=1.ts",
   ],
   "files": Map {
-    "/path/to/example.ts?my-example=0.ts" => "export default (async function () {
+    "/path/to/example.ts?my-example=0.ts" => {
+      "code": "export default (async function () {
   try {
     await report(err);
   } catch (_error) {
@@ -197,8 +277,37 @@ exports[`CatchClause > client > should transform valid server try statements 1`]
   }
   return [3];
 });",
-    "/path/to/example.ts?my-example=1.ts" => "import { server as _entry } from "my-example/client";
+      "map": {
+        "file": undefined,
+        "mappings": ";;IAKQ,MAAMA,MAAM,CAACC,GAAG,CAAC;EAAC,SAAAC,MAAA;IAAA,WAAAA,MAAA;EAAA;EAAA;AAAA",
+        "names": [
+          "report",
+          "err",
+          "_error",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=1.ts" => {
+      "code": "import { server as _entry } from "my-example/client";
 export default _entry("26ecc3a5-0-anonymous");",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
   },
   "map": {
     "file": undefined,
@@ -293,7 +402,8 @@ try {
     "/path/to/example.ts?my-example=1.ts",
   ],
   "files": Map {
-    "/path/to/example.ts?my-example=0.ts" => "export default (async function () {
+    "/path/to/example.ts?my-example=0.ts" => {
+      "code": "export default (async function () {
   try {
     await report(err);
   } catch (_error) {
@@ -301,9 +411,38 @@ try {
   }
   return [3];
 });",
-    "/path/to/example.ts?my-example=1.ts" => "import { server as _entry } from "my-example/server";
+      "map": {
+        "file": undefined,
+        "mappings": ";;IAMQ,MAAMA,MAAM,CAACC,GAAG,CAAC;EAAC,SAAAC,MAAA;IAAA,WAAAA,MAAA;EAAA;EAAA;AAAA",
+        "names": [
+          "report",
+          "err",
+          "_error",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=1.ts" => {
+      "code": "import { server as _entry } from "my-example/server";
 import _root from "./example.ts?my-example=0.ts";
 export default _entry("26ecc3a5-0-anonymous", _root);",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
   },
   "map": {
     "file": undefined,
@@ -359,7 +498,8 @@ exports[`CatchClause > server > should transform valid server functions with sco
     "/path/to/example.ts?my-example=1.ts",
   ],
   "files": Map {
-    "/path/to/example.ts?my-example=0.ts" => "export default (async function () {
+    "/path/to/example.ts?my-example=0.ts" => {
+      "code": "export default (async function () {
   try {
     await report(err);
   } catch (_error) {
@@ -367,9 +507,38 @@ exports[`CatchClause > server > should transform valid server functions with sco
   }
   return [3];
 });",
-    "/path/to/example.ts?my-example=1.ts" => "import { server as _entry } from "my-example/server";
+      "map": {
+        "file": undefined,
+        "mappings": ";;IAOU,MAAMA,MAAM,CAACC,GAAG,CAAC;EAAC,SAAAC,MAAA;IAAA,WAAAA,MAAA;EAAA;EAAA;AAAA",
+        "names": [
+          "report",
+          "err",
+          "_error",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=1.ts" => {
+      "code": "import { server as _entry } from "my-example/server";
 import _root from "./example.ts?my-example=0.ts";
 export default _entry("26ecc3a5-0-foo", _root);",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
   },
   "map": {
     "file": undefined,
@@ -425,7 +594,8 @@ exports[`CatchClause > server > should transform valid server try statements 1`]
     "/path/to/example.ts?my-example=1.ts",
   ],
   "files": Map {
-    "/path/to/example.ts?my-example=0.ts" => "export default (async function () {
+    "/path/to/example.ts?my-example=0.ts" => {
+      "code": "export default (async function () {
   try {
     await report(err);
   } catch (_error) {
@@ -433,9 +603,38 @@ exports[`CatchClause > server > should transform valid server try statements 1`]
   }
   return [3];
 });",
-    "/path/to/example.ts?my-example=1.ts" => "import { server as _entry } from "my-example/server";
+      "map": {
+        "file": undefined,
+        "mappings": ";;IAKQ,MAAMA,MAAM,CAACC,GAAG,CAAC;EAAC,SAAAC,MAAA;IAAA,WAAAA,MAAA;EAAA;EAAA;AAAA",
+        "names": [
+          "report",
+          "err",
+          "_error",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=1.ts" => {
+      "code": "import { server as _entry } from "my-example/server";
 import _root from "./example.ts?my-example=0.ts";
 export default _entry("26ecc3a5-0-anonymous", _root);",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
   },
   "map": {
     "file": undefined,
