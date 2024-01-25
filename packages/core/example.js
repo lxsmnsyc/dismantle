@@ -19,7 +19,7 @@ const logPrefix = server$((prefix) => {
 });
 `;
 
-const result = await compile(code, 'example.ts', {
+const result = await compile(code, '/path/to/example.ts', {
   key: 'example',
   mode: 'server',
   env: 'development',
@@ -51,6 +51,7 @@ const result = await compile(code, 'example.ts', {
 
 console.log('ENTRY');
 console.log(result.code);
+console.log(result.map);
 
 console.log('\nVIRTUALS');
 for (const [name, content] of result.files) {

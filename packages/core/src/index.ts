@@ -1,14 +1,12 @@
 import * as babel from '@babel/core';
 import path from 'node:path';
-import type { Options, StateContext } from './types';
+import type { CodeOutput, Options, StateContext } from './types';
 import assert from './utils/assert';
 import { plugin } from './plugin';
 import xxHash32 from './utils/xxhash32';
 
-export interface Output {
-  code: babel.BabelFileResult['code'];
-  map: babel.BabelFileResult['map'];
-  files: Map<string, string>;
+export interface Output extends CodeOutput {
+  files: Map<string, CodeOutput>;
   entries: string[];
   roots: string[];
 }
@@ -30,9 +28,10 @@ export async function compile(
 
   const entries: string[] = [];
   const roots: string[] = [];
-  const files = new Map<string, string>();
+  const files = new Map<string, CodeOutput>();
 
   const ctx: StateContext = {
+    id,
     path: parsedPath,
     imports: new Map(),
     virtual: {

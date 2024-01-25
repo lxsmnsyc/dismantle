@@ -9,7 +9,7 @@ import type {
 import getForeignBindings from './utils/get-foreign-bindings';
 import type { Binding, BindingKind } from '@babel/traverse';
 import { getDescriptiveName } from './utils/get-descriptive-name';
-import generator from './utils/generator-shim';
+import { generateCode } from './utils/generator-shim';
 import { getRootStatementPath } from './utils/get-root-statement-path';
 import { getModuleDefinition } from './utils/get-module-definition';
 import { isPathValid, unwrapPath } from './utils/unwrap';
@@ -156,13 +156,14 @@ function splitFunctionDeclaration(
   const bindings = getForeignBindings(path, 'function');
   const { modules } = extractBindings(ctx, path, bindings);
   const file = createVirtualFileName(ctx);
-  const compiled = generator(
+  const compiled = generateCode(
+    ctx.id,
     t.program([
       ...moduleDefinitionsToImportDeclarations(modules),
       t.exportNamedDeclaration(path.node),
     ]),
   );
-  ctx.onVirtualFile(file, compiled.code, 'none');
+  ctx.onVirtualFile(file, { code: compiled.code, map: compiled.map }, 'none');
 
   const statement = getRootStatementPath(path);
 
@@ -198,13 +199,14 @@ function splitVariableDeclarator(
     : [];
   const file = createVirtualFileName(ctx);
   const parent = path.parentPath.node as t.VariableDeclaration;
-  const compiled = generator(
+  const compiled = generateCode(
+    ctx.id,
     t.program([
       ...moduleDefinitionsToImportDeclarations(modules),
       t.exportNamedDeclaration(t.variableDeclaration(parent.kind, [path.node])),
     ]),
   );
-  ctx.onVirtualFile(file, compiled.code, 'none');
+  ctx.onVirtualFile(file, { code: compiled.code, map: compiled.map }, 'none');
   const definitions: ModuleDefinition[] = getIdentifiersFromLVal(
     path.node.id,
   ).map(name => ({
@@ -506,7 +508,8 @@ function replaceBlock(
   // Transform all control statements
   const halting = transformHalting(path, bindings.mutations);
   const rootFile = createVirtualFileName(ctx);
-  const rootContent = generator(
+  const rootContent = generateCode(
+    ctx.id,
     t.program([
       ...(ctx.options.mode === 'server'
         ? moduleDefinitionsToImportDeclarations(bindings.modules)
@@ -522,7 +525,11 @@ function replaceBlock(
       ),
     ]),
   );
-  ctx.onVirtualFile(rootFile, rootContent.code, 'root');
+  ctx.onVirtualFile(
+    rootFile,
+    { code: rootContent.code, map: rootContent.map },
+    'root',
+  );
   // Create an ID
   let id = `${ctx.blocks.hash}-${ctx.blocks.count++}`;
   if (ctx.options.env !== 'production') {
@@ -550,13 +557,18 @@ function replaceBlock(
   }
   // Create the registration call
   const entryFile = createVirtualFileName(ctx);
-  const entryContent = generator(
+  const entryContent = generateCode(
+    ctx.id,
     t.program([
       ...moduleDefinitionsToImportDeclarations(entryImports),
       t.exportDefaultDeclaration(t.callExpression(entryID, args)),
     ]),
   );
-  ctx.onVirtualFile(entryFile, entryContent.code, 'entry');
+  ctx.onVirtualFile(
+    entryFile,
+    { code: entryContent.code, map: entryContent.map },
+    'entry',
+  );
 
   // Move to the replacement for the server block,
   // declare the type and result based from transformHalting
@@ -678,7 +690,8 @@ function replaceFunction(
   bindings: ExtractedBindings,
 ): t.Expression {
   const rootFile = createVirtualFileName(ctx);
-  const rootContent = generator(
+  const rootContent = generateCode(
+    ctx.id,
     t.program([
       ...(ctx.options.mode === 'server'
         ? moduleDefinitionsToImportDeclarations(bindings.modules)
@@ -700,7 +713,11 @@ function replaceFunction(
       ),
     ]),
   );
-  ctx.onVirtualFile(rootFile, rootContent.code, 'root');
+  ctx.onVirtualFile(
+    rootFile,
+    { code: rootContent.code, map: rootContent.map },
+    'root',
+  );
   // Create an ID
   let id = `${ctx.blocks.hash}-${ctx.blocks.count++}`;
   if (ctx.options.env !== 'production') {
@@ -727,13 +744,18 @@ function replaceFunction(
   }
   // Create the registration call
   const entryFile = createVirtualFileName(ctx);
-  const entryContent = generator(
+  const entryContent = generateCode(
+    ctx.id,
     t.program([
       ...moduleDefinitionsToImportDeclarations(entryImports),
       t.exportDefaultDeclaration(t.callExpression(entryID, args)),
     ]),
   );
-  ctx.onVirtualFile(entryFile, entryContent.code, 'entry');
+  ctx.onVirtualFile(
+    entryFile,
+    { code: entryContent.code, map: entryContent.map },
+    'entry',
+  );
 
   const rest = path.scope.generateUidIdentifier('rest');
 

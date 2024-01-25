@@ -1,5 +1,6 @@
 import type * as t from '@babel/types';
 import type * as path from 'node:path';
+import type * as babel from '@babel/core';
 
 export interface NamedImportDefinition {
   kind: 'named';
@@ -40,7 +41,13 @@ export interface ModuleDefinition {
   imported?: string;
 }
 
+export interface CodeOutput {
+  code: babel.BabelFileResult['code'];
+  map: babel.BabelFileResult['map'];
+}
+
 export interface StateContext {
+  id: string;
   path: path.ParsedPath;
   imports: Map<string, t.Identifier>;
   virtual: {
@@ -54,7 +61,7 @@ export interface StateContext {
   options: Options;
   onVirtualFile: (
     path: string,
-    content: string,
+    content: CodeOutput,
     mode: 'entry' | 'root' | 'none',
   ) => void;
   registrations: {
