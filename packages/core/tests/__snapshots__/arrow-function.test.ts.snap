@@ -60,7 +60,7 @@ const outer = () => {
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=2.ts" => "import { server as _entry } from "dismantle/example-client";
+    "/path/to/example.ts?directive=2.ts" => "import { server as _entry } from "my-example/client";
 export default _entry("26ecc3a5-0-example");",
   },
   "map": {
@@ -121,7 +121,7 @@ exports[`ArrowFunctionExpression > client > should transform valid server functi
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-client";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/client";
 export default _entry("26ecc3a5-0-example");",
   },
   "map": {
@@ -181,7 +181,7 @@ exports[`ArrowFunctionExpression > client > should transform valid server functi
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-client";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/client";
 export default _entry("26ecc3a5-0-example");",
   },
   "map": {
@@ -281,7 +281,7 @@ export default (async function () {
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=2.ts" => "import { server as _entry } from "dismantle/example-server";
+    "/path/to/example.ts?directive=2.ts" => "import { server as _entry } from "my-example/server";
 import _root from "./example.ts?directive=1.ts";
 export default _entry("26ecc3a5-0-example", _root);",
   },
@@ -343,7 +343,7 @@ exports[`ArrowFunctionExpression > server > should transform valid server functi
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-server";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/server";
 import _root from "./example.ts?directive=0.ts";
 export default _entry("26ecc3a5-0-example", _root);",
   },
@@ -404,7 +404,7 @@ exports[`ArrowFunctionExpression > server > should transform valid server functi
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-server";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/server";
 import _root from "./example.ts?directive=0.ts";
 export default _entry("26ecc3a5-0-example", _root);",
   },

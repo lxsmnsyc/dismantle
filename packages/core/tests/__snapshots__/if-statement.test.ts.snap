@@ -61,7 +61,7 @@ if (cond()) {
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=2.ts" => "import { server as _entry } from "dismantle/example-client";
+    "/path/to/example.ts?directive=2.ts" => "import { server as _entry } from "my-example/client";
 export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
@@ -120,7 +120,7 @@ exports[`IfStatement > client > should transform valid server functions with sco
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-client";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/client";
 export default _entry("26ecc3a5-0-foo");",
   },
   "map": {
@@ -180,7 +180,7 @@ exports[`IfStatement > client > should transform valid server if statements 1`] 
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-client";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/client";
 export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
@@ -276,7 +276,7 @@ export default (async function () {
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=2.ts" => "import { server as _entry } from "dismantle/example-server";
+    "/path/to/example.ts?directive=2.ts" => "import { server as _entry } from "my-example/server";
 import _root from "./example.ts?directive=1.ts";
 export default _entry("26ecc3a5-0-anonymous", _root);",
   },
@@ -336,7 +336,7 @@ exports[`IfStatement > server > should transform valid server functions with sco
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-server";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/server";
 import _root from "./example.ts?directive=0.ts";
 export default _entry("26ecc3a5-0-foo", _root);",
   },
@@ -397,7 +397,7 @@ exports[`IfStatement > server > should transform valid server if statements 1`] 
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-server";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/server";
 import _root from "./example.ts?directive=0.ts";
 export default _entry("26ecc3a5-0-anonymous", _root);",
   },

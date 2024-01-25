@@ -62,7 +62,7 @@ for (const item of items) {
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=2.ts" => "import { server as _entry } from "dismantle/example-client";
+    "/path/to/example.ts?directive=2.ts" => "import { server as _entry } from "my-example/client";
 export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
@@ -126,7 +126,7 @@ exports[`ForOfStatement > client > should transform break statements 1`] = `
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-client";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/client";
 export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
@@ -194,7 +194,7 @@ exports[`ForOfStatement > client > should transform continue statements 1`] = `
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-client";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/client";
 export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
@@ -264,7 +264,7 @@ exports[`ForOfStatement > client > should transform labeled break statements 1`]
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-client";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/client";
 export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
@@ -335,7 +335,7 @@ exports[`ForOfStatement > client > should transform labeled continue statements 
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-client";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/client";
 export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
@@ -397,7 +397,7 @@ exports[`ForOfStatement > client > should transform valid server for-of statemen
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-client";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/client";
 export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
@@ -456,7 +456,7 @@ exports[`ForOfStatement > client > should transform valid server functions with 
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-client";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/client";
 export default _entry("26ecc3a5-0-foo");",
   },
   "map": {
@@ -559,7 +559,7 @@ export default (async function () {
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=2.ts" => "import { server as _entry } from "dismantle/example-server";
+    "/path/to/example.ts?directive=2.ts" => "import { server as _entry } from "my-example/server";
 import _root from "./example.ts?directive=1.ts";
 export default _entry("26ecc3a5-0-anonymous", _root);",
   },
@@ -624,7 +624,7 @@ exports[`ForOfStatement > server > should transform break statements 1`] = `
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-server";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/server";
 import _root from "./example.ts?directive=0.ts";
 export default _entry("26ecc3a5-0-anonymous", _root);",
   },
@@ -693,7 +693,7 @@ exports[`ForOfStatement > server > should transform continue statements 1`] = `
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-server";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/server";
 import _root from "./example.ts?directive=0.ts";
 export default _entry("26ecc3a5-0-anonymous", _root);",
   },
@@ -764,7 +764,7 @@ exports[`ForOfStatement > server > should transform labeled break statements 1`]
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-server";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/server";
 import _root from "./example.ts?directive=0.ts";
 export default _entry("26ecc3a5-0-anonymous", _root);",
   },
@@ -836,7 +836,7 @@ exports[`ForOfStatement > server > should transform labeled continue statements 
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-server";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/server";
 import _root from "./example.ts?directive=0.ts";
 export default _entry("26ecc3a5-0-anonymous", _root);",
   },
@@ -899,7 +899,7 @@ exports[`ForOfStatement > server > should transform valid server for-of statemen
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-server";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/server";
 import _root from "./example.ts?directive=0.ts";
 export default _entry("26ecc3a5-0-anonymous", _root);",
   },
@@ -959,7 +959,7 @@ exports[`ForOfStatement > server > should transform valid server functions with 
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-server";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/server";
 import _root from "./example.ts?directive=0.ts";
 export default _entry("26ecc3a5-0-foo", _root);",
   },

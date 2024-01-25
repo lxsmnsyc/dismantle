@@ -61,7 +61,7 @@ foo: {
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=2.ts" => "import { server as _entry } from "dismantle/example-client";
+    "/path/to/example.ts?directive=2.ts" => "import { server as _entry } from "my-example/client";
 export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
@@ -126,7 +126,7 @@ exports[`LabeledStatement > client > should transform break statements 1`] = `
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-client";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/client";
 export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
@@ -189,7 +189,7 @@ exports[`LabeledStatement > client > should transform valid server functions wit
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-client";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/client";
 export default _entry("26ecc3a5-0-foo");",
   },
   "map": {
@@ -248,7 +248,7 @@ exports[`LabeledStatement > client > should transform valid server labeled state
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-client";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/client";
 export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
@@ -344,7 +344,7 @@ export default (async function () {
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=2.ts" => "import { server as _entry } from "dismantle/example-server";
+    "/path/to/example.ts?directive=2.ts" => "import { server as _entry } from "my-example/server";
 import _root from "./example.ts?directive=1.ts";
 export default _entry("26ecc3a5-0-anonymous", _root);",
   },
@@ -410,7 +410,7 @@ exports[`LabeledStatement > server > should transform break statements 1`] = `
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-server";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/server";
 import _root from "./example.ts?directive=0.ts";
 export default _entry("26ecc3a5-0-anonymous", _root);",
   },
@@ -474,7 +474,7 @@ exports[`LabeledStatement > server > should transform valid server functions wit
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-server";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/server";
 import _root from "./example.ts?directive=0.ts";
 export default _entry("26ecc3a5-0-foo", _root);",
   },
@@ -534,7 +534,7 @@ exports[`LabeledStatement > server > should transform valid server labeled state
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-server";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "my-example/server";
 import _root from "./example.ts?directive=0.ts";
 export default _entry("26ecc3a5-0-anonymous", _root);",
   },
