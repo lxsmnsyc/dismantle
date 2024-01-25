@@ -1,4 +1,4 @@
-import { compile } from 'directive-splitter';
+import { compile } from 'dismantle';
 
 const code = `
 const foo = 'foo';

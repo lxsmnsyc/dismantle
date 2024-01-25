@@ -60,7 +60,7 @@ exports[`BlockStatement > client > should skip top-level values for scope 1`] = 
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=2.ts" => "import { server as _entry } from "directive-splitter/example-client";
+    "/path/to/example.ts?directive=2.ts" => "import { server as _entry } from "dismantle/example-client";
 export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
@@ -109,7 +109,7 @@ exports[`BlockStatement > client > should transform valid server block statement
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-client";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-client";
 export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
@@ -160,7 +160,7 @@ exports[`BlockStatement > client > should transform valid server functions with 
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-client";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-client";
 export default _entry("26ecc3a5-0-foo");",
   },
   "map": {
@@ -259,7 +259,7 @@ export default (async function () {
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=2.ts" => "import { server as _entry } from "directive-splitter/example-server";
+    "/path/to/example.ts?directive=2.ts" => "import { server as _entry } from "dismantle/example-server";
 import _root from "./example.ts?directive=1.ts";
 export default _entry("26ecc3a5-0-anonymous", _root);",
   },
@@ -309,7 +309,7 @@ exports[`BlockStatement > server > should transform valid server block statement
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-server";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-server";
 import _root from "./example.ts?directive=0.ts";
 export default _entry("26ecc3a5-0-anonymous", _root);",
   },
@@ -361,7 +361,7 @@ exports[`BlockStatement > server > should transform valid server functions with 
   }
   return [3];
 });",
-    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "directive-splitter/example-server";
+    "/path/to/example.ts?directive=1.ts" => "import { server as _entry } from "dismantle/example-server";
 import _root from "./example.ts?directive=0.ts";
 export default _entry("26ecc3a5-0-foo", _root);",
   },

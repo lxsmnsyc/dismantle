@@ -1,18 +1,13 @@
 {
-  "name": "directive-splitter",
+  "name": "dismantle",
   "version": "0.1.2",
   "type": "module",
-  "files": [
-    "dist",
-    "src"
-  ],
+  "files": ["dist", "src"],
   "engines": {
     "node": ">=10"
   },
   "license": "MIT",
-  "keywords": [
-    "pridepack"
-  ],
+  "keywords": ["pridepack"],
   "devDependencies": {
     "@types/babel__core": "^7.20.5",
     "@types/babel__generator": "^7.6.8",
@@ -44,12 +39,12 @@
   },
   "description": "Universal \"use-server\" functions",
   "repository": {
-    "url": "https://github.com/lxsmnsyc/directive-splitter.git",
+    "url": "https://github.com/lxsmnsyc/dismantle.git",
     "type": "git"
   },
-  "homepage": "https://github.com/lxsmnsyc/directive-splitter/tree/main/packages/core",
+  "homepage": "https://github.com/lxsmnsyc/dismantle/tree/main/packages/core",
   "bugs": {
-    "url": "https://github.com/lxsmnsyc/directive-splitter/issues"
+    "url": "https://github.com/lxsmnsyc/dismantle/issues"
   },
   "publishConfig": {
     "access": "public"

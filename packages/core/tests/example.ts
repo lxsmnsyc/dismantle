@@ -5,7 +5,7 @@ export const SERVER: compiler.Options = {
     {
       value: 'use server',
       import: {
-        source: 'directive-splitter/example-server',
+        source: 'dismantle/example-server',
         kind: 'named',
         name: 'server',
       },
@@ -19,7 +19,7 @@ export const CLIENT: compiler.Options = {
     {
       value: 'use server',
       import: {
-        source: 'directive-splitter/example-client',
+        source: 'dismantle/example-client',
         kind: 'named',
         name: 'server',
       },

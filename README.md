@@ -1,21 +1,21 @@
-# `directive-splitter`
+# `dismantle`
 
 > Universal directive code-splitter
 
-[![NPM](https://img.shields.io/npm/v/directive-splitter.svg)](https://www.npmjs.com/package/directive-splitter) [![JavaScript Style Guide](https://badgen.net/badge/code%20style/airbnb/ff5a5f?icon=airbnb)](https://github.com/airbnb/javascript)
+[![NPM](https://img.shields.io/npm/v/dismantle.svg)](https://www.npmjs.com/package/dismantle) [![JavaScript Style Guide](https://badgen.net/badge/code%20style/airbnb/ff5a5f?icon=airbnb)](https://github.com/airbnb/javascript)
 
 ## Install
 
 ```bash
-npm i directive-splitter
+npm i dismantle
 ```
 
 ```bash
-yarn add directive-splitter
+yarn add dismantle
 ```
 
 ```bash
-pnpm add directive-splitter
+pnpm add dismantle
 ```
 
 ## Features

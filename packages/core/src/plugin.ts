@@ -8,7 +8,7 @@ interface State extends babel.PluginPass {
 
 export function plugin(): babel.PluginObj<State> {
   return {
-    name: 'directive-splitter',
+    name: 'dismantle',
     visitor: {
       BlockStatement(path, ctx) {
         transformBlock(ctx.opts, path);
