@@ -82,6 +82,19 @@ function extractFunction(
   );
 }
 
+function isSkippableFunction(
+  node: t.ArrowFunctionExpression | t.FunctionExpression,
+): boolean {
+  if (node.leadingComments) {
+    for (let i = 0, len = node.leadingComments.length; i < len; i++) {
+      if (/^@dismantle skip$/.test(node.leadingComments[i].value)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 export function transformCall(
   ctx: StateContext,
   path: babel.NodePath<t.CallExpression>,
@@ -90,5 +103,15 @@ export function transformCall(
   if (!definition) {
     return;
   }
-  splitFunction(ctx, extractFunction(path), definition);
+  const func = extractFunction(path);
+  if (isSkippableFunction(func.node)) {
+    return;
+  }
+  const replacement = splitFunction(ctx, func, definition);
+
+  if (definition.preserve) {
+    func.replaceWith(t.addComment(replacement, 'leading', '@dismantle skip'));
+  } else {
+    path.replaceWith(replacement);
+  }
 }

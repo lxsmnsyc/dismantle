@@ -20,9 +20,9 @@ export interface DirectiveDefinition {
 }
 
 export interface FunctionDefinition {
-  type: 'function' | 'promise';
   source: ImportDefinition;
   target: ImportDefinition;
+  preserve?: boolean;
 }
 
 export interface Options {

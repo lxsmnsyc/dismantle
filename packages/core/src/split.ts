@@ -159,7 +159,7 @@ function splitFunctionDeclaration(
   const compiled = generator(
     t.program([
       ...moduleDefinitionsToImportDeclarations(modules),
-      t.exportDefaultDeclaration(path.node),
+      t.exportNamedDeclaration(path.node),
     ]),
   );
   ctx.onVirtualFile(file, compiled.code, 'none');
@@ -168,7 +168,7 @@ function splitFunctionDeclaration(
 
   const identifier = path.node.id || path.scope.generateUidIdentifier('func');
   const definition: ModuleDefinition = {
-    kind: 'default',
+    kind: 'named',
     local: identifier.name,
     source: file,
   };
@@ -736,62 +736,29 @@ function replaceFunction(
   ctx.onVirtualFile(entryFile, entryContent.code, 'entry');
 
   const rest = path.scope.generateUidIdentifier('rest');
-  const fnID = path.scope.generateUidIdentifier('fn');
 
   return t.arrowFunctionExpression(
     [t.restElement(rest)],
-    t.blockStatement([
-      t.variableDeclaration('const', [
-        t.variableDeclarator(
-          fnID,
-          t.memberExpression(
-            t.awaitExpression(t.importExpression(t.stringLiteral(entryFile))),
-            t.identifier('default'),
-          ),
-        ),
-      ]),
-      t.returnStatement(
-        t.callExpression(fnID, [
-          t.arrayExpression(bindings.locals),
-          t.spreadElement(rest),
-        ]),
+    t.callExpression(
+      t.memberExpression(
+        t.awaitExpression(t.importExpression(t.stringLiteral(entryFile))),
+        t.identifier('default'),
       ),
-    ]),
+      [t.arrayExpression(bindings.locals), t.spreadElement(rest)],
+    ),
     true,
   );
-}
-
-function isSkippableFunction(
-  node: t.ArrowFunctionExpression | t.FunctionExpression,
-): boolean {
-  if (node.leadingComments) {
-    for (let i = 0, len = node.leadingComments.length; i < len; i++) {
-      if (/^@dismantle skip$/.test(node.leadingComments[i].value)) {
-        return true;
-      }
-    }
-  }
-  return false;
 }
 
 export function splitFunction(
   ctx: StateContext,
   path: babel.NodePath<t.ArrowFunctionExpression | t.FunctionExpression>,
   func: FunctionDefinition,
-): void {
-  if (isSkippableFunction(path.node)) {
-    return;
-  }
-  path.replaceWith(
-    t.addComment(
-      replaceFunction(
-        ctx,
-        path,
-        func,
-        extractBindings(ctx, path, getForeignBindings(path, 'function')),
-      ),
-      'leading',
-      '@dismantle skip',
-    ),
+): t.Expression {
+  return replaceFunction(
+    ctx,
+    path,
+    func,
+    extractBindings(ctx, path, getForeignBindings(path, 'function')),
   );
 }
