@@ -11,7 +11,7 @@ describe('LabeledStatement', () => {
         await doStuff();
       }
       `;
-      expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, CLIENT)).toMatchSnapshot();
     });
     it('should skip server labeled statements in non-async functions', async () => {
       const code = `
@@ -22,7 +22,7 @@ describe('LabeledStatement', () => {
         }
       };
       `;
-      expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, CLIENT)).toMatchSnapshot();
     });
     it('should transform valid server functions with scope', async () => {
       const code = `
@@ -34,7 +34,7 @@ describe('LabeledStatement', () => {
         }
       }
       `;
-      expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, CLIENT)).toMatchSnapshot();
     });
     it('should skip top-level values for scope', async () => {
       const code = `
@@ -44,7 +44,7 @@ describe('LabeledStatement', () => {
         await doStuff(value);
       }
       `;
-      expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, CLIENT)).toMatchSnapshot();
     });
     it('should transform break statements', async () => {
       const code = `
@@ -58,7 +58,7 @@ describe('LabeledStatement', () => {
         await doMoreStuff();
       }
       `;
-      expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, CLIENT)).toMatchSnapshot();
     });
   });
   describe('server', () => {
@@ -69,7 +69,7 @@ describe('LabeledStatement', () => {
         await doStuff();
       }
       `;
-      expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, SERVER)).toMatchSnapshot();
     });
     it('should skip server labeled statements in non-async functions', async () => {
       const code = `
@@ -80,7 +80,7 @@ describe('LabeledStatement', () => {
         }
       };
       `;
-      expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, SERVER)).toMatchSnapshot();
     });
     it('should transform valid server functions with scope', async () => {
       const code = `
@@ -92,7 +92,7 @@ describe('LabeledStatement', () => {
         }
       }
       `;
-      expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, SERVER)).toMatchSnapshot();
     });
     it('should skip top-level values for scope', async () => {
       const code = `
@@ -102,7 +102,7 @@ describe('LabeledStatement', () => {
         await doStuff(value);
       }
       `;
-      expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, SERVER)).toMatchSnapshot();
     });
     it('should transform break statements', async () => {
       const code = `
@@ -116,7 +116,7 @@ describe('LabeledStatement', () => {
         await doMoreStuff();
       }
       `;
-      expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, SERVER)).toMatchSnapshot();
     });
   });
 });

@@ -11,7 +11,7 @@ describe('FunctionExpression', () => {
         return 'foo bar';
       });
       `;
-      expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, CLIENT)).toMatchSnapshot();
     });
     it('should transform valid server functions with scope', async () => {
       const code = `
@@ -23,7 +23,7 @@ describe('FunctionExpression', () => {
         });
       }
       `;
-      expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, CLIENT)).toMatchSnapshot();
     });
     it('should skip top-level values for scope', async () => {
       const code = `
@@ -35,7 +35,7 @@ describe('FunctionExpression', () => {
         });
       }
       `;
-      expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, CLIENT)).toMatchSnapshot();
     });
   });
   describe('server', () => {
@@ -46,7 +46,7 @@ describe('FunctionExpression', () => {
         return 'foo bar';
       });
       `;
-      expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, SERVER)).toMatchSnapshot();
     });
     it('should transform valid server functions with scope', async () => {
       const code = `
@@ -58,7 +58,7 @@ describe('FunctionExpression', () => {
         });
       }
       `;
-      expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, SERVER)).toMatchSnapshot();
     });
     it('should skip top-level values for scope', async () => {
       const code = `
@@ -70,7 +70,7 @@ describe('FunctionExpression', () => {
         });
       }
       `;
-      expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, SERVER)).toMatchSnapshot();
     });
   });
 });

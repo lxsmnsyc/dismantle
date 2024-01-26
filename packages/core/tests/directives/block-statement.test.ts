@@ -11,7 +11,7 @@ describe('BlockStatement', () => {
         await doStuff();
       }
       `;
-      expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, CLIENT)).toMatchSnapshot();
     });
     it('should skip server block statements in non-async functions', async () => {
       const code = `
@@ -22,7 +22,7 @@ describe('BlockStatement', () => {
         }
       };
       `;
-      expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, CLIENT)).toMatchSnapshot();
     });
     it('should transform valid server functions with scope', async () => {
       const code = `
@@ -34,7 +34,7 @@ describe('BlockStatement', () => {
         }
       }
       `;
-      expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, CLIENT)).toMatchSnapshot();
     });
     it('should skip top-level values for scope', async () => {
       const code = `
@@ -44,7 +44,7 @@ describe('BlockStatement', () => {
         await doStuff(value);
       }
       `;
-      expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, CLIENT)).toMatchSnapshot();
     });
   });
   describe('server', () => {
@@ -55,7 +55,7 @@ describe('BlockStatement', () => {
         await doStuff();
       }
       `;
-      expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, SERVER)).toMatchSnapshot();
     });
     it('should skip server block statements in non-async functions', async () => {
       const code = `
@@ -66,7 +66,7 @@ describe('BlockStatement', () => {
         }
       };
       `;
-      expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, SERVER)).toMatchSnapshot();
     });
     it('should transform valid server functions with scope', async () => {
       const code = `
@@ -78,7 +78,7 @@ describe('BlockStatement', () => {
         }
       }
       `;
-      expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, SERVER)).toMatchSnapshot();
     });
     it('should skip top-level values for scope', async () => {
       const code = `
@@ -88,7 +88,7 @@ describe('BlockStatement', () => {
         await doStuff(value);
       }
       `;
-      expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, SERVER)).toMatchSnapshot();
     });
   });
 });

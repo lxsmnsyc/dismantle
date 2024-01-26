@@ -9,7 +9,7 @@ describe('ArrowFunctionExpression', () => {
       import { server$ } from 'my-example';
       const example = server$(() => 'foo bar');
       `;
-      expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, CLIENT)).toMatchSnapshot();
     });
     it('should transform valid server functions with scope', async () => {
       const code = `
@@ -19,7 +19,7 @@ describe('ArrowFunctionExpression', () => {
         const example = server$(() => value);
       }
       `;
-      expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, CLIENT)).toMatchSnapshot();
     });
     it('should skip top-level values for scope', async () => {
       const code = `
@@ -29,7 +29,7 @@ describe('ArrowFunctionExpression', () => {
         const example = server$(() => value);
       }
       `;
-      expect(await compiler.compile(code, ID, CLIENT)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, CLIENT)).toMatchSnapshot();
     });
   });
   describe('server', () => {
@@ -38,7 +38,7 @@ describe('ArrowFunctionExpression', () => {
       import { server$ } from 'my-example';
       const example = server$(() => 'foo bar');
       `;
-      expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, SERVER)).toMatchSnapshot();
     });
     it('should transform valid server functions with scope', async () => {
       const code = `
@@ -48,7 +48,7 @@ describe('ArrowFunctionExpression', () => {
         const example = server$(() => value);
       }
       `;
-      expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, SERVER)).toMatchSnapshot();
     });
     it('should skip top-level values for scope', async () => {
       const code = `
@@ -58,7 +58,7 @@ describe('ArrowFunctionExpression', () => {
         const example = server$(() => value);
       }
       `;
-      expect(await compiler.compile(code, ID, SERVER)).toMatchSnapshot();
+      expect(await compiler.compile(ID, code, SERVER)).toMatchSnapshot();
     });
   });
 });

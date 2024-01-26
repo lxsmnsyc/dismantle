@@ -20,8 +20,8 @@ export {
 } from './types';
 
 export async function compile(
-  code: string,
   id: string,
+  code: string,
   options: Options,
 ): Promise<Output> {
   const parsedPath = path.parse(id);
