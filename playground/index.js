@@ -3,14 +3,17 @@ import { compile } from 'dismantle';
 const code = `
 import { server$ } from 'my-example';
 
-function createHandler(a, b) {
-  return (prefix) => console.log(prefix, a, b);
+async function foo() {
+  let count = 0;
+
+  async function* log(value) {
+    'use server';
+    for (let i = 0; i < 10; i++) {
+      yield value + i;
+    }
+    count++;
+  }
 }
-
-const foo = 'foo';
-const bar = 'bar';
-
-const logPrefix = server$(createHandler(foo, bar));
 `;
 
 const result = await compile('/path/to/example.ts', code, {

@@ -1,0 +1,11 @@
+{
+  "name": "playground",
+  "type": "module",
+  "private": true,
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "dependencies": {
+    "dismantle": "0.1.2"
+  }
+}

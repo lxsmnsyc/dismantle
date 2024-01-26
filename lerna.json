@@ -1,6 +1,6 @@
 {
   "npmClient": "pnpm",
-  "packages": ["packages/*", "examples/*"],
+  "packages": ["packages/*", "examples/*", "playground"],
   "command": {
     "version": {
       "exact": true
