@@ -6,13 +6,20 @@ import { server$ } from 'my-example';
 async function foo() {
   let count = 0;
 
-  async function* log(value) {
+  async function* foo(value) {
     'use server';
     for (let i = 0; i < 10; i++) {
       yield value + i;
     }
     count++;
   }
+
+  const bar = server$(async function* (value) {
+    for (let i = 0; i < 10; i++) {
+      yield value + i;
+    }
+    count++;
+  });
 }
 `;
 
