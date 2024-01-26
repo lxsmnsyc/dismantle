@@ -227,12 +227,13 @@ function splitVariableDeclarator(
   path.remove();
   return definitions;
 }
-
-// These are internal code for the control flow of the server block
-// The goal is to transform these into return statements, and the
-// the return value with the associated control flow code.
-// This allows the replacement statement for the server block to
-// know what to do if it encounters the said statement on the server.
+/**
+ * These are internal code for the control flow of the server block
+ * The goal is to transform these into return statements, and the
+ * the return value with the associated control flow code.
+ * This allows the replacement statement for the server block to
+ * know what to do if it encounters the said statement on the server.
+ */
 const BREAK_KEY = t.numericLiteral(0);
 const CONTINUE_KEY = t.numericLiteral(1);
 const RETURN_KEY = t.numericLiteral(2);
@@ -376,12 +377,14 @@ function transformHalting(
   return { breaks, continues, hasReturn, hasYield, breakCount, continueCount };
 }
 
-// This generates a chain of if-statements that checks the
-// received server return (which is transformed from the original block's
-// server statement)
-// Each if-statement matches an specific label, assuming that the original
-// break statement is a labeled break statement.
-// Otherwise, the output code is either a normal break statement or none.
+/**
+ * This generates a chain of if-statements that checks the
+ * received server return (which is transformed from the original block's
+ * server statement)
+ * Each if-statement matches an specific label, assuming that the original
+ * break statement is a labeled break statement.
+ * Otherwise, the output code is either a normal break statement or none.
+ */
 function getBreakCheck(
   returnType: t.Identifier,
   returnResult: t.Identifier,
@@ -413,12 +416,14 @@ function getBreakCheck(
   return check;
 }
 
-// This generates a chain of if-statements that checks the
-// received server return (which is transformed from the original block's
-// server statement)
-// Each if-statement matches an specific label, assuming that the original
-// continue statement is a labeled continue statement.
-// Otherwise, the output code is either a normal continue statement or none.
+/**
+ * This generates a chain of if-statements that checks the
+ * received server return (which is transformed from the original block's
+ * server statement)
+ * Each if-statement matches an specific label, assuming that the original
+ * continue statement is a labeled continue statement.
+ * Otherwise, the output code is either a normal continue statement or none.
+ */
 function getContinueCheck(
   returnType: t.Identifier,
   returnResult: t.Identifier,
