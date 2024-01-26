@@ -20,8 +20,12 @@ pnpm add dismantle
 
 ## Features
 
-- Closure extraction
-- Block-level code-splitting
+- Directive Splitting
+- Function Call Splitting
+- Closure Extraction
+
+## Docs
+
 
 ## Sponsors
 
