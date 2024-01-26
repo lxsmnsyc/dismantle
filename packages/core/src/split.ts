@@ -241,7 +241,7 @@ const RETURN_KEY = t.numericLiteral(2);
 const NO_HALT_KEY = t.numericLiteral(3);
 const THROW_KEY = t.numericLiteral(4);
 
-function transformHalting(
+function transformBlockContent(
   path: babel.NodePath<t.BlockStatement>,
   mutations: t.Identifier[],
 ): {
@@ -516,7 +516,7 @@ function replaceBlock(
   bindings: ExtractedBindings,
 ): void {
   // Transform all control statements
-  const halting = transformHalting(path, bindings.mutations);
+  const halting = transformBlockContent(path, bindings.mutations);
   const rootFile = createVirtualFileName(ctx);
   const rootContent = generateCode(
     ctx.id,
@@ -581,7 +581,7 @@ function replaceBlock(
   );
 
   // Move to the replacement for the server block,
-  // declare the type and result based from transformHalting
+  // declare the type and result based from transformBlockContent
   const returnType = path.scope.generateUidIdentifier('type');
   const returnResult = path.scope.generateUidIdentifier('result');
   const returnMutations = path.scope.generateUidIdentifier('mutations');
@@ -698,12 +698,92 @@ export function splitBlock(
   );
 }
 
+function transformFunctionContent(
+  path: babel.NodePath<t.BlockStatement>,
+  mutations: t.Identifier[],
+) {
+  const target =
+    path.scope.getFunctionParent() || path.scope.getProgramParent();
+
+  const applyMutations = mutations.length
+    ? path.scope.generateUidIdentifier('mutate')
+    : undefined;
+
+  // Transform the control flow statements
+  path.traverse({
+    ReturnStatement(child) {
+      const parent =
+        child.scope.getFunctionParent() || child.scope.getProgramParent();
+      if (parent === target) {
+        const replacement: t.Expression[] = [RETURN_KEY];
+        if (child.node.argument) {
+          replacement.push(child.node.argument);
+        } else {
+          replacement.push(t.nullLiteral());
+        }
+        if (applyMutations) {
+          replacement.push(t.callExpression(applyMutations, []));
+        }
+        child.replaceWith(t.returnStatement(t.arrayExpression(replacement)));
+        child.skip();
+      }
+    },
+  });
+
+  const error = path.scope.generateUidIdentifier('error');
+
+  const throwResult: t.Expression[] = [THROW_KEY, error];
+  const haltResult: t.Expression[] = [NO_HALT_KEY];
+
+  if (applyMutations) {
+    throwResult.push(t.callExpression(applyMutations, []));
+    haltResult.push(t.nullLiteral());
+    haltResult.push(t.callExpression(applyMutations, []));
+  }
+
+  const statements: t.Statement[] = [
+    t.tryStatement(
+      t.blockStatement(path.node.body),
+      t.catchClause(
+        error,
+        t.blockStatement([t.returnStatement(t.arrayExpression(throwResult))]),
+      ),
+    ),
+    t.returnStatement(t.arrayExpression(haltResult)),
+  ];
+
+  if (applyMutations) {
+    statements.unshift(
+      t.variableDeclaration('const', [
+        t.variableDeclarator(
+          applyMutations,
+          t.arrowFunctionExpression(
+            [],
+            t.objectExpression(
+              mutations.map(item => t.objectProperty(item, item, false, true)),
+            ),
+          ),
+        ),
+      ]),
+    );
+  }
+
+  path.node.body = statements;
+}
+
 function replaceFunction(
   ctx: StateContext,
   path: babel.NodePath<t.ArrowFunctionExpression | t.FunctionExpression>,
   func: FunctionDefinition,
   bindings: ExtractedBindings,
 ): t.Expression {
+  const body = path.get('body');
+  if (isPathValid(body, t.isExpression)) {
+    body.replaceWith(t.blockStatement([t.returnStatement(body.node)]));
+  }
+  if (isPathValid(body, t.isBlockStatement)) {
+    transformFunctionContent(body, bindings.mutations);
+  }
   const rootFile = createVirtualFileName(ctx);
   const rootContent = generateCode(
     ctx.id,
@@ -774,15 +854,41 @@ function replaceFunction(
 
   const rest = path.scope.generateUidIdentifier('rest');
 
+  const funcID = path.scope.generateUidIdentifier('fn');
+
+  const returnType = path.scope.generateUidIdentifier('type');
+  const returnResult = path.scope.generateUidIdentifier('result');
+  const returnMutations = path.scope.generateUidIdentifier('mutations');
+
   return t.arrowFunctionExpression(
     [t.restElement(rest)],
-    t.callExpression(
-      t.memberExpression(
-        t.awaitExpression(t.importExpression(t.stringLiteral(entryFile))),
-        t.identifier('default'),
+    t.blockStatement([
+      t.variableDeclaration('let', [
+        t.variableDeclarator(
+          funcID,
+          t.memberExpression(
+            t.awaitExpression(t.importExpression(t.stringLiteral(entryFile))),
+            t.identifier('default'),
+          ),
+        ),
+      ]),
+      t.variableDeclaration('const', [
+        t.variableDeclarator(
+          t.arrayPattern([returnType, returnResult, returnMutations]),
+          t.awaitExpression(
+            t.callExpression(funcID, [
+              t.arrayExpression(bindings.locals),
+              t.spreadElement(rest),
+            ]),
+          ),
+        ),
+      ]),
+      t.ifStatement(
+        t.binaryExpression('===', returnType, THROW_KEY),
+        t.blockStatement([t.throwStatement(returnResult)]),
       ),
-      [t.arrayExpression(bindings.locals), t.spreadElement(rest)],
-    ),
+      t.returnStatement(returnResult),
+    ]),
     true,
   );
 }
