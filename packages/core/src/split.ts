@@ -787,3 +787,91 @@ export function splitFunction(
     extractBindings(ctx, path, getForeignBindings(path, 'function')),
   );
 }
+
+function replaceExpression(
+  ctx: StateContext,
+  path: babel.NodePath<t.Expression>,
+  func: FunctionDefinition,
+  bindings: ExtractedBindings,
+): t.Expression {
+  const rootFile = createVirtualFileName(ctx);
+  const rootContent = generateCode(
+    ctx.id,
+    t.program([
+      ...(ctx.options.mode === 'server'
+        ? moduleDefinitionsToImportDeclarations(bindings.modules)
+        : []),
+      t.exportDefaultDeclaration(path.node),
+    ]),
+  );
+  ctx.onVirtualFile(
+    rootFile,
+    { code: rootContent.code, map: rootContent.map },
+    'root',
+  );
+  // Create an ID
+  let id = `${ctx.blocks.hash}-${ctx.blocks.count++}`;
+  if (ctx.options.env !== 'production') {
+    id += `-${getDescriptiveName(path, 'anonymous')}`;
+  }
+  const entryID = path.scope.generateUidIdentifier('entry');
+  const entryImports: ModuleDefinition[] = [
+    {
+      kind: func.target.kind,
+      source: func.target.source,
+      local: entryID.name,
+      imported: func.target.kind === 'named' ? func.target.name : undefined,
+    },
+  ];
+  const args: t.Expression[] = [t.stringLiteral(id)];
+  if (ctx.options.mode === 'server') {
+    const rootID = path.scope.generateUidIdentifier('root');
+    entryImports.push({
+      kind: 'default',
+      source: rootFile,
+      local: rootID.name,
+    });
+    args.push(rootID);
+  }
+  // Create the registration call
+  const entryFile = createVirtualFileName(ctx);
+  const entryContent = generateCode(
+    ctx.id,
+    t.program([
+      ...moduleDefinitionsToImportDeclarations(entryImports),
+      t.exportDefaultDeclaration(t.callExpression(entryID, args)),
+    ]),
+  );
+  ctx.onVirtualFile(
+    entryFile,
+    { code: entryContent.code, map: entryContent.map },
+    'entry',
+  );
+
+  const rest = path.scope.generateUidIdentifier('rest');
+
+  return t.arrowFunctionExpression(
+    [t.restElement(rest)],
+    t.callExpression(
+      t.memberExpression(
+        t.awaitExpression(t.importExpression(t.stringLiteral(entryFile))),
+        t.identifier('default'),
+      ),
+      [t.spreadElement(rest)],
+    ),
+    true,
+  );
+}
+
+export function splitExpression(
+  ctx: StateContext,
+  path: babel.NodePath<t.Expression>,
+  func: FunctionDefinition,
+): t.Expression {
+  return replaceExpression(
+    ctx,
+    path,
+    func,
+    extractBindings(ctx, path, getForeignBindings(path, 'expression')),
+  );
+}

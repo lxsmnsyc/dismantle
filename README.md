@@ -91,6 +91,8 @@ const result = await compile(
           kind: 'named',
           /**
            * The name of the function to be imported
+           * 
+           * Only affects `named` import
            */
           name: '$$server',
           /**
@@ -178,6 +180,12 @@ result.entries;
  */
 result.roots;
 ```
+
+### Setup for internal functions
+
+
+
+
 
 ## Sponsors
 

@@ -3,23 +3,17 @@ import { compile } from 'dismantle';
 const code = `
 import { server$ } from 'my-example';
 
+function createHandler(a, b) {
+  return (prefix) => console.log(prefix, a, b);
+}
+
 const foo = 'foo';
 const bar = 'bar';
 
-function log(prefix, suffix) {
-  console.log(prefix, suffix);
-}
-
-const logPrefix = server$((prefix) => {
-  if (prefix === 'foo') {
-    log(prefix, foo);
-  } else {
-    log(prefix, bar);
-  }
-});
+const logPrefix = server$(createHandler(foo, bar));
 `;
 
-const result = await compile(code, '/path/to/example.ts', {
+const result = await compile('/path/to/example.ts', code, {
   key: 'example',
   mode: 'server',
   env: 'development',

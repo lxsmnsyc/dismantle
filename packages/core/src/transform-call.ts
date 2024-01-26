@@ -1,9 +1,8 @@
 import type * as babel from '@babel/core';
 import * as t from '@babel/types';
-import { splitFunction } from './split';
+import { splitExpression, splitFunction } from './split';
 import type { FunctionDefinition, StateContext } from './types';
-import { unexpectedArgumentLength, unexpectedType } from './utils/errors';
-import { unwrapNode, unwrapPath } from './utils/unwrap';
+import { isPathValid, unwrapNode } from './utils/unwrap';
 
 function getFunctionDefinitionFromPropName(
   definitions: FunctionDefinition[],
@@ -63,28 +62,7 @@ function isValidFunction(
   return t.isArrowFunctionExpression(node) || t.isFunctionExpression(node);
 }
 
-function extractFunction(
-  path: babel.NodePath<t.CallExpression>,
-): babel.NodePath<t.ArrowFunctionExpression | t.FunctionExpression> {
-  const args = path.get('arguments');
-  if (args.length === 0) {
-    throw unexpectedArgumentLength(path, args.length, 1);
-  }
-  const arg = args[0];
-  const argument = unwrapPath(arg, isValidFunction);
-  if (argument) {
-    return argument;
-  }
-  throw unexpectedType(
-    arg,
-    arg.node.type,
-    'ArrowFunctionExpression | FunctionExpression',
-  );
-}
-
-function isSkippableFunction(
-  node: t.ArrowFunctionExpression | t.FunctionExpression,
-): boolean {
+function isSkippableFunction(node: t.Expression): boolean {
   if (node.leadingComments) {
     for (let i = 0, len = node.leadingComments.length; i < len; i++) {
       if (/^@dismantle skip$/.test(node.leadingComments[i].value)) {
@@ -103,15 +81,20 @@ export function transformCall(
   if (!definition) {
     return;
   }
-  const func = extractFunction(path);
-  if (isSkippableFunction(func.node)) {
-    return;
-  }
-  const replacement = splitFunction(ctx, func, definition);
+  const args = path.get('arguments');
+  const expr = args[0];
+  if (isPathValid(expr, t.isExpression)) {
+    if (isSkippableFunction(expr.node)) {
+      return;
+    }
+    const replacement = isPathValid(expr, isValidFunction)
+      ? splitFunction(ctx, expr, definition)
+      : splitExpression(ctx, expr, definition);
 
-  if (definition.preserve) {
-    func.replaceWith(t.addComment(replacement, 'leading', '@dismantle skip'));
-  } else {
-    path.replaceWith(replacement);
+    if (definition.preserve) {
+      expr.replaceWith(t.addComment(replacement, 'leading', '@dismantle skip'));
+    } else {
+      path.replaceWith(replacement);
+    }
   }
 }

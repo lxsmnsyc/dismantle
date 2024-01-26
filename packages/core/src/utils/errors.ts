@@ -16,6 +16,6 @@ export function unexpectedArgumentLength<T>(
   expected: number,
 ): Error {
   return path.buildCodeFrameError(
-    `Unexpected argument length of ${received} (Expected: ${expected})`,
+    `Unexpected argument length of ${received} (Expected: at least ${expected})`,
   );
 }
