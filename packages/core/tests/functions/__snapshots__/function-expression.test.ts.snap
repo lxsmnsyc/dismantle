@@ -1,0 +1,495 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`FunctionExpression > client > should skip top-level values for scope 1`] = `
+{
+  "code": "import { server$ } from 'my-example';
+import { value } from "./example.ts?my-example=0.ts";
+const outer = () => {
+  const example = async (..._rest) => (await import("./example.ts?my-example=2.ts")).default([], ..._rest);
+};",
+  "entries": [
+    "/path/to/example.ts?my-example=2.ts",
+  ],
+  "files": Map {
+    "/path/to/example.ts?my-example=0.ts" => {
+      "code": "export const value = 'foo bar';",
+      "map": {
+        "file": undefined,
+        "mappings": "aAEYA,KAAK,GAAG,SAAS",
+        "names": [
+          "value",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=1.ts" => {
+      "code": "export default (function ([]) {
+  return value;
+});",
+      "map": {
+        "file": undefined,
+        "mappings": "8BAI4C;EAClC,OAAOA,KAAK;AACd,CAAC",
+        "names": [
+          "value",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=2.ts" => {
+      "code": "import { registerServerFunction as _entry } from "my-example/server";
+export default _entry("26ecc3a5-0-example");",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
+  },
+  "map": {
+    "file": undefined,
+    "mappings": "AACM,SAASA,OAAO,QAAQ,YAAY;AAAC,SAAAC,KAAA;AAErC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,OAAO,SAAAA,CAAA,GAAAC,KAAA,oDAAAC,OAAA,QAAAD,KAAA,CAEX;AACJ,CAAC",
+    "names": [
+      "server$",
+      "value",
+      "outer",
+      "example",
+      "_rest",
+      "default",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "/path/to/example.ts",
+    ],
+    "sourcesContent": [
+      "
+      import { server$ } from 'my-example';
+      const value = 'foo bar';
+      const outer = () => {
+        const example = server$(function () {
+          return value;
+        });
+      }
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "/path/to/example.ts?my-example=1.ts",
+  ],
+}
+`;
+
+exports[`FunctionExpression > client > should transform valid server functions 1`] = `
+{
+  "code": "import { server$ } from 'my-example';
+const example = async (..._rest) => (await import("./example.ts?my-example=1.ts")).default([], ..._rest);",
+  "entries": [
+    "/path/to/example.ts?my-example=1.ts",
+  ],
+  "files": Map {
+    "/path/to/example.ts?my-example=0.ts" => {
+      "code": "export default (function ([]) {
+  return 'foo bar';
+});",
+      "map": {
+        "file": undefined,
+        "mappings": "8BAE0C;EAClC,OAAO,SAAS;AAClB,CAAC",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=1.ts" => {
+      "code": "import { registerServerFunction as _entry } from "my-example/server";
+export default _entry("26ecc3a5-0-example");",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
+  },
+  "map": {
+    "file": undefined,
+    "mappings": "AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,OAAO,SAAAA,CAAA,GAAAC,KAAA,oDAAAC,OAAA,QAAAD,KAAA,CAEX",
+    "names": [
+      "server$",
+      "example",
+      "_rest",
+      "default",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "/path/to/example.ts",
+    ],
+    "sourcesContent": [
+      "
+      import { server$ } from 'my-example';
+      const example = server$(function () {
+        return 'foo bar';
+      });
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "/path/to/example.ts?my-example=0.ts",
+  ],
+}
+`;
+
+exports[`FunctionExpression > client > should transform valid server functions with scope 1`] = `
+{
+  "code": "import { server$ } from 'my-example';
+const outer = () => {
+  const value = 'foo bar';
+  const example = async (..._rest) => (await import("./example.ts?my-example=1.ts")).default([value], ..._rest);
+};",
+  "entries": [
+    "/path/to/example.ts?my-example=1.ts",
+  ],
+  "files": Map {
+    "/path/to/example.ts?my-example=0.ts" => {
+      "code": "export default (function ([value]) {
+  return value;
+});",
+      "map": {
+        "file": undefined,
+        "mappings": "2BAGcA,KAAK,GACyB;EAClC,OAAOA,KAAK;AACd,CAAC",
+        "names": [
+          "value",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=1.ts" => {
+      "code": "import { registerServerFunction as _entry } from "my-example/server";
+export default _entry("26ecc3a5-0-example");",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
+  },
+  "map": {
+    "file": undefined,
+    "mappings": "AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,MAAMC,OAAO,SAAAA,CAAA,GAAAC,KAAA,oDAAAC,OAAA,EADPH,KAAK,MAAAE,KAAA,CAGT;AACJ,CAAC",
+    "names": [
+      "server$",
+      "outer",
+      "value",
+      "example",
+      "_rest",
+      "default",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "/path/to/example.ts",
+    ],
+    "sourcesContent": [
+      "
+      import { server$ } from 'my-example';
+      const outer = () => {
+        const value = 'foo bar';
+        const example = server$(function () {
+          return value;
+        });
+      }
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "/path/to/example.ts?my-example=0.ts",
+  ],
+}
+`;
+
+exports[`FunctionExpression > server > should skip top-level values for scope 1`] = `
+{
+  "code": "import { server$ } from 'my-example';
+import { value } from "./example.ts?my-example=0.ts";
+const outer = () => {
+  const example = async (..._rest) => (await import("./example.ts?my-example=2.ts")).default([], ..._rest);
+};",
+  "entries": [
+    "/path/to/example.ts?my-example=2.ts",
+  ],
+  "files": Map {
+    "/path/to/example.ts?my-example=0.ts" => {
+      "code": "export const value = 'foo bar';",
+      "map": {
+        "file": undefined,
+        "mappings": "aAEYA,KAAK,GAAG,SAAS",
+        "names": [
+          "value",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=1.ts" => {
+      "code": "import { value } from "./example.ts?my-example=0.ts";
+export default (function ([]) {
+  return value;
+});",
+      "map": {
+        "file": undefined,
+        "mappings": ";8BAI4C;EAClC,OAAOA,KAAK;AACd,CAAC",
+        "names": [
+          "value",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=2.ts" => {
+      "code": "import { registerServerFunction as _entry } from "my-example/server";
+import _root from "./example.ts?my-example=1.ts";
+export default _entry("26ecc3a5-0-example", _root);",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
+  },
+  "map": {
+    "file": undefined,
+    "mappings": "AACM,SAASA,OAAO,QAAQ,YAAY;AAAC,SAAAC,KAAA;AAErC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,OAAO,SAAAA,CAAA,GAAAC,KAAA,oDAAAC,OAAA,QAAAD,KAAA,CAEX;AACJ,CAAC",
+    "names": [
+      "server$",
+      "value",
+      "outer",
+      "example",
+      "_rest",
+      "default",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "/path/to/example.ts",
+    ],
+    "sourcesContent": [
+      "
+      import { server$ } from 'my-example';
+      const value = 'foo bar';
+      const outer = () => {
+        const example = server$(function () {
+          return value;
+        });
+      }
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "/path/to/example.ts?my-example=1.ts",
+  ],
+}
+`;
+
+exports[`FunctionExpression > server > should transform valid server functions 1`] = `
+{
+  "code": "import { server$ } from 'my-example';
+const example = async (..._rest) => (await import("./example.ts?my-example=1.ts")).default([], ..._rest);",
+  "entries": [
+    "/path/to/example.ts?my-example=1.ts",
+  ],
+  "files": Map {
+    "/path/to/example.ts?my-example=0.ts" => {
+      "code": "export default (function ([]) {
+  return 'foo bar';
+});",
+      "map": {
+        "file": undefined,
+        "mappings": "8BAE0C;EAClC,OAAO,SAAS;AAClB,CAAC",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=1.ts" => {
+      "code": "import { registerServerFunction as _entry } from "my-example/server";
+import _root from "./example.ts?my-example=0.ts";
+export default _entry("26ecc3a5-0-example", _root);",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
+  },
+  "map": {
+    "file": undefined,
+    "mappings": "AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,OAAO,SAAAA,CAAA,GAAAC,KAAA,oDAAAC,OAAA,QAAAD,KAAA,CAEX",
+    "names": [
+      "server$",
+      "example",
+      "_rest",
+      "default",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "/path/to/example.ts",
+    ],
+    "sourcesContent": [
+      "
+      import { server$ } from 'my-example';
+      const example = server$(function () {
+        return 'foo bar';
+      });
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "/path/to/example.ts?my-example=0.ts",
+  ],
+}
+`;
+
+exports[`FunctionExpression > server > should transform valid server functions with scope 1`] = `
+{
+  "code": "import { server$ } from 'my-example';
+const outer = () => {
+  const value = 'foo bar';
+  const example = async (..._rest) => (await import("./example.ts?my-example=1.ts")).default([value], ..._rest);
+};",
+  "entries": [
+    "/path/to/example.ts?my-example=1.ts",
+  ],
+  "files": Map {
+    "/path/to/example.ts?my-example=0.ts" => {
+      "code": "export default (function ([value]) {
+  return value;
+});",
+      "map": {
+        "file": undefined,
+        "mappings": "2BAGcA,KAAK,GACyB;EAClC,OAAOA,KAAK;AACd,CAAC",
+        "names": [
+          "value",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=1.ts" => {
+      "code": "import { registerServerFunction as _entry } from "my-example/server";
+import _root from "./example.ts?my-example=0.ts";
+export default _entry("26ecc3a5-0-example", _root);",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
+  },
+  "map": {
+    "file": undefined,
+    "mappings": "AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,MAAMC,OAAO,SAAAA,CAAA,GAAAC,KAAA,oDAAAC,OAAA,EADPH,KAAK,MAAAE,KAAA,CAGT;AACJ,CAAC",
+    "names": [
+      "server$",
+      "outer",
+      "value",
+      "example",
+      "_rest",
+      "default",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "/path/to/example.ts",
+    ],
+    "sourcesContent": [
+      "
+      import { server$ } from 'my-example';
+      const outer = () => {
+        const value = 'foo bar';
+        const example = server$(function () {
+          return value;
+        });
+      }
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "/path/to/example.ts?my-example=0.ts",
+  ],
+}
+`;
