@@ -53,7 +53,7 @@ import root from '/path/to/file.ts?example=0';
 export default myInternalFunc('<unique id>');
 ```
 
-### Control Flow
+### Remote Control Flow
 
 Directives understands its original control flow, but the delegation of its interpretation is up to the user. 
 
@@ -97,7 +97,7 @@ Here's the following tuples:
 [4, value, mutations];
 ```
 
-### Mutations
+### Remote Mutations
 
 Directives also understands mutations, but is only limited to local `let` variables and params.
 
@@ -119,3 +119,11 @@ async function foo() {
   console.log(result); // 'foo'
 }
 ```
+
+### Remote Control Flow
+
+Similar to directives, function calls allows remote control flows, excluding `break` and `continue` statements.
+
+### Remote Mutations
+
+Remote mutations are also supported in "server" functions.

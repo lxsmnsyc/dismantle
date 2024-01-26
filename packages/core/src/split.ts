@@ -7,6 +7,7 @@ import type {
   ModuleDefinition,
   StateContext,
 } from './types';
+import assert from './utils/assert';
 import { generateCode } from './utils/generator-shim';
 import { getDescriptiveName } from './utils/get-descriptive-name';
 import getForeignBindings from './utils/get-foreign-bindings';
@@ -456,9 +457,9 @@ function getContinueCheck(
 }
 
 function getGeneratorReplacementForServerBlock(
-  path: babel.NodePath<t.BlockStatement>,
+  path: babel.NodePath,
   registerID: t.Identifier,
-  cloneArgs: t.Identifier[],
+  cloneArgs: (t.ArrayExpression | t.SpreadElement | t.Identifier)[],
 ): [replacements: t.Statement[], step: t.Identifier] {
   const iterator = path.scope.generateUidIdentifier('iterator');
   const step = path.scope.generateUidIdentifier('step');
@@ -701,13 +702,18 @@ export function splitBlock(
 function transformFunctionContent(
   path: babel.NodePath<t.BlockStatement>,
   mutations: t.Identifier[],
-) {
+): {
+  hasReturn: boolean;
+  hasYield: boolean;
+} {
   const target =
     path.scope.getFunctionParent() || path.scope.getProgramParent();
 
   const applyMutations = mutations.length
     ? path.scope.generateUidIdentifier('mutate')
     : undefined;
+  let hasReturn = false;
+  let hasYield = false;
 
   // Transform the control flow statements
   path.traverse({
@@ -715,6 +721,7 @@ function transformFunctionContent(
       const parent =
         child.scope.getFunctionParent() || child.scope.getProgramParent();
       if (parent === target) {
+        hasReturn = true;
         const replacement: t.Expression[] = [RETURN_KEY];
         if (child.node.argument) {
           replacement.push(child.node.argument);
@@ -726,6 +733,13 @@ function transformFunctionContent(
         }
         child.replaceWith(t.returnStatement(t.arrayExpression(replacement)));
         child.skip();
+      }
+    },
+    YieldExpression(child) {
+      const parent =
+        child.scope.getFunctionParent() || child.scope.getProgramParent();
+      if (parent === target) {
+        hasYield = true;
       }
     },
   });
@@ -769,6 +783,11 @@ function transformFunctionContent(
   }
 
   path.node.body = statements;
+
+  return {
+    hasReturn,
+    hasYield,
+  };
 }
 
 function replaceFunction(
@@ -781,9 +800,8 @@ function replaceFunction(
   if (isPathValid(body, t.isExpression)) {
     body.replaceWith(t.blockStatement([t.returnStatement(body.node)]));
   }
-  if (isPathValid(body, t.isBlockStatement)) {
-    transformFunctionContent(body, bindings.mutations);
-  }
+  assert(isPathValid(body, t.isBlockStatement), 'invariant');
+  const halting = transformFunctionContent(body, bindings.mutations);
   const rootFile = createVirtualFileName(ctx);
   const rootContent = generateCode(
     ctx.id,
@@ -860,18 +878,36 @@ function replaceFunction(
   const returnResult = path.scope.generateUidIdentifier('result');
   const returnMutations = path.scope.generateUidIdentifier('mutations');
 
-  return t.arrowFunctionExpression(
-    [t.restElement(rest)],
-    t.blockStatement([
-      t.variableDeclaration('let', [
+  const replacement: t.Statement[] = [
+    t.variableDeclaration('let', [
+      t.variableDeclarator(
+        funcID,
+        t.memberExpression(
+          t.awaitExpression(t.importExpression(t.stringLiteral(entryFile))),
+          t.identifier('default'),
+        ),
+      ),
+    ]),
+  ];
+
+  if (halting.hasYield) {
+    const [reps, step] = getGeneratorReplacementForServerBlock(path, funcID, [
+      t.arrayExpression(bindings.locals),
+      t.spreadElement(rest),
+    ]);
+    for (let i = 0, len = reps.length; i < len; i++) {
+      replacement.push(reps[i]);
+    }
+    replacement.push(
+      t.variableDeclaration('const', [
         t.variableDeclarator(
-          funcID,
-          t.memberExpression(
-            t.awaitExpression(t.importExpression(t.stringLiteral(entryFile))),
-            t.identifier('default'),
-          ),
+          t.arrayPattern([returnType, returnResult, returnMutations]),
+          t.memberExpression(step, t.identifier('value')),
         ),
       ]),
+    );
+  } else {
+    replacement.push(
       t.variableDeclaration('const', [
         t.variableDeclarator(
           t.arrayPattern([returnType, returnResult, returnMutations]),
@@ -883,12 +919,45 @@ function replaceFunction(
           ),
         ),
       ]),
-      t.ifStatement(
-        t.binaryExpression('===', returnType, THROW_KEY),
-        t.blockStatement([t.throwStatement(returnResult)]),
+    );
+  }
+
+  if (bindings.mutations.length) {
+    replacement.push(
+      t.expressionStatement(
+        t.assignmentExpression(
+          '=',
+          t.objectPattern(
+            bindings.mutations.map(item =>
+              t.objectProperty(item, item, false, true),
+            ),
+          ),
+          returnMutations,
+        ),
       ),
-      t.returnStatement(returnResult),
-    ]),
+    );
+  }
+
+  replacement.push(
+    t.ifStatement(
+      t.binaryExpression('===', returnType, THROW_KEY),
+      t.blockStatement([t.throwStatement(returnResult)]),
+    ),
+    t.returnStatement(returnResult),
+  );
+
+  if (isPathValid(path, t.isFunctionExpression)) {
+    return t.functionExpression(
+      path.node.id,
+      [t.restElement(rest)],
+      t.blockStatement(replacement),
+      true,
+      halting.hasYield,
+    );
+  }
+  return t.arrowFunctionExpression(
+    [t.restElement(rest)],
+    t.blockStatement(replacement),
     true,
   );
 }
