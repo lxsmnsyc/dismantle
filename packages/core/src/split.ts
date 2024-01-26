@@ -92,6 +92,7 @@ function registerBinding(
   mutations: t.Identifier[],
   binding: string,
   target: Binding,
+  pure?: boolean,
 ): void {
   if (target.kind === 'module') {
     const result = getModuleDefinition(target.path);
@@ -109,7 +110,7 @@ function registerBinding(
     }
     if (blockParent === programParent) {
       registerModuleLevelBinding(ctx, modules, binding, target);
-    } else {
+    } else if (!pure) {
       locals.push(target.identifier);
       if (isMutation(target.kind)) {
         mutations.push(target.identifier);
@@ -128,6 +129,7 @@ function extractBindings(
   ctx: StateContext,
   path: babel.NodePath,
   bindings: Set<string>,
+  pure?: boolean,
 ): ExtractedBindings {
   const modules: ModuleDefinition[] = [];
   const locals: t.Identifier[] = [];
@@ -135,7 +137,7 @@ function extractBindings(
   for (const binding of bindings) {
     const target = path.scope.getBinding(binding);
     if (target) {
-      registerBinding(ctx, modules, locals, mutations, binding, target);
+      registerBinding(ctx, modules, locals, mutations, binding, target, pure);
     }
   }
 
@@ -682,7 +684,12 @@ export function splitBlock(
     ctx,
     path,
     directive,
-    extractBindings(ctx, path, getForeignBindings(path, 'block')),
+    extractBindings(
+      ctx,
+      path,
+      getForeignBindings(path, 'block'),
+      directive.pure,
+    ),
   );
 }
 
@@ -784,7 +791,7 @@ export function splitFunction(
     ctx,
     path,
     func,
-    extractBindings(ctx, path, getForeignBindings(path, 'function')),
+    extractBindings(ctx, path, getForeignBindings(path, 'function'), func.pure),
   );
 }
 
@@ -872,6 +879,11 @@ export function splitExpression(
     ctx,
     path,
     func,
-    extractBindings(ctx, path, getForeignBindings(path, 'expression')),
+    extractBindings(
+      ctx,
+      path,
+      getForeignBindings(path, 'expression'),
+      func.pure,
+    ),
   );
 }

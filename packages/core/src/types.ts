@@ -18,12 +18,14 @@ export type ImportDefinition = DefaultImportDefinition | NamedImportDefinition;
 export interface DirectiveDefinition {
   value: string;
   import: ImportDefinition;
+  pure?: boolean;
 }
 
 export interface FunctionDefinition {
   source: ImportDefinition;
   target: ImportDefinition;
   preserve?: boolean;
+  pure?: boolean;
 }
 
 export interface Options {
