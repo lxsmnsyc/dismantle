@@ -1,8 +1,8 @@
 import type * as babel from '@babel/core';
-import type { StateContext } from './types';
 import { transformBlock } from './transform-block';
-import { registerImportSpecifiers } from './utils/register-import-specifiers';
 import { transformCall } from './transform-call';
+import type { StateContext } from './types';
+import { registerImportSpecifiers } from './utils/register-import-specifiers';
 
 interface State extends babel.PluginPass {
   opts: StateContext;

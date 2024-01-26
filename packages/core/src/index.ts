@@ -1,8 +1,8 @@
 import * as babel from '@babel/core';
 import path from 'node:path';
+import { plugin } from './plugin';
 import type { CodeOutput, Options, StateContext } from './types';
 import assert from './utils/assert';
-import { plugin } from './plugin';
 import xxHash32 from './utils/xxhash32';
 
 export interface Output extends CodeOutput {
@@ -12,10 +12,10 @@ export interface Output extends CodeOutput {
 }
 
 export {
-  NamedImportDefinition,
   DefaultImportDefinition,
   DirectiveDefinition,
   ImportDefinition,
+  NamedImportDefinition,
   Options,
 } from './types';
 

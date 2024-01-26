@@ -1,19 +1,19 @@
-import * as t from '@babel/types';
 import type * as babel from '@babel/core';
+import type { Binding, BindingKind } from '@babel/traverse';
+import * as t from '@babel/types';
 import type {
   DirectiveDefinition,
   FunctionDefinition,
   ModuleDefinition,
   StateContext,
 } from './types';
-import getForeignBindings from './utils/get-foreign-bindings';
-import type { Binding, BindingKind } from '@babel/traverse';
-import { getDescriptiveName } from './utils/get-descriptive-name';
 import { generateCode } from './utils/generator-shim';
-import { getRootStatementPath } from './utils/get-root-statement-path';
-import { getModuleDefinition } from './utils/get-module-definition';
-import { isPathValid, unwrapPath } from './utils/unwrap';
+import { getDescriptiveName } from './utils/get-descriptive-name';
+import getForeignBindings from './utils/get-foreign-bindings';
 import { getIdentifiersFromLVal } from './utils/get-identifiers-from-lval';
+import { getModuleDefinition } from './utils/get-module-definition';
+import { getRootStatementPath } from './utils/get-root-statement-path';
+import { isPathValid, unwrapPath } from './utils/unwrap';
 
 function moduleDefinitionToImportSpecifier(definition: ModuleDefinition) {
   switch (definition.kind) {
@@ -94,7 +94,10 @@ function registerBinding(
   target: Binding,
 ): void {
   if (target.kind === 'module') {
-    modules.push(getModuleDefinition(target.path));
+    const result = getModuleDefinition(target.path);
+    if (result) {
+      modules.push(result);
+    }
   } else if (target.kind === 'param') {
     locals.push(target.identifier);
   } else {

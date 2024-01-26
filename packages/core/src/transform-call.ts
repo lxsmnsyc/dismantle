@@ -1,9 +1,9 @@
-import * as t from '@babel/types';
 import type * as babel from '@babel/core';
-import type { FunctionDefinition, StateContext } from './types';
+import * as t from '@babel/types';
 import { splitFunction } from './split';
-import { unwrapNode, unwrapPath } from './utils/unwrap';
+import type { FunctionDefinition, StateContext } from './types';
 import { unexpectedArgumentLength, unexpectedType } from './utils/errors';
+import { unwrapNode, unwrapPath } from './utils/unwrap';
 
 function getFunctionDefinitionFromPropName(
   definitions: FunctionDefinition[],

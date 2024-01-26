@@ -1,5 +1,5 @@
-import { addDefault, addNamed } from '@babel/helper-module-imports';
 import type * as babel from '@babel/core';
+import { addDefault, addNamed } from '@babel/helper-module-imports';
 import type * as t from '@babel/types';
 import type { ImportDefinition, StateContext } from '../types';
 
