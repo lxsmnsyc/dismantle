@@ -32,9 +32,13 @@ The following are the list of configuration that can be accepted by the `compile
 import { compile } from 'dismantle';
 
 const result = await compile(
-  // The full path to file
+  /**
+   * The full path to file
+   */
   path,
-  // The contents of the file
+  /**
+   * The contents of the file
+   */
   code,
   {
     /**
@@ -100,6 +104,10 @@ const result = await compile(
            */
           source: 'my-example',
         },
+        /**
+         * If the function should skip closure extraction
+         */
+        pure: false,
       },
     ],
     /**
@@ -181,11 +189,79 @@ result.entries;
 result.roots;
 ```
 
-### Setup for internal functions
+### Internal functions contract
 
+> [!INFO]
+> The terms "server" and "client" are metaphors: "server" signifies where the function exists and is called
+> remotely, "client" is where the function call request comes from.
 
+#### Directives
 
+An internal function for directives are called on top-level. This behavior is to allow the function to be registered on a user-based implementation. The registration's purpose is to allow mapping the function in the "server" from a "client" request.
 
+```js
+export function myInternalFunc(
+  /**
+   * ID of the function
+   * 
+   * Use this for mapping to the function's instance
+   */
+  id,
+  /**
+   * The function to be managed. You can do
+   * whatever you want here.
+   * 
+   * The functions arguments is composed of the "closure" variables.
+   */
+  func,
+) {
+  /**
+   * Registration stuff goes here
+   */
+
+  /**
+   * The newly returned function.
+   * 
+   * You can choose to return the `func` if you want.
+   */
+  return newFunc;
+}
+```
+
+On the "client" side, the API required is almost similar except that the function only accepts the `id`.
+
+Here's how an example output would look like:
+
+```js
+// server.js
+import { myInternalFunc } from 'my-example/server';
+import root from '/path/to/file.ts?example=0';
+export default myInternalFunc('<unique id>', root);
+
+// client.js
+import { myInternalFunc } from 'my-example/server';
+import root from '/path/to/file.ts?example=0';
+export default myInternalFunc('<unique id>');
+```
+
+#### Function Calls
+
+A bit similar to the directives, with the exception of how the function definition can decide
+if the original call must be retained or replaced by the new function as a whole.
+
+This is useful for deciding whether or not you wanted a function or a side-effect.
+
+```js
+import { lazy$ } from 'my-example';
+
+async function foo() {
+  const result = await lazy$(() => {
+    return 'foo';
+  });
+
+  console.log(result); // 'foo'
+}
+```
 
 ## Sponsors
 
