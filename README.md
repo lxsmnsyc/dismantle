@@ -158,8 +158,8 @@ exampleFile.code;
 exampleFile.map;
 
 /**
- * An array that contains which files are entry files.
- * Entry files usually contains the registration calls
+ * An array that contains the path of the entry files.
+ * Entry files contains the registration calls
  * for the newly produced functions.
  * 
  * Use this for preloading the registration
@@ -170,8 +170,8 @@ exampleFile.map;
 result.entries;
 
 /**
- * An array that contains which files are the roots.
- * Roots are the newly produced functions.
+ * An array that contains the path of the root files.
+ * Root files contains the newly produced functions.
  * 
  * Use this if you want to transform the root module/function
  * before the registration call.
