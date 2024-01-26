@@ -5,7 +5,14 @@ exports[`ArrowFunctionExpression > client > should skip top-level values for sco
   "code": "import { server$ } from 'my-example';
 import { value } from "./example.ts?my-example=0.ts";
 const outer = () => {
-  const example = async (..._rest) => (await import("./example.ts?my-example=2.ts")).default([], ..._rest);
+  const example = async (..._rest) => {
+    let _fn = (await import("./example.ts?my-example=2.ts")).default;
+    const [_type, _result, _mutations] = await _fn([], ..._rest);
+    if (_type === 4) {
+      throw _result;
+    }
+    return _result;
+  };
 };",
   "entries": [
     "/path/to/example.ts?my-example=2.ts",
@@ -30,12 +37,20 @@ const outer = () => {
       },
     },
     "/path/to/example.ts?my-example=1.ts" => {
-      "code": "export default (([]) => value);",
+      "code": "export default (([]) => {
+  try {
+    return [2, value];
+  } catch (_error) {
+    return [4, _error];
+  }
+  return [3];
+});",
       "map": {
         "file": undefined,
-        "mappings": "wBAIsCA,KAAK",
+        "mappings": ";;eAIsCA,KAAK;EAAA,SAAAC,MAAA;IAAA,WAAAA,MAAA;EAAA;EAAA;AAAA",
         "names": [
           "value",
+          "_error",
         ],
         "sourceRoot": undefined,
         "sources": [
@@ -63,14 +78,18 @@ export default _entry("26ecc3a5-0-example");",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACM,SAASA,OAAO,QAAQ,YAAY;AAAC,SAAAC,KAAA;AAErC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,OAAO,SAAAA,CAAA,GAAAC,KAAA,oDAAAC,OAAA,QAAAD,KAAA,CAAuB;AACtC,CAAC",
+    "mappings": "AACM,SAASA,OAAO,QAAQ,YAAY;AAAC,SAAAC,KAAA;AAErC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,OAAO,SAAAA,CAAA,GAAAC,KAAA;IAAA,IAAAC,GAAA,kDAAAC,OAAA;IAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,GAAA,QAAAD,KAAA;IAAA,IAAAG,KAAA;MAAA,MAAAC,OAAA;IAAA;IAAA,OAAAA,OAAA;EAAA,CAAuB;AACtC,CAAC",
     "names": [
       "server$",
       "value",
       "outer",
       "example",
       "_rest",
+      "_fn",
       "default",
+      "_type",
+      "_result",
+      "_mutations",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -96,17 +115,33 @@ export default _entry("26ecc3a5-0-example");",
 exports[`ArrowFunctionExpression > client > should transform valid server functions 1`] = `
 {
   "code": "import { server$ } from 'my-example';
-const example = async (..._rest) => (await import("./example.ts?my-example=1.ts")).default([], ..._rest);",
+const example = async (..._rest) => {
+  let _fn = (await import("./example.ts?my-example=1.ts")).default;
+  const [_type, _result, _mutations] = await _fn([], ..._rest);
+  if (_type === 4) {
+    throw _result;
+  }
+  return _result;
+};",
   "entries": [
     "/path/to/example.ts?my-example=1.ts",
   ],
   "files": Map {
     "/path/to/example.ts?my-example=0.ts" => {
-      "code": "export default (([]) => 'foo bar');",
+      "code": "export default (([]) => {
+  try {
+    return [2, 'foo bar'];
+  } catch (_error) {
+    return [4, _error];
+  }
+  return [3];
+});",
       "map": {
         "file": undefined,
-        "mappings": "wBAEoC,SAAS",
-        "names": [],
+        "mappings": ";;eAEoC,SAAS;EAAA,SAAAA,MAAA;IAAA,WAAAA,MAAA;EAAA;EAAA;AAAA",
+        "names": [
+          "_error",
+        ],
         "sourceRoot": undefined,
         "sources": [
           "/path/to/example.ts",
@@ -133,12 +168,16 @@ export default _entry("26ecc3a5-0-example");",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,OAAO,SAAAA,CAAA,GAAAC,KAAA,oDAAAC,OAAA,QAAAD,KAAA,CAA2B",
+    "mappings": "AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,OAAO,SAAAA,CAAA,GAAAC,KAAA;EAAA,IAAAC,GAAA,kDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,GAAA,QAAAD,KAAA;EAAA,IAAAG,KAAA;IAAA,MAAAC,OAAA;EAAA;EAAA,OAAAA,OAAA;AAAA,CAA2B",
     "names": [
       "server$",
       "example",
       "_rest",
+      "_fn",
       "default",
+      "_type",
+      "_result",
+      "_mutations",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -163,19 +202,34 @@ exports[`ArrowFunctionExpression > client > should transform valid server functi
   "code": "import { server$ } from 'my-example';
 const outer = () => {
   const value = 'foo bar';
-  const example = async (..._rest) => (await import("./example.ts?my-example=1.ts")).default([value], ..._rest);
+  const example = async (..._rest) => {
+    let _fn = (await import("./example.ts?my-example=1.ts")).default;
+    const [_type, _result, _mutations] = await _fn([value], ..._rest);
+    if (_type === 4) {
+      throw _result;
+    }
+    return _result;
+  };
 };",
   "entries": [
     "/path/to/example.ts?my-example=1.ts",
   ],
   "files": Map {
     "/path/to/example.ts?my-example=0.ts" => {
-      "code": "export default (([value]) => value);",
+      "code": "export default (([value]) => {
+  try {
+    return [2, value];
+  } catch (_error) {
+    return [4, _error];
+  }
+  return [3];
+});",
       "map": {
         "file": undefined,
-        "mappings": "kBAGcA,KAAK,MACmBA,KAAK",
+        "mappings": "kBAGcA,KAAK;EAAA;IAAA,WACmBA,KAAK;EAAA,SAAAC,MAAA;IAAA,WAAAA,MAAA;EAAA;EAAA;AAAA",
         "names": [
           "value",
+          "_error",
         ],
         "sourceRoot": undefined,
         "sources": [
@@ -203,14 +257,18 @@ export default _entry("26ecc3a5-0-example");",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,MAAMC,OAAO,SAAAA,CAAA,GAAAC,KAAA,oDAAAC,OAAA,EADPH,KAAK,MAAAE,KAAA,CACyB;AACtC,CAAC",
+    "mappings": "AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,MAAMC,OAAO,SAAAA,CAAA,GAAAC,KAAA;IAAA,IAAAC,GAAA,kDAAAC,OAAA;IAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,GAAA,EADPH,KAAK,MAAAE,KAAA;IAAA,IAAAG,KAAA;MAAA,MAAAC,OAAA;IAAA;IAAA,OAAAA,OAAA;EAAA,CACyB;AACtC,CAAC",
     "names": [
       "server$",
       "outer",
       "value",
       "example",
       "_rest",
+      "_fn",
       "default",
+      "_type",
+      "_result",
+      "_mutations",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -238,7 +296,14 @@ exports[`ArrowFunctionExpression > server > should skip top-level values for sco
   "code": "import { server$ } from 'my-example';
 import { value } from "./example.ts?my-example=0.ts";
 const outer = () => {
-  const example = async (..._rest) => (await import("./example.ts?my-example=2.ts")).default([], ..._rest);
+  const example = async (..._rest) => {
+    let _fn = (await import("./example.ts?my-example=2.ts")).default;
+    const [_type, _result, _mutations] = await _fn([], ..._rest);
+    if (_type === 4) {
+      throw _result;
+    }
+    return _result;
+  };
 };",
   "entries": [
     "/path/to/example.ts?my-example=2.ts",
@@ -264,12 +329,20 @@ const outer = () => {
     },
     "/path/to/example.ts?my-example=1.ts" => {
       "code": "import { value } from "./example.ts?my-example=0.ts";
-export default (([]) => value);",
+export default (([]) => {
+  try {
+    return [2, value];
+  } catch (_error) {
+    return [4, _error];
+  }
+  return [3];
+});",
       "map": {
         "file": undefined,
-        "mappings": ";wBAIsCA,KAAK",
+        "mappings": ";;;eAIsCA,KAAK;EAAA,SAAAC,MAAA;IAAA,WAAAA,MAAA;EAAA;EAAA;AAAA",
         "names": [
           "value",
+          "_error",
         ],
         "sourceRoot": undefined,
         "sources": [
@@ -298,14 +371,18 @@ export default _entry("26ecc3a5-0-example", _root);",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACM,SAASA,OAAO,QAAQ,YAAY;AAAC,SAAAC,KAAA;AAErC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,OAAO,SAAAA,CAAA,GAAAC,KAAA,oDAAAC,OAAA,QAAAD,KAAA,CAAuB;AACtC,CAAC",
+    "mappings": "AACM,SAASA,OAAO,QAAQ,YAAY;AAAC,SAAAC,KAAA;AAErC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,OAAO,SAAAA,CAAA,GAAAC,KAAA;IAAA,IAAAC,GAAA,kDAAAC,OAAA;IAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,GAAA,QAAAD,KAAA;IAAA,IAAAG,KAAA;MAAA,MAAAC,OAAA;IAAA;IAAA,OAAAA,OAAA;EAAA,CAAuB;AACtC,CAAC",
     "names": [
       "server$",
       "value",
       "outer",
       "example",
       "_rest",
+      "_fn",
       "default",
+      "_type",
+      "_result",
+      "_mutations",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -331,17 +408,33 @@ export default _entry("26ecc3a5-0-example", _root);",
 exports[`ArrowFunctionExpression > server > should transform valid server functions 1`] = `
 {
   "code": "import { server$ } from 'my-example';
-const example = async (..._rest) => (await import("./example.ts?my-example=1.ts")).default([], ..._rest);",
+const example = async (..._rest) => {
+  let _fn = (await import("./example.ts?my-example=1.ts")).default;
+  const [_type, _result, _mutations] = await _fn([], ..._rest);
+  if (_type === 4) {
+    throw _result;
+  }
+  return _result;
+};",
   "entries": [
     "/path/to/example.ts?my-example=1.ts",
   ],
   "files": Map {
     "/path/to/example.ts?my-example=0.ts" => {
-      "code": "export default (([]) => 'foo bar');",
+      "code": "export default (([]) => {
+  try {
+    return [2, 'foo bar'];
+  } catch (_error) {
+    return [4, _error];
+  }
+  return [3];
+});",
       "map": {
         "file": undefined,
-        "mappings": "wBAEoC,SAAS",
-        "names": [],
+        "mappings": ";;eAEoC,SAAS;EAAA,SAAAA,MAAA;IAAA,WAAAA,MAAA;EAAA;EAAA;AAAA",
+        "names": [
+          "_error",
+        ],
         "sourceRoot": undefined,
         "sources": [
           "/path/to/example.ts",
@@ -369,12 +462,16 @@ export default _entry("26ecc3a5-0-example", _root);",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,OAAO,SAAAA,CAAA,GAAAC,KAAA,oDAAAC,OAAA,QAAAD,KAAA,CAA2B",
+    "mappings": "AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,OAAO,SAAAA,CAAA,GAAAC,KAAA;EAAA,IAAAC,GAAA,kDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,GAAA,QAAAD,KAAA;EAAA,IAAAG,KAAA;IAAA,MAAAC,OAAA;EAAA;EAAA,OAAAA,OAAA;AAAA,CAA2B",
     "names": [
       "server$",
       "example",
       "_rest",
+      "_fn",
       "default",
+      "_type",
+      "_result",
+      "_mutations",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -399,19 +496,34 @@ exports[`ArrowFunctionExpression > server > should transform valid server functi
   "code": "import { server$ } from 'my-example';
 const outer = () => {
   const value = 'foo bar';
-  const example = async (..._rest) => (await import("./example.ts?my-example=1.ts")).default([value], ..._rest);
+  const example = async (..._rest) => {
+    let _fn = (await import("./example.ts?my-example=1.ts")).default;
+    const [_type, _result, _mutations] = await _fn([value], ..._rest);
+    if (_type === 4) {
+      throw _result;
+    }
+    return _result;
+  };
 };",
   "entries": [
     "/path/to/example.ts?my-example=1.ts",
   ],
   "files": Map {
     "/path/to/example.ts?my-example=0.ts" => {
-      "code": "export default (([value]) => value);",
+      "code": "export default (([value]) => {
+  try {
+    return [2, value];
+  } catch (_error) {
+    return [4, _error];
+  }
+  return [3];
+});",
       "map": {
         "file": undefined,
-        "mappings": "kBAGcA,KAAK,MACmBA,KAAK",
+        "mappings": "kBAGcA,KAAK;EAAA;IAAA,WACmBA,KAAK;EAAA,SAAAC,MAAA;IAAA,WAAAA,MAAA;EAAA;EAAA;AAAA",
         "names": [
           "value",
+          "_error",
         ],
         "sourceRoot": undefined,
         "sources": [
@@ -440,14 +552,18 @@ export default _entry("26ecc3a5-0-example", _root);",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,MAAMC,OAAO,SAAAA,CAAA,GAAAC,KAAA,oDAAAC,OAAA,EADPH,KAAK,MAAAE,KAAA,CACyB;AACtC,CAAC",
+    "mappings": "AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,MAAMC,OAAO,SAAAA,CAAA,GAAAC,KAAA;IAAA,IAAAC,GAAA,kDAAAC,OAAA;IAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,GAAA,EADPH,KAAK,MAAAE,KAAA;IAAA,IAAAG,KAAA;MAAA,MAAAC,OAAA;IAAA;IAAA,OAAAA,OAAA;EAAA,CACyB;AACtC,CAAC",
     "names": [
       "server$",
       "outer",
       "value",
       "example",
       "_rest",
+      "_fn",
       "default",
+      "_type",
+      "_result",
+      "_mutations",
     ],
     "sourceRoot": undefined,
     "sources": [
