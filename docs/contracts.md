@@ -1,6 +1,6 @@
 # Internal functions contract
 
-> [!INFO]
+> [!NOTE]
 > The terms "server" and "client" are metaphors: "server" signifies where the function exists and is called
 > remotely, "client" is where the function call request comes from.
 
