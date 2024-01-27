@@ -17,7 +17,7 @@ export type ImportDefinition = DefaultImportDefinition | NamedImportDefinition;
 
 export interface DirectiveDefinition {
   value: string;
-  import: ImportDefinition;
+  target: ImportDefinition;
   pure?: boolean;
 }
 

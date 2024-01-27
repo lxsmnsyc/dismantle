@@ -53,7 +53,7 @@ const result = await compile(
          * This function is called at top-level
          * and as a module side-effect.
          */
-        import: {
+        target: {
           /**
            * Possible values are 'named' or 'default'
            * 

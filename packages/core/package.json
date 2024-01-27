@@ -57,7 +57,11 @@
   "author": "Alexis Munsayac",
   "private": false,
   "typesVersions": {
-    "*": {}
+    "*": {
+      "runtime": [
+        "./dist/types/index.d.ts"
+      ]
+    }
   },
   "exports": {
     ".": {
@@ -67,6 +71,15 @@
       },
       "require": "./dist/cjs/production/index.cjs",
       "import": "./dist/esm/production/index.mjs",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./runtime": {
+      "development": {
+        "require": "./dist/cjs/development/runtime.cjs",
+        "import": "./dist/esm/development/runtime.mjs"
+      },
+      "require": "./dist/cjs/production/runtime.cjs",
+      "import": "./dist/esm/production/runtime.mjs",
       "types": "./dist/types/index.d.ts"
     }
   },

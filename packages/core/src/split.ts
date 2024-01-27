@@ -1,9 +1,11 @@
 import type * as babel from '@babel/core';
 import type { Binding, BindingKind } from '@babel/traverse';
 import * as t from '@babel/types';
+import { HIDDEN_FUNC, HIDDEN_GENERATOR } from './hidden-imports';
 import type {
   DirectiveDefinition,
   FunctionDefinition,
+  ImportDefinition,
   ModuleDefinition,
   StateContext,
 } from './types';
@@ -12,6 +14,7 @@ import { generateCode } from './utils/generator-shim';
 import { getDescriptiveName } from './utils/get-descriptive-name';
 import getForeignBindings from './utils/get-foreign-bindings';
 import { getIdentifiersFromLVal } from './utils/get-identifiers-from-lval';
+import { getImportIdentifier } from './utils/get-import-identifier';
 import { getModuleDefinition } from './utils/get-module-definition';
 import { getRootStatementPath } from './utils/get-root-statement-path';
 import { isPathValid, unwrapPath } from './utils/unwrap';
@@ -155,6 +158,78 @@ function createVirtualFileName(ctx: StateContext) {
   }`;
 }
 
+function createRootFile(
+  ctx: StateContext,
+  bindings: ExtractedBindings,
+  replacement: t.Expression,
+): string {
+  const rootFile = createVirtualFileName(ctx);
+  const rootContent = generateCode(
+    ctx.id,
+    t.program([
+      ...(ctx.options.mode === 'server'
+        ? moduleDefinitionsToImportDeclarations(bindings.modules)
+        : []),
+      t.exportDefaultDeclaration(replacement),
+    ]),
+  );
+  ctx.onVirtualFile(
+    rootFile,
+    { code: rootContent.code, map: rootContent.map },
+    'root',
+  );
+  return rootFile;
+}
+
+function createEntryFile(
+  ctx: StateContext,
+  path: babel.NodePath,
+  rootFile: string,
+  imported: ImportDefinition,
+): string {
+  // Create an ID
+  let id = `${ctx.blocks.hash}-${ctx.blocks.count++}`;
+  if (ctx.options.env !== 'production') {
+    id += `-${getDescriptiveName(path, 'anonymous')}`;
+  }
+  const entryID = path.scope.generateUidIdentifier('entry');
+  const entryImports: ModuleDefinition[] = [
+    {
+      kind: imported.kind,
+      source: imported.source,
+      local: entryID.name,
+      imported: imported.kind === 'named' ? imported.name : undefined,
+    },
+  ];
+  const args: t.Expression[] = [t.stringLiteral(id)];
+  if (ctx.options.mode === 'server') {
+    const rootID = path.scope.generateUidIdentifier('root');
+    entryImports.push({
+      kind: 'default',
+      source: rootFile,
+      local: rootID.name,
+    });
+    args.push(rootID);
+  }
+
+  // Create the registration call
+  const entryFile = createVirtualFileName(ctx);
+  const entryContent = generateCode(
+    ctx.id,
+    t.program([
+      ...moduleDefinitionsToImportDeclarations(entryImports),
+      t.exportDefaultDeclaration(t.callExpression(entryID, args)),
+    ]),
+  );
+  ctx.onVirtualFile(
+    entryFile,
+    { code: entryContent.code, map: entryContent.map },
+    'entry',
+  );
+
+  return entryFile;
+}
+
 function splitFunctionDeclaration(
   ctx: StateContext,
   path: babel.NodePath<t.FunctionDeclaration>,
@@ -241,18 +316,21 @@ const RETURN_KEY = t.numericLiteral(2);
 // If the function has no explicit return
 const NO_HALT_KEY = t.numericLiteral(3);
 const THROW_KEY = t.numericLiteral(4);
+const YIELD_KEY = t.numericLiteral(5);
 
-function transformBlockContent(
-  path: babel.NodePath<t.BlockStatement>,
-  mutations: t.Identifier[],
-): {
+interface HaltingBlockResult {
   breaks: string[];
   breakCount: number;
   continues: string[];
   continueCount: number;
   hasReturn: boolean;
   hasYield: boolean;
-} {
+}
+
+function transformBlockContent(
+  path: babel.NodePath<t.BlockStatement>,
+  mutations: t.Identifier[],
+): HaltingBlockResult {
   const target =
     path.scope.getFunctionParent() || path.scope.getProgramParent();
 
@@ -314,17 +392,16 @@ function transformBlockContent(
         child.scope.getFunctionParent() || child.scope.getProgramParent();
       if (parent === target) {
         hasReturn = true;
-        const replacement: t.Expression[] = [RETURN_KEY];
-        if (child.node.argument) {
-          replacement.push(child.node.argument);
-        } else {
-          replacement.push(t.nullLiteral());
-        }
-        if (applyMutations) {
-          replacement.push(t.callExpression(applyMutations, []));
-        }
-        child.replaceWith(t.returnStatement(t.arrayExpression(replacement)));
-        child.skip();
+        const arg = child.get('argument');
+        arg.replaceWith(
+          t.arrayExpression([
+            RETURN_KEY,
+            arg.node ? arg.node : t.nullLiteral(),
+            applyMutations
+              ? t.callExpression(applyMutations, [])
+              : t.nullLiteral(),
+          ]),
+        );
       }
     },
     YieldExpression(child) {
@@ -332,6 +409,20 @@ function transformBlockContent(
         child.scope.getFunctionParent() || child.scope.getProgramParent();
       if (parent === target) {
         hasYield = true;
+        if (child.node.delegate) {
+          // TODO
+        } else {
+          const arg = child.get('argument');
+          arg.replaceWith(
+            t.arrayExpression([
+              YIELD_KEY,
+              arg.node ? arg.node : t.nullLiteral(),
+              applyMutations
+                ? t.callExpression(applyMutations, [])
+                : t.nullLiteral(),
+            ]),
+          );
+        }
       }
     },
   });
@@ -391,8 +482,8 @@ function getBreakCheck(
   returnResult: t.Identifier,
   breakCount: number,
   breaks: string[],
-  check: t.Statement,
-): t.Statement {
+  check: t.Statement | undefined,
+): t.Statement | undefined {
   let current: t.Statement | undefined;
   if (breakCount !== breaks.length) {
     current = t.blockStatement([t.breakStatement()]);
@@ -430,8 +521,8 @@ function getContinueCheck(
   returnResult: t.Identifier,
   continueCount: number,
   continues: string[],
-  check: t.Statement,
-): t.Statement {
+  check: t.Statement | undefined,
+): t.Statement | undefined {
   let current: t.Statement | undefined;
   if (continueCount !== continues.length) {
     current = t.blockStatement([t.continueStatement()]);
@@ -459,7 +550,7 @@ function getContinueCheck(
 function getGeneratorReplacementForServerBlock(
   path: babel.NodePath,
   registerID: t.Identifier,
-  cloneArgs: (t.ArrayExpression | t.SpreadElement | t.Identifier)[],
+  args: (t.Identifier | t.SpreadElement | t.ArrayExpression)[],
 ): [replacements: t.Statement[], step: t.Identifier] {
   const iterator = path.scope.generateUidIdentifier('iterator');
   const step = path.scope.generateUidIdentifier('step');
@@ -469,7 +560,7 @@ function getGeneratorReplacementForServerBlock(
       // First, get the iterator by calling the generator
       t.variableDeclarator(
         iterator,
-        t.awaitExpression(t.callExpression(registerID, cloneArgs)),
+        t.awaitExpression(t.callExpression(registerID, args)),
       ),
     ]),
     // Create a while statement, the intent is to
@@ -482,9 +573,11 @@ function getGeneratorReplacementForServerBlock(
           t.assignmentExpression(
             '=',
             step,
-            t.callExpression(
-              t.memberExpression(iterator, t.identifier('next')),
-              [],
+            t.awaitExpression(
+              t.callExpression(
+                t.memberExpression(iterator, t.identifier('next')),
+                [],
+              ),
             ),
           ),
         ),
@@ -510,86 +603,19 @@ function getGeneratorReplacementForServerBlock(
   return [replacement, step];
 }
 
-function replaceBlock(
+function getBlockReplacement(
   ctx: StateContext,
   path: babel.NodePath<t.BlockStatement>,
-  directive: DirectiveDefinition,
+  entryFile: string,
   bindings: ExtractedBindings,
-): void {
-  // Transform all control statements
-  const halting = transformBlockContent(path, bindings.mutations);
-  const rootFile = createVirtualFileName(ctx);
-  const rootContent = generateCode(
-    ctx.id,
-    t.program([
-      ...(ctx.options.mode === 'server'
-        ? moduleDefinitionsToImportDeclarations(bindings.modules)
-        : []),
-      t.exportDefaultDeclaration(
-        t.functionExpression(
-          undefined,
-          bindings.locals,
-          t.blockStatement(path.node.body),
-          halting.hasYield,
-          true,
-        ),
-      ),
-    ]),
-  );
-  ctx.onVirtualFile(
-    rootFile,
-    { code: rootContent.code, map: rootContent.map },
-    'root',
-  );
-  // Create an ID
-  let id = `${ctx.blocks.hash}-${ctx.blocks.count++}`;
-  if (ctx.options.env !== 'production') {
-    id += `-${getDescriptiveName(path, 'anonymous')}`;
-  }
-  const entryID = path.scope.generateUidIdentifier('entry');
-  const entryImports: ModuleDefinition[] = [
-    {
-      kind: directive.import.kind,
-      source: directive.import.source,
-      local: entryID.name,
-      imported:
-        directive.import.kind === 'named' ? directive.import.name : undefined,
-    },
-  ];
-  const args: t.Expression[] = [t.stringLiteral(id)];
-  if (ctx.options.mode === 'server') {
-    const rootID = path.scope.generateUidIdentifier('root');
-    entryImports.push({
-      kind: 'default',
-      source: rootFile,
-      local: rootID.name,
-    });
-    args.push(rootID);
-  }
-  // Create the registration call
-  const entryFile = createVirtualFileName(ctx);
-  const entryContent = generateCode(
-    ctx.id,
-    t.program([
-      ...moduleDefinitionsToImportDeclarations(entryImports),
-      t.exportDefaultDeclaration(t.callExpression(entryID, args)),
-    ]),
-  );
-  ctx.onVirtualFile(
-    entryFile,
-    { code: entryContent.code, map: entryContent.map },
-    'entry',
-  );
-
+  halting: HaltingBlockResult,
+) {
   // Move to the replacement for the server block,
   // declare the type and result based from transformBlockContent
   const returnType = path.scope.generateUidIdentifier('type');
   const returnResult = path.scope.generateUidIdentifier('result');
   const returnMutations = path.scope.generateUidIdentifier('mutations');
-  let check: t.Statement = t.ifStatement(
-    t.binaryExpression('===', returnType, THROW_KEY),
-    t.blockStatement([t.throwStatement(returnResult)]),
-  );
+  let check: t.Statement | undefined;
   // If the block has a return, we need to make sure that the
   // replacement does too.
   if (halting.hasReturn) {
@@ -619,21 +645,36 @@ function replaceBlock(
       check,
     );
   }
-
-  const blockID = path.scope.generateUidIdentifier('block');
-  // If the server block happens to be declared in a generator
-  const replacement: t.Statement[] = [
-    t.variableDeclaration('const', [
-      t.variableDeclarator(
-        blockID,
-        t.memberExpression(
-          t.awaitExpression(t.importExpression(t.stringLiteral(entryFile))),
-          t.identifier('default'),
-        ),
-      ),
-    ]),
-  ];
+  const replacement: t.Statement[] = [];
   if (halting.hasYield) {
+    const blockID = path.scope.generateUidIdentifier('block');
+    replacement.push(
+      t.variableDeclaration('const', [
+        t.variableDeclarator(
+          blockID,
+          t.callExpression(getImportIdentifier(ctx, path, HIDDEN_GENERATOR), [
+            t.memberExpression(
+              t.awaitExpression(t.importExpression(t.stringLiteral(entryFile))),
+              t.identifier('default'),
+            ),
+            bindings.mutations.length
+              ? t.arrowFunctionExpression(
+                  [returnMutations],
+                  t.assignmentExpression(
+                    '=',
+                    t.objectPattern(
+                      bindings.mutations.map(item =>
+                        t.objectProperty(item, item, false, true),
+                      ),
+                    ),
+                    returnMutations,
+                  ),
+                )
+              : t.nullLiteral(),
+          ]),
+        ),
+      ]),
+    );
     const [reps, step] = getGeneratorReplacementForServerBlock(
       path,
       blockID,
@@ -645,7 +686,7 @@ function replaceBlock(
     replacement.push(
       t.variableDeclaration('const', [
         t.variableDeclarator(
-          t.arrayPattern([returnType, returnResult, returnMutations]),
+          t.arrayPattern([returnType, returnResult]),
           t.memberExpression(step, t.identifier('value')),
         ),
       ]),
@@ -654,31 +695,68 @@ function replaceBlock(
     replacement.push(
       t.variableDeclaration('const', [
         t.variableDeclarator(
-          t.arrayPattern([returnType, returnResult, returnMutations]),
-          t.awaitExpression(t.callExpression(blockID, bindings.locals)),
-        ),
-      ]),
-    );
-  }
-  if (bindings.mutations.length) {
-    replacement.push(
-      t.expressionStatement(
-        t.assignmentExpression(
-          '=',
-          t.objectPattern(
-            bindings.mutations.map(item =>
-              t.objectProperty(item, item, false, true),
+          t.arrayPattern([returnType, returnResult]),
+          t.awaitExpression(
+            t.callExpression(
+              t.callExpression(getImportIdentifier(ctx, path, HIDDEN_FUNC), [
+                t.memberExpression(
+                  t.awaitExpression(
+                    t.importExpression(t.stringLiteral(entryFile)),
+                  ),
+                  t.identifier('default'),
+                ),
+                bindings.mutations.length
+                  ? t.arrowFunctionExpression(
+                      [returnMutations],
+                      t.assignmentExpression(
+                        '=',
+                        t.objectPattern(
+                          bindings.mutations.map(item =>
+                            t.objectProperty(item, item, false, true),
+                          ),
+                        ),
+                        returnMutations,
+                      ),
+                    )
+                  : t.nullLiteral(),
+              ]),
+              bindings.locals,
             ),
           ),
-          returnMutations,
         ),
-      ),
+      ]),
     );
   }
   if (check) {
     replacement.push(check);
   }
-  path.replaceWith(t.blockStatement(replacement));
+
+  return t.blockStatement(replacement);
+}
+
+function replaceBlock(
+  ctx: StateContext,
+  path: babel.NodePath<t.BlockStatement>,
+  directive: DirectiveDefinition,
+  bindings: ExtractedBindings,
+): void {
+  // Transform all control statements
+  const halting = transformBlockContent(path, bindings.mutations);
+  const rootFile = createRootFile(
+    ctx,
+    bindings,
+    t.functionExpression(
+      undefined,
+      bindings.locals,
+      t.blockStatement(path.node.body),
+      halting.hasYield,
+      true,
+    ),
+  );
+  const entryFile = createEntryFile(ctx, path, rootFile, directive.target);
+  path.replaceWith(
+    getBlockReplacement(ctx, path, entryFile, bindings, halting),
+  );
 }
 
 export function splitBlock(
@@ -699,13 +777,15 @@ export function splitBlock(
   );
 }
 
+interface HaltingFunctionResult {
+  hasReturn: boolean;
+  hasYield: boolean;
+}
+
 function transformFunctionContent(
   path: babel.NodePath<t.BlockStatement>,
   mutations: t.Identifier[],
-): {
-  hasReturn: boolean;
-  hasYield: boolean;
-} {
+): HaltingFunctionResult {
   const target =
     path.scope.getFunctionParent() || path.scope.getProgramParent();
 
@@ -790,107 +870,49 @@ function transformFunctionContent(
   };
 }
 
-function replaceFunction(
+function getFunctionReplacement(
   ctx: StateContext,
   path: babel.NodePath<t.ArrowFunctionExpression | t.FunctionExpression>,
-  func: FunctionDefinition,
+  entryFile: string,
   bindings: ExtractedBindings,
+  halting: HaltingFunctionResult,
 ): t.Expression {
-  const body = path.get('body');
-  if (isPathValid(body, t.isExpression)) {
-    body.replaceWith(t.blockStatement([t.returnStatement(body.node)]));
-  }
-  assert(isPathValid(body, t.isBlockStatement), 'invariant');
-  const halting = transformFunctionContent(body, bindings.mutations);
-  const rootFile = createVirtualFileName(ctx);
-  const rootContent = generateCode(
-    ctx.id,
-    t.program([
-      ...(ctx.options.mode === 'server'
-        ? moduleDefinitionsToImportDeclarations(bindings.modules)
-        : []),
-      t.exportDefaultDeclaration(
-        t.isFunctionExpression(path.node)
-          ? t.functionExpression(
-              path.node.id,
-              [t.arrayPattern(bindings.locals), ...path.node.params],
-              path.node.body,
-              path.node.async,
-              path.node.generator,
-            )
-          : t.arrowFunctionExpression(
-              [t.arrayPattern(bindings.locals), ...path.node.params],
-              path.node.body,
-              path.node.async,
-            ),
-      ),
-    ]),
-  );
-  ctx.onVirtualFile(
-    rootFile,
-    { code: rootContent.code, map: rootContent.map },
-    'root',
-  );
-  // Create an ID
-  let id = `${ctx.blocks.hash}-${ctx.blocks.count++}`;
-  if (ctx.options.env !== 'production') {
-    id += `-${getDescriptiveName(path, 'anonymous')}`;
-  }
-  const entryID = path.scope.generateUidIdentifier('entry');
-  const entryImports: ModuleDefinition[] = [
-    {
-      kind: func.target.kind,
-      source: func.target.source,
-      local: entryID.name,
-      imported: func.target.kind === 'named' ? func.target.name : undefined,
-    },
-  ];
-  const args: t.Expression[] = [t.stringLiteral(id)];
-  if (ctx.options.mode === 'server') {
-    const rootID = path.scope.generateUidIdentifier('root');
-    entryImports.push({
-      kind: 'default',
-      source: rootFile,
-      local: rootID.name,
-    });
-    args.push(rootID);
-  }
-  // Create the registration call
-  const entryFile = createVirtualFileName(ctx);
-  const entryContent = generateCode(
-    ctx.id,
-    t.program([
-      ...moduleDefinitionsToImportDeclarations(entryImports),
-      t.exportDefaultDeclaration(t.callExpression(entryID, args)),
-    ]),
-  );
-  ctx.onVirtualFile(
-    entryFile,
-    { code: entryContent.code, map: entryContent.map },
-    'entry',
-  );
-
   const rest = path.scope.generateUidIdentifier('rest');
-
-  const funcID = path.scope.generateUidIdentifier('fn');
 
   const returnType = path.scope.generateUidIdentifier('type');
   const returnResult = path.scope.generateUidIdentifier('result');
   const returnMutations = path.scope.generateUidIdentifier('mutations');
 
-  const replacement: t.Statement[] = [
-    t.variableDeclaration('let', [
-      t.variableDeclarator(
-        funcID,
-        t.memberExpression(
-          t.awaitExpression(t.importExpression(t.stringLiteral(entryFile))),
-          t.identifier('default'),
-        ),
-      ),
-    ]),
-  ];
-
+  const replacement: t.Statement[] = [];
   if (halting.hasYield) {
+    const funcID = path.scope.generateUidIdentifier('fn');
+    replacement.push(
+      t.variableDeclaration('const', [
+        t.variableDeclarator(
+          funcID,
+          t.callExpression(getImportIdentifier(ctx, path, HIDDEN_GENERATOR), [
+            t.memberExpression(
+              t.awaitExpression(t.importExpression(t.stringLiteral(entryFile))),
+              t.identifier('default'),
+            ),
+            bindings.mutations.length
+              ? t.arrowFunctionExpression(
+                  [returnMutations],
+                  t.assignmentExpression(
+                    '=',
+                    t.objectPattern(
+                      bindings.mutations.map(item =>
+                        t.objectProperty(item, item, false, true),
+                      ),
+                    ),
+                    returnMutations,
+                  ),
+                )
+              : t.nullLiteral(),
+          ]),
+        ),
+      ]),
+    );
     const [reps, step] = getGeneratorReplacementForServerBlock(path, funcID, [
       t.arrayExpression(bindings.locals),
       t.spreadElement(rest),
@@ -901,7 +923,7 @@ function replaceFunction(
     replacement.push(
       t.variableDeclaration('const', [
         t.variableDeclarator(
-          t.arrayPattern([returnType, returnResult, returnMutations]),
+          t.arrayPattern([returnType, returnResult]),
           t.memberExpression(step, t.identifier('value')),
         ),
       ]),
@@ -910,41 +932,40 @@ function replaceFunction(
     replacement.push(
       t.variableDeclaration('const', [
         t.variableDeclarator(
-          t.arrayPattern([returnType, returnResult, returnMutations]),
+          t.arrayPattern([returnType, returnResult]),
           t.awaitExpression(
-            t.callExpression(funcID, [
-              t.arrayExpression(bindings.locals),
-              t.spreadElement(rest),
-            ]),
+            t.callExpression(
+              t.callExpression(getImportIdentifier(ctx, path, HIDDEN_FUNC), [
+                t.memberExpression(
+                  t.awaitExpression(
+                    t.importExpression(t.stringLiteral(entryFile)),
+                  ),
+                  t.identifier('default'),
+                ),
+                bindings.mutations.length
+                  ? t.arrowFunctionExpression(
+                      [returnMutations],
+                      t.assignmentExpression(
+                        '=',
+                        t.objectPattern(
+                          bindings.mutations.map(item =>
+                            t.objectProperty(item, item, false, true),
+                          ),
+                        ),
+                        returnMutations,
+                      ),
+                    )
+                  : t.nullLiteral(),
+              ]),
+              [t.arrayExpression(bindings.locals), t.spreadElement(rest)],
+            ),
           ),
         ),
       ]),
     );
   }
 
-  if (bindings.mutations.length) {
-    replacement.push(
-      t.expressionStatement(
-        t.assignmentExpression(
-          '=',
-          t.objectPattern(
-            bindings.mutations.map(item =>
-              t.objectProperty(item, item, false, true),
-            ),
-          ),
-          returnMutations,
-        ),
-      ),
-    );
-  }
-
-  replacement.push(
-    t.ifStatement(
-      t.binaryExpression('===', returnType, THROW_KEY),
-      t.blockStatement([t.throwStatement(returnResult)]),
-    ),
-    t.returnStatement(returnResult),
-  );
+  replacement.push(t.returnStatement(returnResult));
 
   if (isPathValid(path, t.isFunctionExpression)) {
     return t.functionExpression(
@@ -960,6 +981,41 @@ function replaceFunction(
     t.blockStatement(replacement),
     true,
   );
+}
+
+function replaceFunction(
+  ctx: StateContext,
+  path: babel.NodePath<t.ArrowFunctionExpression | t.FunctionExpression>,
+  func: FunctionDefinition,
+  bindings: ExtractedBindings,
+): t.Expression {
+  const body = path.get('body');
+  if (isPathValid(body, t.isExpression)) {
+    body.replaceWith(t.blockStatement([t.returnStatement(body.node)]));
+  }
+  assert(isPathValid(body, t.isBlockStatement), 'invariant');
+  const halting = transformFunctionContent(body, bindings.mutations);
+  const rootFile = createRootFile(
+    ctx,
+    bindings,
+    t.isFunctionExpression(path.node)
+      ? t.functionExpression(
+          path.node.id,
+          [t.arrayPattern(bindings.locals), ...path.node.params],
+          path.node.body,
+          path.node.async,
+          path.node.generator,
+        )
+      : t.arrowFunctionExpression(
+          [t.arrayPattern(bindings.locals), ...path.node.params],
+          path.node.body,
+          path.node.async,
+        ),
+  );
+
+  const entryFile = createEntryFile(ctx, path, rootFile, func.target);
+
+  return getFunctionReplacement(ctx, path, entryFile, bindings, halting);
 }
 
 export function splitFunction(
@@ -981,59 +1037,8 @@ function replaceExpression(
   func: FunctionDefinition,
   bindings: ExtractedBindings,
 ): t.Expression {
-  const rootFile = createVirtualFileName(ctx);
-  const rootContent = generateCode(
-    ctx.id,
-    t.program([
-      ...(ctx.options.mode === 'server'
-        ? moduleDefinitionsToImportDeclarations(bindings.modules)
-        : []),
-      t.exportDefaultDeclaration(path.node),
-    ]),
-  );
-  ctx.onVirtualFile(
-    rootFile,
-    { code: rootContent.code, map: rootContent.map },
-    'root',
-  );
-  // Create an ID
-  let id = `${ctx.blocks.hash}-${ctx.blocks.count++}`;
-  if (ctx.options.env !== 'production') {
-    id += `-${getDescriptiveName(path, 'anonymous')}`;
-  }
-  const entryID = path.scope.generateUidIdentifier('entry');
-  const entryImports: ModuleDefinition[] = [
-    {
-      kind: func.target.kind,
-      source: func.target.source,
-      local: entryID.name,
-      imported: func.target.kind === 'named' ? func.target.name : undefined,
-    },
-  ];
-  const args: t.Expression[] = [t.stringLiteral(id)];
-  if (ctx.options.mode === 'server') {
-    const rootID = path.scope.generateUidIdentifier('root');
-    entryImports.push({
-      kind: 'default',
-      source: rootFile,
-      local: rootID.name,
-    });
-    args.push(rootID);
-  }
-  // Create the registration call
-  const entryFile = createVirtualFileName(ctx);
-  const entryContent = generateCode(
-    ctx.id,
-    t.program([
-      ...moduleDefinitionsToImportDeclarations(entryImports),
-      t.exportDefaultDeclaration(t.callExpression(entryID, args)),
-    ]),
-  );
-  ctx.onVirtualFile(
-    entryFile,
-    { code: entryContent.code, map: entryContent.map },
-    'entry',
-  );
+  const rootFile = createRootFile(ctx, bindings, path.node);
+  const entryFile = createEntryFile(ctx, path, rootFile, func.target);
 
   const rest = path.scope.generateUidIdentifier('rest');
 

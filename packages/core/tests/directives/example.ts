@@ -5,7 +5,7 @@ export const SERVER: compiler.Options = {
   directives: [
     {
       value: 'use server',
-      import: {
+      target: {
         source: 'my-example/server',
         kind: 'named',
         name: 'server',
@@ -21,7 +21,7 @@ export const CLIENT: compiler.Options = {
   directives: [
     {
       value: 'use server',
-      import: {
+      target: {
         source: 'my-example/client',
         kind: 'named',
         name: 'server',
