@@ -23,9 +23,13 @@ pnpm add dismantle
 - Directive Splitting
 - Function Call Splitting
 - Closure Extraction
+- Remote Control Flows
+- Remote Mutations
 
 ## Docs
 
+- [Configuration](https://github.com/lxsmnsyc/dismantle/blob/main/docs/configuration.md)
+- [Contracts](https://github.com/lxsmnsyc/dismantle/blob/main/docs/contracts.md)
 
 ## Sponsors
 

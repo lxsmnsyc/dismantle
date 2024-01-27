@@ -28,8 +28,8 @@ pnpm add dismantle
 
 ## Docs
 
-- [Configuration](https://github.com/lxsmnsyc/directive-splitter/blob/main/docs/configuration.md)
-- [Contract](https://github.com/lxsmnsyc/directive-splitter/blob/rename/docs/contracts.md)
+- [Configuration](https://github.com/lxsmnsyc/dismantle/blob/main/docs/configuration.md)
+- [Contracts](https://github.com/lxsmnsyc/dismantle/blob/main/docs/contracts.md)
 
 ## Sponsors
 
