@@ -45,15 +45,12 @@ exports[`CatchClause > client > should skip server try statements in non-async f
 
 exports[`CatchClause > client > should skip top-level values for scope 1`] = `
 {
-  "code": "import { value } from "./example.ts?my-example=0.ts";
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+import { value } from "./example.ts?my-example=0.ts";
 try {
   doStuff();
 } catch (err) {
-  const _block = (await import("./example.ts?my-example=2.ts")).default;
-  const [_type, _result, _mutations] = await _block();
-  if (_type === 4) {
-    throw _result;
-  }
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=2.ts")).default, null)();
 }",
   "entries": [
     "/path/to/example.ts?my-example=2.ts",
@@ -121,15 +118,14 @@ export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AAEM,IAAI;EACFA,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG;EAAA,MAAAC,MAAA,kDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA",
+    "mappings": ";;AAEM,IAAI;EACFA,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;AAAA",
     "names": [
       "doStuff",
       "err",
-      "_block",
-      "default",
       "_type",
       "_result",
-      "_mutations",
+      "_$$func",
+      "default",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -156,16 +152,13 @@ export default _entry("26ecc3a5-0-anonymous");",
 
 exports[`CatchClause > client > should transform valid server functions with scope 1`] = `
 {
-  "code": "async function foo() {
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+async function foo() {
   const value = 'foo bar';
   try {
     doStuff();
   } catch (err) {
-    const _block = (await import("./example.ts?my-example=1.ts")).default;
-    const [_type, _result, _mutations] = await _block(value);
-    if (_type === 4) {
-      throw _result;
-    }
+    const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)(value);
   }
 }",
   "entries": [
@@ -216,17 +209,16 @@ export default _entry("26ecc3a5-0-foo");",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB,IAAI;IACFC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG;IAAA,MAAAC,MAAA,kDAAAC,OAAA;IAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA,CAHNH,KAAK;IAAA,IAAAK,KAAA;MAAA,MAAAC,OAAA;IAAA;EAAA;AAOb",
+    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB,IAAI;IACFC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG;IAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA,QAHNN,KAAK;EAAA;AAOb",
     "names": [
       "foo",
       "value",
       "doStuff",
       "err",
-      "_block",
-      "default",
       "_type",
       "_result",
-      "_mutations",
+      "_$$func",
+      "default",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -255,14 +247,11 @@ export default _entry("26ecc3a5-0-foo");",
 
 exports[`CatchClause > client > should transform valid server try statements 1`] = `
 {
-  "code": "try {
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+try {
   doStuff();
 } catch (err) {
-  const _block = (await import("./example.ts?my-example=1.ts")).default;
-  const [_type, _result, _mutations] = await _block();
-  if (_type === 4) {
-    throw _result;
-  }
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)();
 }",
   "entries": [
     "/path/to/example.ts?my-example=1.ts",
@@ -311,15 +300,14 @@ export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACM,IAAI;EACFA,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG;EAAA,MAAAC,MAAA,kDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA",
+    "mappings": ";AACM,IAAI;EACFA,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;AAAA",
     "names": [
       "doStuff",
       "err",
-      "_block",
-      "default",
       "_type",
       "_result",
-      "_mutations",
+      "_$$func",
+      "default",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -388,15 +376,12 @@ exports[`CatchClause > server > should skip server try statements in non-async f
 
 exports[`CatchClause > server > should skip top-level values for scope 1`] = `
 {
-  "code": "const value = 'foo bar';
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+const value = 'foo bar';
 try {
   doStuff();
 } catch (err) {
-  const _block = (await import("./example.ts?my-example=1.ts")).default;
-  const [_type, _result, _mutations] = await _block();
-  if (_type === 4) {
-    throw _result;
-  }
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)();
 }",
   "entries": [
     "/path/to/example.ts?my-example=1.ts",
@@ -446,16 +431,15 @@ export default _entry("26ecc3a5-0-anonymous", _root);",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACM,MAAMA,KAAK,GAAG,SAAS;AACvB,IAAI;EACFC,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG;EAAA,MAAAC,MAAA,kDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA",
+    "mappings": ";AACM,MAAMA,KAAK,GAAG,SAAS;AACvB,IAAI;EACFC,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;AAAA",
     "names": [
       "value",
       "doStuff",
       "err",
-      "_block",
-      "default",
       "_type",
       "_result",
-      "_mutations",
+      "_$$func",
+      "default",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -482,16 +466,13 @@ export default _entry("26ecc3a5-0-anonymous", _root);",
 
 exports[`CatchClause > server > should transform valid server functions with scope 1`] = `
 {
-  "code": "async function foo() {
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+async function foo() {
   const value = 'foo bar';
   try {
     doStuff();
   } catch (err) {
-    const _block = (await import("./example.ts?my-example=1.ts")).default;
-    const [_type, _result, _mutations] = await _block();
-    if (_type === 4) {
-      throw _result;
-    }
+    const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)();
   }
 }",
   "entries": [
@@ -542,17 +523,16 @@ export default _entry("26ecc3a5-0-foo", _root);",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB,IAAI;IACFC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG;IAAA,MAAAC,MAAA,kDAAAC,OAAA;IAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;IAAA,IAAAE,KAAA;MAAA,MAAAC,OAAA;IAAA;EAAA;AAId",
+    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB,IAAI;IACFC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG;IAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;EAAA;AAId",
     "names": [
       "foo",
       "value",
       "doStuff",
       "err",
-      "_block",
-      "default",
       "_type",
       "_result",
-      "_mutations",
+      "_$$func",
+      "default",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -581,14 +561,11 @@ export default _entry("26ecc3a5-0-foo", _root);",
 
 exports[`CatchClause > server > should transform valid server try statements 1`] = `
 {
-  "code": "try {
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+try {
   doStuff();
 } catch (err) {
-  const _block = (await import("./example.ts?my-example=1.ts")).default;
-  const [_type, _result, _mutations] = await _block();
-  if (_type === 4) {
-    throw _result;
-  }
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)();
 }",
   "entries": [
     "/path/to/example.ts?my-example=1.ts",
@@ -638,15 +615,14 @@ export default _entry("26ecc3a5-0-anonymous", _root);",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACM,IAAI;EACFA,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG;EAAA,MAAAC,MAAA,kDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA",
+    "mappings": ";AACM,IAAI;EACFA,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;AAAA",
     "names": [
       "doStuff",
       "err",
-      "_block",
-      "default",
       "_type",
       "_result",
-      "_mutations",
+      "_$$func",
+      "default",
     ],
     "sourceRoot": undefined,
     "sources": [

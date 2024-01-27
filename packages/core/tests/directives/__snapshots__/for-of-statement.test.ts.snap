@@ -41,13 +41,10 @@ exports[`ForOfStatement > client > should skip server for-of statements in non-a
 
 exports[`ForOfStatement > client > should skip top-level values for scope 1`] = `
 {
-  "code": "import { value } from "./example.ts?my-example=0.ts";
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+import { value } from "./example.ts?my-example=0.ts";
 for (const item of items) {
-  const _block = (await import("./example.ts?my-example=2.ts")).default;
-  const [_type, _result, _mutations] = await _block();
-  if (_type === 4) {
-    throw _result;
-  }
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=2.ts")).default, null)();
 }",
   "entries": [
     "/path/to/example.ts?my-example=2.ts",
@@ -114,15 +111,14 @@ export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AAEM,KAAK,MAAMA,IAAI,IAAIC,KAAK;EAAA,MAAAC,MAAA,kDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA",
+    "mappings": ";;AAEM,KAAK,MAAMA,IAAI,IAAIC,KAAK;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;AAAA",
     "names": [
       "item",
       "items",
-      "_block",
-      "default",
       "_type",
       "_result",
-      "_mutations",
+      "_$$func",
+      "default",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -147,13 +143,11 @@ export default _entry("26ecc3a5-0-anonymous");",
 
 exports[`ForOfStatement > client > should transform break statements 1`] = `
 {
-  "code": "for (const item of items) {
-  const _block = (await import("./example.ts?my-example=1.ts")).default;
-  const [_type, _result, _mutations] = await _block();
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+for (const item of items) {
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)();
   if (_type === 0) {
     break;
-  } else if (_type === 4) {
-    throw _result;
   }
 }",
   "entries": [
@@ -210,15 +204,14 @@ export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACM,KAAK,MAAMA,IAAI,IAAIC,KAAK;EAAA,MAAAC,MAAA,kDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA;EAAA,WAAAA,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA",
+    "mappings": ";AACM,KAAK,MAAMA,IAAI,IAAIC,KAAK;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;EAAA,IAAAH,KAAA;IAAA;EAAA;AAAA",
     "names": [
       "item",
       "items",
-      "_block",
-      "default",
       "_type",
       "_result",
-      "_mutations",
+      "_$$func",
+      "default",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -247,13 +240,11 @@ export default _entry("26ecc3a5-0-anonymous");",
 
 exports[`ForOfStatement > client > should transform continue statements 1`] = `
 {
-  "code": "for (const item of items) {
-  const _block = (await import("./example.ts?my-example=1.ts")).default;
-  const [_type, _result, _mutations] = await _block();
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+for (const item of items) {
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)();
   if (_type === 1) {
     continue;
-  } else if (_type === 4) {
-    throw _result;
   }
 }",
   "entries": [
@@ -310,15 +301,14 @@ export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACM,KAAK,MAAMA,IAAI,IAAIC,KAAK;EAAA,MAAAC,MAAA,kDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA;EAAA,WAAAA,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA",
+    "mappings": ";AACM,KAAK,MAAMA,IAAI,IAAIC,KAAK;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;EAAA,IAAAH,KAAA;IAAA;EAAA;AAAA",
     "names": [
       "item",
       "items",
-      "_block",
-      "default",
       "_type",
       "_result",
-      "_mutations",
+      "_$$func",
+      "default",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -347,15 +337,13 @@ export default _entry("26ecc3a5-0-anonymous");",
 
 exports[`ForOfStatement > client > should transform labeled break statements 1`] = `
 {
-  "code": "foo: for (const item of items) {
-  const _block = (await import("./example.ts?my-example=1.ts")).default;
-  const [_type, _result, _mutations] = await _block();
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+foo: for (const item of items) {
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)();
   if (_type === 0) {
     if (_result === "foo") {
       break foo;
     }
-  } else if (_type === 4) {
-    throw _result;
   }
 }",
   "entries": [
@@ -412,16 +400,15 @@ export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACMA,GAAG,EAAE,KAAK,MAAMC,IAAI,IAAIC,KAAK;EAAA,MAAAC,MAAA,kDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA,IAAAC,OAAA;MAAA,MAAAN,GAAA;IAAA;EAAA,WAAAK,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA",
+    "mappings": ";AACMA,GAAG,EAAE,KAAK,MAAMC,IAAI,IAAIC,KAAK;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;EAAA,IAAAH,KAAA;IAAA,IAAAC,OAAA;MAAA,MAAAJ,GAAA;IAAA;EAAA;AAAA",
     "names": [
       "foo",
       "item",
       "items",
-      "_block",
-      "default",
       "_type",
       "_result",
-      "_mutations",
+      "_$$func",
+      "default",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -450,15 +437,13 @@ export default _entry("26ecc3a5-0-anonymous");",
 
 exports[`ForOfStatement > client > should transform labeled continue statements 1`] = `
 {
-  "code": "foo: for (const item of items) {
-  const _block = (await import("./example.ts?my-example=1.ts")).default;
-  const [_type, _result, _mutations] = await _block();
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+foo: for (const item of items) {
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)();
   if (_type === 1) {
     if (_result === "foo") {
       continue foo;
     }
-  } else if (_type === 4) {
-    throw _result;
   }
 }",
   "entries": [
@@ -515,16 +500,15 @@ export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACMA,GAAG,EAAE,KAAK,MAAMC,IAAI,IAAIC,KAAK;EAAA,MAAAC,MAAA,kDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA,IAAAC,OAAA;MAAA,SAAAN,GAAA;IAAA;EAAA,WAAAK,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA",
+    "mappings": ";AACMA,GAAG,EAAE,KAAK,MAAMC,IAAI,IAAIC,KAAK;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;EAAA,IAAAH,KAAA;IAAA,IAAAC,OAAA;MAAA,SAAAJ,GAAA;IAAA;EAAA;AAAA",
     "names": [
       "foo",
       "item",
       "items",
-      "_block",
-      "default",
       "_type",
       "_result",
-      "_mutations",
+      "_$$func",
+      "default",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -553,12 +537,9 @@ export default _entry("26ecc3a5-0-anonymous");",
 
 exports[`ForOfStatement > client > should transform valid server for-of statements 1`] = `
 {
-  "code": "for (const item of items) {
-  const _block = (await import("./example.ts?my-example=1.ts")).default;
-  const [_type, _result, _mutations] = await _block();
-  if (_type === 4) {
-    throw _result;
-  }
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+for (const item of items) {
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)();
 }",
   "entries": [
     "/path/to/example.ts?my-example=1.ts",
@@ -606,15 +587,14 @@ export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACM,KAAK,MAAMA,IAAI,IAAIC,KAAK;EAAA,MAAAC,MAAA,kDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA",
+    "mappings": ";AACM,KAAK,MAAMA,IAAI,IAAIC,KAAK;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;AAAA",
     "names": [
       "item",
       "items",
-      "_block",
-      "default",
       "_type",
       "_result",
-      "_mutations",
+      "_$$func",
+      "default",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -638,14 +618,11 @@ export default _entry("26ecc3a5-0-anonymous");",
 
 exports[`ForOfStatement > client > should transform valid server functions with scope 1`] = `
 {
-  "code": "async function foo() {
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+async function foo() {
   const value = 'foo bar';
   for (const item of items) {
-    const _block = (await import("./example.ts?my-example=1.ts")).default;
-    const [_type, _result, _mutations] = await _block(value);
-    if (_type === 4) {
-      throw _result;
-    }
+    const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)(value);
   }
 }",
   "entries": [
@@ -695,17 +672,16 @@ export default _entry("26ecc3a5-0-foo");",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB,KAAK,MAAMC,IAAI,IAAIC,KAAK;IAAA,MAAAC,MAAA,kDAAAC,OAAA;IAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA,CADlBH,KAAK;IAAA,IAAAK,KAAA;MAAA,MAAAC,OAAA;IAAA;EAAA;AAKb",
+    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB,KAAK,MAAMC,IAAI,IAAIC,KAAK;IAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA,QADlBN,KAAK;EAAA;AAKb",
     "names": [
       "foo",
       "value",
       "item",
       "items",
-      "_block",
-      "default",
       "_type",
       "_result",
-      "_mutations",
+      "_$$func",
+      "default",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -771,13 +747,10 @@ exports[`ForOfStatement > server > should skip server for-of statements in non-a
 
 exports[`ForOfStatement > server > should skip top-level values for scope 1`] = `
 {
-  "code": "import { value } from "./example.ts?my-example=0.ts";
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+import { value } from "./example.ts?my-example=0.ts";
 for (const item of items) {
-  const _block = (await import("./example.ts?my-example=2.ts")).default;
-  const [_type, _result, _mutations] = await _block();
-  if (_type === 4) {
-    throw _result;
-  }
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=2.ts")).default, null)();
 }",
   "entries": [
     "/path/to/example.ts?my-example=2.ts",
@@ -846,15 +819,14 @@ export default _entry("26ecc3a5-0-anonymous", _root);",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AAEM,KAAK,MAAMA,IAAI,IAAIC,KAAK;EAAA,MAAAC,MAAA,kDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA",
+    "mappings": ";;AAEM,KAAK,MAAMA,IAAI,IAAIC,KAAK;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;AAAA",
     "names": [
       "item",
       "items",
-      "_block",
-      "default",
       "_type",
       "_result",
-      "_mutations",
+      "_$$func",
+      "default",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -879,13 +851,11 @@ export default _entry("26ecc3a5-0-anonymous", _root);",
 
 exports[`ForOfStatement > server > should transform break statements 1`] = `
 {
-  "code": "for (const item of items) {
-  const _block = (await import("./example.ts?my-example=1.ts")).default;
-  const [_type, _result, _mutations] = await _block();
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+for (const item of items) {
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)();
   if (_type === 0) {
     break;
-  } else if (_type === 4) {
-    throw _result;
   }
 }",
   "entries": [
@@ -943,15 +913,14 @@ export default _entry("26ecc3a5-0-anonymous", _root);",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACM,KAAK,MAAMA,IAAI,IAAIC,KAAK;EAAA,MAAAC,MAAA,kDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA;EAAA,WAAAA,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA",
+    "mappings": ";AACM,KAAK,MAAMA,IAAI,IAAIC,KAAK;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;EAAA,IAAAH,KAAA;IAAA;EAAA;AAAA",
     "names": [
       "item",
       "items",
-      "_block",
-      "default",
       "_type",
       "_result",
-      "_mutations",
+      "_$$func",
+      "default",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -980,13 +949,11 @@ export default _entry("26ecc3a5-0-anonymous", _root);",
 
 exports[`ForOfStatement > server > should transform continue statements 1`] = `
 {
-  "code": "for (const item of items) {
-  const _block = (await import("./example.ts?my-example=1.ts")).default;
-  const [_type, _result, _mutations] = await _block();
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+for (const item of items) {
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)();
   if (_type === 1) {
     continue;
-  } else if (_type === 4) {
-    throw _result;
   }
 }",
   "entries": [
@@ -1044,15 +1011,14 @@ export default _entry("26ecc3a5-0-anonymous", _root);",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACM,KAAK,MAAMA,IAAI,IAAIC,KAAK;EAAA,MAAAC,MAAA,kDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA;EAAA,WAAAA,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA",
+    "mappings": ";AACM,KAAK,MAAMA,IAAI,IAAIC,KAAK;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;EAAA,IAAAH,KAAA;IAAA;EAAA;AAAA",
     "names": [
       "item",
       "items",
-      "_block",
-      "default",
       "_type",
       "_result",
-      "_mutations",
+      "_$$func",
+      "default",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -1081,15 +1047,13 @@ export default _entry("26ecc3a5-0-anonymous", _root);",
 
 exports[`ForOfStatement > server > should transform labeled break statements 1`] = `
 {
-  "code": "foo: for (const item of items) {
-  const _block = (await import("./example.ts?my-example=1.ts")).default;
-  const [_type, _result, _mutations] = await _block();
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+foo: for (const item of items) {
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)();
   if (_type === 0) {
     if (_result === "foo") {
       break foo;
     }
-  } else if (_type === 4) {
-    throw _result;
   }
 }",
   "entries": [
@@ -1147,16 +1111,15 @@ export default _entry("26ecc3a5-0-anonymous", _root);",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACMA,GAAG,EAAE,KAAK,MAAMC,IAAI,IAAIC,KAAK;EAAA,MAAAC,MAAA,kDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA,IAAAC,OAAA;MAAA,MAAAN,GAAA;IAAA;EAAA,WAAAK,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA",
+    "mappings": ";AACMA,GAAG,EAAE,KAAK,MAAMC,IAAI,IAAIC,KAAK;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;EAAA,IAAAH,KAAA;IAAA,IAAAC,OAAA;MAAA,MAAAJ,GAAA;IAAA;EAAA;AAAA",
     "names": [
       "foo",
       "item",
       "items",
-      "_block",
-      "default",
       "_type",
       "_result",
-      "_mutations",
+      "_$$func",
+      "default",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -1185,15 +1148,13 @@ export default _entry("26ecc3a5-0-anonymous", _root);",
 
 exports[`ForOfStatement > server > should transform labeled continue statements 1`] = `
 {
-  "code": "foo: for (const item of items) {
-  const _block = (await import("./example.ts?my-example=1.ts")).default;
-  const [_type, _result, _mutations] = await _block();
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+foo: for (const item of items) {
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)();
   if (_type === 1) {
     if (_result === "foo") {
       continue foo;
     }
-  } else if (_type === 4) {
-    throw _result;
   }
 }",
   "entries": [
@@ -1251,16 +1212,15 @@ export default _entry("26ecc3a5-0-anonymous", _root);",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACMA,GAAG,EAAE,KAAK,MAAMC,IAAI,IAAIC,KAAK;EAAA,MAAAC,MAAA,kDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA,IAAAC,OAAA;MAAA,SAAAN,GAAA;IAAA;EAAA,WAAAK,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA",
+    "mappings": ";AACMA,GAAG,EAAE,KAAK,MAAMC,IAAI,IAAIC,KAAK;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;EAAA,IAAAH,KAAA;IAAA,IAAAC,OAAA;MAAA,SAAAJ,GAAA;IAAA;EAAA;AAAA",
     "names": [
       "foo",
       "item",
       "items",
-      "_block",
-      "default",
       "_type",
       "_result",
-      "_mutations",
+      "_$$func",
+      "default",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -1289,12 +1249,9 @@ export default _entry("26ecc3a5-0-anonymous", _root);",
 
 exports[`ForOfStatement > server > should transform valid server for-of statements 1`] = `
 {
-  "code": "for (const item of items) {
-  const _block = (await import("./example.ts?my-example=1.ts")).default;
-  const [_type, _result, _mutations] = await _block();
-  if (_type === 4) {
-    throw _result;
-  }
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+for (const item of items) {
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)();
 }",
   "entries": [
     "/path/to/example.ts?my-example=1.ts",
@@ -1343,15 +1300,14 @@ export default _entry("26ecc3a5-0-anonymous", _root);",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACM,KAAK,MAAMA,IAAI,IAAIC,KAAK;EAAA,MAAAC,MAAA,kDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA",
+    "mappings": ";AACM,KAAK,MAAMA,IAAI,IAAIC,KAAK;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;AAAA",
     "names": [
       "item",
       "items",
-      "_block",
-      "default",
       "_type",
       "_result",
-      "_mutations",
+      "_$$func",
+      "default",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -1375,14 +1331,11 @@ export default _entry("26ecc3a5-0-anonymous", _root);",
 
 exports[`ForOfStatement > server > should transform valid server functions with scope 1`] = `
 {
-  "code": "async function foo() {
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+async function foo() {
   const value = 'foo bar';
   for (const item of items) {
-    const _block = (await import("./example.ts?my-example=1.ts")).default;
-    const [_type, _result, _mutations] = await _block(value);
-    if (_type === 4) {
-      throw _result;
-    }
+    const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)(value);
   }
 }",
   "entries": [
@@ -1433,17 +1386,16 @@ export default _entry("26ecc3a5-0-foo", _root);",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB,KAAK,MAAMC,IAAI,IAAIC,KAAK;IAAA,MAAAC,MAAA,kDAAAC,OAAA;IAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA,CADlBH,KAAK;IAAA,IAAAK,KAAA;MAAA,MAAAC,OAAA;IAAA;EAAA;AAKb",
+    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB,KAAK,MAAMC,IAAI,IAAIC,KAAK;IAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA,QADlBN,KAAK;EAAA;AAKb",
     "names": [
       "foo",
       "value",
       "item",
       "items",
-      "_block",
-      "default",
       "_type",
       "_result",
-      "_mutations",
+      "_$$func",
+      "default",
     ],
     "sourceRoot": undefined,
     "sources": [

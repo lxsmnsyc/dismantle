@@ -40,13 +40,10 @@ exports[`LabeledStatement > client > should skip server labeled statements in no
 
 exports[`LabeledStatement > client > should skip top-level values for scope 1`] = `
 {
-  "code": "import { value } from "./example.ts?my-example=0.ts";
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+import { value } from "./example.ts?my-example=0.ts";
 foo: {
-  const _block = (await import("./example.ts?my-example=2.ts")).default;
-  const [_type, _result, _mutations] = await _block();
-  if (_type === 4) {
-    throw _result;
-  }
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=2.ts")).default, null)();
 }",
   "entries": [
     "/path/to/example.ts?my-example=2.ts",
@@ -113,14 +110,13 @@ export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AAEMA,GAAG;EAAA,MAAAC,MAAA,kDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA",
+    "mappings": ";;AAEMA,GAAG;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;AAAA",
     "names": [
       "foo",
-      "_block",
-      "default",
       "_type",
       "_result",
-      "_mutations",
+      "_$$func",
+      "default",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -145,15 +141,13 @@ export default _entry("26ecc3a5-0-anonymous");",
 
 exports[`LabeledStatement > client > should transform break statements 1`] = `
 {
-  "code": "foo: {
-  const _block = (await import("./example.ts?my-example=1.ts")).default;
-  const [_type, _result, _mutations] = await _block();
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+foo: {
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)();
   if (_type === 0) {
     if (_result === "foo") {
       break foo;
     }
-  } else if (_type === 4) {
-    throw _result;
   }
 }",
   "entries": [
@@ -210,14 +204,13 @@ export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACMA,GAAG;EAAA,MAAAC,MAAA,kDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA,IAAAC,OAAA;MAAA,MAAAJ,GAAA;IAAA;EAAA,WAAAG,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA",
+    "mappings": ";AACMA,GAAG;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;EAAA,IAAAH,KAAA;IAAA,IAAAC,OAAA;MAAA,MAAAF,GAAA;IAAA;EAAA;AAAA",
     "names": [
       "foo",
-      "_block",
-      "default",
       "_type",
       "_result",
-      "_mutations",
+      "_$$func",
+      "default",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -246,14 +239,11 @@ export default _entry("26ecc3a5-0-anonymous");",
 
 exports[`LabeledStatement > client > should transform valid server functions with scope 1`] = `
 {
-  "code": "async function foo() {
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+async function foo() {
   const value = 'foo bar';
   foo: {
-    const _block = (await import("./example.ts?my-example=1.ts")).default;
-    const [_type, _result, _mutations] = await _block(value);
-    if (_type === 4) {
-      throw _result;
-    }
+    const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)(value);
   }
 }",
   "entries": [
@@ -303,15 +293,14 @@ export default _entry("26ecc3a5-0-foo");",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvBD,GAAG;IAAA,MAAAE,MAAA,kDAAAC,OAAA;IAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA,CADGD,KAAK;IAAA,IAAAG,KAAA;MAAA,MAAAC,OAAA;IAAA;EAAA;AAKb",
+    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvBD,GAAG;IAAA,OAAAE,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA,QADGJ,KAAK;EAAA;AAKb",
     "names": [
       "foo",
       "value",
-      "_block",
-      "default",
       "_type",
       "_result",
-      "_mutations",
+      "_$$func",
+      "default",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -338,12 +327,9 @@ export default _entry("26ecc3a5-0-foo");",
 
 exports[`LabeledStatement > client > should transform valid server labeled statements 1`] = `
 {
-  "code": "foo: {
-  const _block = (await import("./example.ts?my-example=1.ts")).default;
-  const [_type, _result, _mutations] = await _block();
-  if (_type === 4) {
-    throw _result;
-  }
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+foo: {
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)();
 }",
   "entries": [
     "/path/to/example.ts?my-example=1.ts",
@@ -391,14 +377,13 @@ export default _entry("26ecc3a5-0-anonymous");",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACMA,GAAG;EAAA,MAAAC,MAAA,kDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA",
+    "mappings": ";AACMA,GAAG;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;AAAA",
     "names": [
       "foo",
-      "_block",
-      "default",
       "_type",
       "_result",
-      "_mutations",
+      "_$$func",
+      "default",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -460,13 +445,10 @@ exports[`LabeledStatement > server > should skip server labeled statements in no
 
 exports[`LabeledStatement > server > should skip top-level values for scope 1`] = `
 {
-  "code": "import { value } from "./example.ts?my-example=0.ts";
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+import { value } from "./example.ts?my-example=0.ts";
 foo: {
-  const _block = (await import("./example.ts?my-example=2.ts")).default;
-  const [_type, _result, _mutations] = await _block();
-  if (_type === 4) {
-    throw _result;
-  }
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=2.ts")).default, null)();
 }",
   "entries": [
     "/path/to/example.ts?my-example=2.ts",
@@ -535,14 +517,13 @@ export default _entry("26ecc3a5-0-anonymous", _root);",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AAEMA,GAAG;EAAA,MAAAC,MAAA,kDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA",
+    "mappings": ";;AAEMA,GAAG;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;AAAA",
     "names": [
       "foo",
-      "_block",
-      "default",
       "_type",
       "_result",
-      "_mutations",
+      "_$$func",
+      "default",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -567,15 +548,13 @@ export default _entry("26ecc3a5-0-anonymous", _root);",
 
 exports[`LabeledStatement > server > should transform break statements 1`] = `
 {
-  "code": "foo: {
-  const _block = (await import("./example.ts?my-example=1.ts")).default;
-  const [_type, _result, _mutations] = await _block();
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+foo: {
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)();
   if (_type === 0) {
     if (_result === "foo") {
       break foo;
     }
-  } else if (_type === 4) {
-    throw _result;
   }
 }",
   "entries": [
@@ -633,14 +612,13 @@ export default _entry("26ecc3a5-0-anonymous", _root);",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACMA,GAAG;EAAA,MAAAC,MAAA,kDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA,IAAAC,OAAA;MAAA,MAAAJ,GAAA;IAAA;EAAA,WAAAG,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA",
+    "mappings": ";AACMA,GAAG;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;EAAA,IAAAH,KAAA;IAAA,IAAAC,OAAA;MAAA,MAAAF,GAAA;IAAA;EAAA;AAAA",
     "names": [
       "foo",
-      "_block",
-      "default",
       "_type",
       "_result",
-      "_mutations",
+      "_$$func",
+      "default",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -669,14 +647,11 @@ export default _entry("26ecc3a5-0-anonymous", _root);",
 
 exports[`LabeledStatement > server > should transform valid server functions with scope 1`] = `
 {
-  "code": "async function foo() {
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+async function foo() {
   const value = 'foo bar';
   foo: {
-    const _block = (await import("./example.ts?my-example=1.ts")).default;
-    const [_type, _result, _mutations] = await _block(value);
-    if (_type === 4) {
-      throw _result;
-    }
+    const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)(value);
   }
 }",
   "entries": [
@@ -727,15 +702,14 @@ export default _entry("26ecc3a5-0-foo", _root);",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvBD,GAAG;IAAA,MAAAE,MAAA,kDAAAC,OAAA;IAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA,CADGD,KAAK;IAAA,IAAAG,KAAA;MAAA,MAAAC,OAAA;IAAA;EAAA;AAKb",
+    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvBD,GAAG;IAAA,OAAAE,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA,QADGJ,KAAK;EAAA;AAKb",
     "names": [
       "foo",
       "value",
-      "_block",
-      "default",
       "_type",
       "_result",
-      "_mutations",
+      "_$$func",
+      "default",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -762,12 +736,9 @@ export default _entry("26ecc3a5-0-foo", _root);",
 
 exports[`LabeledStatement > server > should transform valid server labeled statements 1`] = `
 {
-  "code": "foo: {
-  const _block = (await import("./example.ts?my-example=1.ts")).default;
-  const [_type, _result, _mutations] = await _block();
-  if (_type === 4) {
-    throw _result;
-  }
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+foo: {
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)();
 }",
   "entries": [
     "/path/to/example.ts?my-example=1.ts",
@@ -816,14 +787,13 @@ export default _entry("26ecc3a5-0-anonymous", _root);",
   },
   "map": {
     "file": undefined,
-    "mappings": "AACMA,GAAG;EAAA,MAAAC,MAAA,kDAAAC,OAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,EAAAC,UAAA,UAAAJ,MAAA;EAAA,IAAAE,KAAA;IAAA,MAAAC,OAAA;EAAA;AAAA",
+    "mappings": ";AACMA,GAAG;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;AAAA",
     "names": [
       "foo",
-      "_block",
-      "default",
       "_type",
       "_result",
-      "_mutations",
+      "_$$func",
+      "default",
     ],
     "sourceRoot": undefined,
     "sources": [
