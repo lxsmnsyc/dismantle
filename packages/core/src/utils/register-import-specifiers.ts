@@ -12,6 +12,9 @@ function registerImportSpecifier(
   definition: FunctionDefinition,
 ): void {
   if (t.isImportSpecifier(node)) {
+    if (node.importKind === 'type' || node.importKind === 'typeof') {
+      return;
+    }
     const key = getImportSpecifierName(node);
     if (
       (definition.source.kind === 'named' && key === definition.source.name) ||
@@ -57,12 +60,15 @@ export function registerImportSpecifiers(
   }
   programPath.traverse({
     ImportDeclaration(path) {
+      if (
+        path.node.importKind === 'type' ||
+        path.node.importKind === 'typeof'
+      ) {
+        return;
+      }
       for (let i = 0; i < len; i++) {
         const func = ctx.options.functions[i];
-        if (
-          path.node.importKind === 'value' &&
-          func.source.source === path.node.source.value
-        ) {
+        if (func.source.source === path.node.source.value) {
           registerImportDeclarationByDefinition(ctx, path, func);
         }
       }
