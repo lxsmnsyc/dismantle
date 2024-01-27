@@ -1,6 +1,6 @@
 # `dismantle`
 
-> Universal directive code-splitter
+> Universal semi-automatic code-splitter
 
 [![NPM](https://img.shields.io/npm/v/dismantle.svg)](https://www.npmjs.com/package/dismantle) [![JavaScript Style Guide](https://badgen.net/badge/code%20style/airbnb/ff5a5f?icon=airbnb)](https://github.com/airbnb/javascript)
 
