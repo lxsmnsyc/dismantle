@@ -1,38 +1,37 @@
 import * as babel from '@babel/core';
-import path from 'path';
-import type { Options, StateContext } from './types';
-import assert from './utils/assert';
+import path from 'node:path';
 import { plugin } from './plugin';
+import type { CodeOutput, Options, StateContext } from './types';
+import assert from './utils/assert';
 import xxHash32 from './utils/xxhash32';
 
-export interface Output {
-  code: babel.BabelFileResult['code'];
-  map: babel.BabelFileResult['map'];
-  files: Map<string, string>;
+export interface Output extends CodeOutput {
+  files: Map<string, CodeOutput>;
   entries: string[];
   roots: string[];
 }
 
 export {
-  NamedImportDefinition,
   DefaultImportDefinition,
   DirectiveDefinition,
   ImportDefinition,
+  NamedImportDefinition,
   Options,
 } from './types';
 
 export async function compile(
-  code: string,
   id: string,
+  code: string,
   options: Options,
 ): Promise<Output> {
   const parsedPath = path.parse(id);
 
   const entries: string[] = [];
   const roots: string[] = [];
-  const files = new Map<string, string>();
+  const files = new Map<string, CodeOutput>();
 
   const ctx: StateContext = {
+    id,
     path: parsedPath,
     imports: new Map(),
     virtual: {
@@ -52,6 +51,10 @@ export async function compile(
       } else if (mode === 'root') {
         roots.push(filePath);
       }
+    },
+    registrations: {
+      identifiers: new Map(),
+      namespaces: new Map(),
     },
   };
 

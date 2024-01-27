@@ -1,5 +1,6 @@
+import type * as babel from '@babel/core';
 import type * as t from '@babel/types';
-import type * as path from 'path';
+import type * as path from 'node:path';
 
 export interface NamedImportDefinition {
   kind: 'named';
@@ -16,13 +17,23 @@ export type ImportDefinition = DefaultImportDefinition | NamedImportDefinition;
 
 export interface DirectiveDefinition {
   value: string;
-  import: ImportDefinition;
+  target: ImportDefinition;
+  pure?: boolean;
+}
+
+export interface FunctionDefinition {
+  source: ImportDefinition;
+  target: ImportDefinition;
+  preserve?: boolean;
+  pure?: boolean;
 }
 
 export interface Options {
+  key: string;
   mode: 'server' | 'client';
   env: 'production' | 'development';
   directives: DirectiveDefinition[];
+  functions: FunctionDefinition[];
 }
 
 export interface ModuleDefinition {
@@ -32,7 +43,13 @@ export interface ModuleDefinition {
   imported?: string;
 }
 
+export interface CodeOutput {
+  code: babel.BabelFileResult['code'];
+  map: babel.BabelFileResult['map'];
+}
+
 export interface StateContext {
+  id: string;
   path: path.ParsedPath;
   imports: Map<string, t.Identifier>;
   virtual: {
@@ -46,7 +63,11 @@ export interface StateContext {
   options: Options;
   onVirtualFile: (
     path: string,
-    content: string,
+    content: CodeOutput,
     mode: 'entry' | 'root' | 'none',
   ) => void;
+  registrations: {
+    identifiers: Map<t.Identifier, FunctionDefinition>;
+    namespaces: Map<t.Identifier, FunctionDefinition[]>;
+  };
 }

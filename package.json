@@ -1,13 +1,10 @@
 {
   "name": "root",
   "private": true,
-  "workspaces": [
-    "packages/*",
-    "examples/*"
-  ],
+  "workspaces": ["packages/*", "examples/*", "playground"],
   "devDependencies": {
-    "@biomejs/biome": "^1.4.1",
+    "@biomejs/biome": "^1.5.3",
     "lerna": "^8.0.2",
-    "typescript": "^5.3.2"
+    "typescript": "^5.3.3"
   }
 }

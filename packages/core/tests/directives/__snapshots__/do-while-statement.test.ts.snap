@@ -1,0 +1,1405 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DoWhileStatement > client > should skip server do-while statements in non-async functions 1`] = `
+{
+  "code": "const example = () => {
+  do {
+    'use server';
+    doStuff();
+  } while (cond());
+};",
+  "entries": [],
+  "files": Map {},
+  "map": {
+    "file": undefined,
+    "mappings": "AACM,MAAMA,OAAO,GAAGA,CAAA,KAAM;EACpB,GAAG;IACD,YAAY;IACZC,OAAO,CAAC,CAAC;EACX,CAAC,QAAQC,IAAI,CAAC,CAAC;AACjB,CAAC",
+    "names": [
+      "example",
+      "doStuff",
+      "cond",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "/path/to/example.ts",
+    ],
+    "sourcesContent": [
+      "
+      const example = () => {
+        do {
+          'use server';
+          doStuff();
+        } while (cond())
+      };
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [],
+}
+`;
+
+exports[`DoWhileStatement > client > should skip top-level values for scope 1`] = `
+{
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+import { value } from "./example.ts?my-example=0.ts";
+do {
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=2.ts")).default, null)();
+} while (cond());",
+  "entries": [
+    "/path/to/example.ts?my-example=2.ts",
+  ],
+  "files": Map {
+    "/path/to/example.ts?my-example=0.ts" => {
+      "code": "export const value = 'foo bar';",
+      "map": {
+        "file": undefined,
+        "mappings": "aACYA,KAAK,GAAG,SAAS",
+        "names": [
+          "value",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=1.ts" => {
+      "code": "export default (async function () {
+  try {
+    await doStuff(value);
+  } catch (_error) {
+    return [4, _error];
+  }
+  return [3];
+});",
+      "map": {
+        "file": undefined,
+        "mappings": ";;IAIQ,MAAMA,OAAO,CAACC,KAAK,CAAC;EAAC,SAAAC,MAAA;IAAA,WAAAA,MAAA;EAAA;EAAA;AAAA",
+        "names": [
+          "doStuff",
+          "value",
+          "_error",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=2.ts" => {
+      "code": "import { server as _entry } from "my-example/client";
+export default _entry("26ecc3a5-0-anonymous");",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
+  },
+  "map": {
+    "file": undefined,
+    "mappings": ";;AAEM;EAAA,OAAAA,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;AAAA,SAGSC,IAAI,CAAC,CAAC",
+    "names": [
+      "_type",
+      "_result",
+      "_$$func",
+      "default",
+      "cond",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "/path/to/example.ts",
+    ],
+    "sourcesContent": [
+      "
+      const value = 'foo bar';
+      do {
+        'use server';
+        await doStuff(value);
+      } while (cond())
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "/path/to/example.ts?my-example=1.ts",
+  ],
+}
+`;
+
+exports[`DoWhileStatement > client > should transform break statements 1`] = `
+{
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+do {
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)();
+  if (_type === 0) {
+    break;
+  }
+} while (cond());",
+  "entries": [
+    "/path/to/example.ts?my-example=1.ts",
+  ],
+  "files": Map {
+    "/path/to/example.ts?my-example=0.ts" => {
+      "code": "export default (async function () {
+  try {
+    if (cond()) {
+      await doStuff(value);
+    } else {
+      return [0, null];
+    }
+    await doMoreStuff();
+  } catch (_error) {
+    return [4, _error];
+  }
+  return [3];
+});",
+      "map": {
+        "file": undefined,
+        "mappings": ";;IAGQ,IAAIA,IAAI,CAAC,CAAC,EAAE;MACV,MAAMC,OAAO,CAACC,KAAK,CAAC;IACtB,CAAC,MAAM;MAAA;IAEP;IACA,MAAMC,WAAW,CAAC,CAAC;EAAC,SAAAC,MAAA;IAAA,WAAAA,MAAA;EAAA;EAAA;AAAA",
+        "names": [
+          "cond",
+          "doStuff",
+          "value",
+          "doMoreStuff",
+          "_error",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=1.ts" => {
+      "code": "import { server as _entry } from "my-example/client";
+export default _entry("26ecc3a5-0-anonymous");",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
+  },
+  "map": {
+    "file": undefined,
+    "mappings": ";AACM;EAAA,OAAAA,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;EAAA,IAAAH,KAAA;IAAA;EAAA;AAAA,SAQSI,IAAI,CAAC,CAAC",
+    "names": [
+      "_type",
+      "_result",
+      "_$$func",
+      "default",
+      "cond",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "/path/to/example.ts",
+    ],
+    "sourcesContent": [
+      "
+      do {
+        'use server';
+        if (cond()) {
+          await doStuff(value);
+        } else {
+          break;
+        }
+        await doMoreStuff();
+      } while (cond())
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "/path/to/example.ts?my-example=0.ts",
+  ],
+}
+`;
+
+exports[`DoWhileStatement > client > should transform continue statements 1`] = `
+{
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+do {
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)();
+  if (_type === 1) {
+    continue;
+  }
+} while (cond());",
+  "entries": [
+    "/path/to/example.ts?my-example=1.ts",
+  ],
+  "files": Map {
+    "/path/to/example.ts?my-example=0.ts" => {
+      "code": "export default (async function () {
+  try {
+    if (cond()) {
+      await doStuff(value);
+    } else {
+      return [1, null];
+    }
+    await doMoreStuff();
+  } catch (_error) {
+    return [4, _error];
+  }
+  return [3];
+});",
+      "map": {
+        "file": undefined,
+        "mappings": ";;IAGQ,IAAIA,IAAI,CAAC,CAAC,EAAE;MACV,MAAMC,OAAO,CAACC,KAAK,CAAC;IACtB,CAAC,MAAM;MAAA;IAEP;IACA,MAAMC,WAAW,CAAC,CAAC;EAAC,SAAAC,MAAA;IAAA,WAAAA,MAAA;EAAA;EAAA;AAAA",
+        "names": [
+          "cond",
+          "doStuff",
+          "value",
+          "doMoreStuff",
+          "_error",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=1.ts" => {
+      "code": "import { server as _entry } from "my-example/client";
+export default _entry("26ecc3a5-0-anonymous");",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
+  },
+  "map": {
+    "file": undefined,
+    "mappings": ";AACM;EAAA,OAAAA,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;EAAA,IAAAH,KAAA;IAAA;EAAA;AAAA,SAQSI,IAAI,CAAC,CAAC",
+    "names": [
+      "_type",
+      "_result",
+      "_$$func",
+      "default",
+      "cond",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "/path/to/example.ts",
+    ],
+    "sourcesContent": [
+      "
+      do {
+        'use server';
+        if (cond()) {
+          await doStuff(value);
+        } else {
+          continue;
+        }
+        await doMoreStuff();
+      } while (cond())
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "/path/to/example.ts?my-example=0.ts",
+  ],
+}
+`;
+
+exports[`DoWhileStatement > client > should transform labeled break statements 1`] = `
+{
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+foo: do {
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)();
+  if (_type === 0) {
+    if (_result === "foo") {
+      break foo;
+    }
+  }
+} while (cond());",
+  "entries": [
+    "/path/to/example.ts?my-example=1.ts",
+  ],
+  "files": Map {
+    "/path/to/example.ts?my-example=0.ts" => {
+      "code": "export default (async function () {
+  try {
+    if (cond()) {
+      await doStuff(value);
+    } else {
+      return [0, "foo"];
+    }
+    await doMoreStuff();
+  } catch (_error) {
+    return [4, _error];
+  }
+  return [3];
+});",
+      "map": {
+        "file": undefined,
+        "mappings": ";;IAGQ,IAAIA,IAAI,CAAC,CAAC,EAAE;MACV,MAAMC,OAAO,CAACC,KAAK,CAAC;IACtB,CAAC,MAAM;MAAA;IAEP;IACA,MAAMC,WAAW,CAAC,CAAC;EAAC,SAAAC,MAAA;IAAA,WAAAA,MAAA;EAAA;EAAA;AAAA",
+        "names": [
+          "cond",
+          "doStuff",
+          "value",
+          "doMoreStuff",
+          "_error",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=1.ts" => {
+      "code": "import { server as _entry } from "my-example/client";
+export default _entry("26ecc3a5-0-anonymous");",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
+  },
+  "map": {
+    "file": undefined,
+    "mappings": ";AACMA,GAAG,EAAE;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;EAAA,IAAAH,KAAA;IAAA,IAAAC,OAAA;MAAA,MAAAF,GAAA;IAAA;EAAA;AAAA,SAQIK,IAAI,CAAC,CAAC",
+    "names": [
+      "foo",
+      "_type",
+      "_result",
+      "_$$func",
+      "default",
+      "cond",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "/path/to/example.ts",
+    ],
+    "sourcesContent": [
+      "
+      foo: do {
+        'use server';
+        if (cond()) {
+          await doStuff(value);
+        } else {
+          break foo;
+        }
+        await doMoreStuff();
+      } while (cond())
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "/path/to/example.ts?my-example=0.ts",
+  ],
+}
+`;
+
+exports[`DoWhileStatement > client > should transform labeled continue statements 1`] = `
+{
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+foo: do {
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)();
+  if (_type === 1) {
+    if (_result === "foo") {
+      continue foo;
+    }
+  }
+} while (cond());",
+  "entries": [
+    "/path/to/example.ts?my-example=1.ts",
+  ],
+  "files": Map {
+    "/path/to/example.ts?my-example=0.ts" => {
+      "code": "export default (async function () {
+  try {
+    if (cond()) {
+      await doStuff(value);
+    } else {
+      return [1, "foo"];
+    }
+    await doMoreStuff();
+  } catch (_error) {
+    return [4, _error];
+  }
+  return [3];
+});",
+      "map": {
+        "file": undefined,
+        "mappings": ";;IAGQ,IAAIA,IAAI,CAAC,CAAC,EAAE;MACV,MAAMC,OAAO,CAACC,KAAK,CAAC;IACtB,CAAC,MAAM;MAAA;IAEP;IACA,MAAMC,WAAW,CAAC,CAAC;EAAC,SAAAC,MAAA;IAAA,WAAAA,MAAA;EAAA;EAAA;AAAA",
+        "names": [
+          "cond",
+          "doStuff",
+          "value",
+          "doMoreStuff",
+          "_error",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=1.ts" => {
+      "code": "import { server as _entry } from "my-example/client";
+export default _entry("26ecc3a5-0-anonymous");",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
+  },
+  "map": {
+    "file": undefined,
+    "mappings": ";AACMA,GAAG,EAAE;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;EAAA,IAAAH,KAAA;IAAA,IAAAC,OAAA;MAAA,SAAAF,GAAA;IAAA;EAAA;AAAA,SAQIK,IAAI,CAAC,CAAC",
+    "names": [
+      "foo",
+      "_type",
+      "_result",
+      "_$$func",
+      "default",
+      "cond",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "/path/to/example.ts",
+    ],
+    "sourcesContent": [
+      "
+      foo: do {
+        'use server';
+        if (cond()) {
+          await doStuff(value);
+        } else {
+          continue foo;
+        }
+        await doMoreStuff();
+      } while (cond())
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "/path/to/example.ts?my-example=0.ts",
+  ],
+}
+`;
+
+exports[`DoWhileStatement > client > should transform valid server do-while statements 1`] = `
+{
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+do {
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)();
+} while (cond());",
+  "entries": [
+    "/path/to/example.ts?my-example=1.ts",
+  ],
+  "files": Map {
+    "/path/to/example.ts?my-example=0.ts" => {
+      "code": "export default (async function () {
+  try {
+    await doStuff();
+  } catch (_error) {
+    return [4, _error];
+  }
+  return [3];
+});",
+      "map": {
+        "file": undefined,
+        "mappings": ";;IAGQ,MAAMA,OAAO,CAAC,CAAC;EAAC,SAAAC,MAAA;IAAA,WAAAA,MAAA;EAAA;EAAA;AAAA",
+        "names": [
+          "doStuff",
+          "_error",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=1.ts" => {
+      "code": "import { server as _entry } from "my-example/client";
+export default _entry("26ecc3a5-0-anonymous");",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
+  },
+  "map": {
+    "file": undefined,
+    "mappings": ";AACM;EAAA,OAAAA,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;AAAA,SAGSC,IAAI,CAAC,CAAC",
+    "names": [
+      "_type",
+      "_result",
+      "_$$func",
+      "default",
+      "cond",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "/path/to/example.ts",
+    ],
+    "sourcesContent": [
+      "
+      do {
+        'use server';
+        await doStuff();
+      } while (cond())
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "/path/to/example.ts?my-example=0.ts",
+  ],
+}
+`;
+
+exports[`DoWhileStatement > client > should transform valid server functions with scope 1`] = `
+{
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+async function foo() {
+  const value = 'foo bar';
+  do {
+    const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)(value);
+  } while (cond());
+}",
+  "entries": [
+    "/path/to/example.ts?my-example=1.ts",
+  ],
+  "files": Map {
+    "/path/to/example.ts?my-example=0.ts" => {
+      "code": "export default (async function (value) {
+  try {
+    await doStuff(value);
+  } catch (_error) {
+    return [4, _error];
+  }
+  return [3];
+});",
+      "map": {
+        "file": undefined,
+        "mappings": "gCAEcA,KAAK;EAAA;IAGT,MAAMC,OAAO,CAACD,KAAK,CAAC;EAAC,SAAAE,MAAA;IAAA,WAAAA,MAAA;EAAA;EAAA;AAAA",
+        "names": [
+          "value",
+          "doStuff",
+          "_error",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=1.ts" => {
+      "code": "import { server as _entry } from "my-example/client";
+export default _entry("26ecc3a5-0-foo");",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
+  },
+  "map": {
+    "file": undefined,
+    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB;IAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA,QADMJ,KAAK;EAAA,SAIFK,IAAI,CAAC,CAAC;AACjB",
+    "names": [
+      "foo",
+      "value",
+      "_type",
+      "_result",
+      "_$$func",
+      "default",
+      "cond",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "/path/to/example.ts",
+    ],
+    "sourcesContent": [
+      "
+      async function foo() {
+        const value = 'foo bar';
+        do {
+          'use server';
+          await doStuff(value);
+        } while (cond())
+      }
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "/path/to/example.ts?my-example=0.ts",
+  ],
+}
+`;
+
+exports[`DoWhileStatement > server > should skip server do-while statements in non-async functions 1`] = `
+{
+  "code": "const example = () => {
+  do {
+    'use server';
+    doStuff();
+  } while (cond());
+};",
+  "entries": [],
+  "files": Map {},
+  "map": {
+    "file": undefined,
+    "mappings": "AACM,MAAMA,OAAO,GAAGA,CAAA,KAAM;EACpB,GAAG;IACD,YAAY;IACZC,OAAO,CAAC,CAAC;EACX,CAAC,QAAQC,IAAI,CAAC,CAAC;AACjB,CAAC",
+    "names": [
+      "example",
+      "doStuff",
+      "cond",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "/path/to/example.ts",
+    ],
+    "sourcesContent": [
+      "
+      const example = () => {
+        do {
+          'use server';
+          doStuff();
+        } while (cond())
+      };
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [],
+}
+`;
+
+exports[`DoWhileStatement > server > should skip top-level values for scope 1`] = `
+{
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+import { value } from "./example.ts?my-example=0.ts";
+do {
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=2.ts")).default, null)();
+} while (cond());",
+  "entries": [
+    "/path/to/example.ts?my-example=2.ts",
+  ],
+  "files": Map {
+    "/path/to/example.ts?my-example=0.ts" => {
+      "code": "export const value = 'foo bar';",
+      "map": {
+        "file": undefined,
+        "mappings": "aACYA,KAAK,GAAG,SAAS",
+        "names": [
+          "value",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=1.ts" => {
+      "code": "import { value } from "./example.ts?my-example=0.ts";
+export default (async function () {
+  try {
+    await doStuff(value);
+  } catch (_error) {
+    return [4, _error];
+  }
+  return [3];
+});",
+      "map": {
+        "file": undefined,
+        "mappings": ";;;IAIQ,MAAMA,OAAO,CAACC,KAAK,CAAC;EAAC,SAAAC,MAAA;IAAA,WAAAA,MAAA;EAAA;EAAA;AAAA",
+        "names": [
+          "doStuff",
+          "value",
+          "_error",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=2.ts" => {
+      "code": "import { server as _entry } from "my-example/server";
+import _root from "./example.ts?my-example=1.ts";
+export default _entry("26ecc3a5-0-anonymous", _root);",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
+  },
+  "map": {
+    "file": undefined,
+    "mappings": ";;AAEM;EAAA,OAAAA,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;AAAA,SAGSC,IAAI,CAAC,CAAC",
+    "names": [
+      "_type",
+      "_result",
+      "_$$func",
+      "default",
+      "cond",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "/path/to/example.ts",
+    ],
+    "sourcesContent": [
+      "
+      const value = 'foo bar';
+      do {
+        'use server';
+        await doStuff(value);
+      } while (cond())
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "/path/to/example.ts?my-example=1.ts",
+  ],
+}
+`;
+
+exports[`DoWhileStatement > server > should transform break statements 1`] = `
+{
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+do {
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)();
+  if (_type === 0) {
+    break;
+  }
+} while (cond());",
+  "entries": [
+    "/path/to/example.ts?my-example=1.ts",
+  ],
+  "files": Map {
+    "/path/to/example.ts?my-example=0.ts" => {
+      "code": "export default (async function () {
+  try {
+    if (cond()) {
+      await doStuff(value);
+    } else {
+      return [0, null];
+    }
+    await doMoreStuff();
+  } catch (_error) {
+    return [4, _error];
+  }
+  return [3];
+});",
+      "map": {
+        "file": undefined,
+        "mappings": ";;IAGQ,IAAIA,IAAI,CAAC,CAAC,EAAE;MACV,MAAMC,OAAO,CAACC,KAAK,CAAC;IACtB,CAAC,MAAM;MAAA;IAEP;IACA,MAAMC,WAAW,CAAC,CAAC;EAAC,SAAAC,MAAA;IAAA,WAAAA,MAAA;EAAA;EAAA;AAAA",
+        "names": [
+          "cond",
+          "doStuff",
+          "value",
+          "doMoreStuff",
+          "_error",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=1.ts" => {
+      "code": "import { server as _entry } from "my-example/server";
+import _root from "./example.ts?my-example=0.ts";
+export default _entry("26ecc3a5-0-anonymous", _root);",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
+  },
+  "map": {
+    "file": undefined,
+    "mappings": ";AACM;EAAA,OAAAA,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;EAAA,IAAAH,KAAA;IAAA;EAAA;AAAA,SAQSI,IAAI,CAAC,CAAC",
+    "names": [
+      "_type",
+      "_result",
+      "_$$func",
+      "default",
+      "cond",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "/path/to/example.ts",
+    ],
+    "sourcesContent": [
+      "
+      do {
+        'use server';
+        if (cond()) {
+          await doStuff(value);
+        } else {
+          break;
+        }
+        await doMoreStuff();
+      } while (cond())
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "/path/to/example.ts?my-example=0.ts",
+  ],
+}
+`;
+
+exports[`DoWhileStatement > server > should transform continue statements 1`] = `
+{
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+do {
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)();
+  if (_type === 1) {
+    continue;
+  }
+} while (cond());",
+  "entries": [
+    "/path/to/example.ts?my-example=1.ts",
+  ],
+  "files": Map {
+    "/path/to/example.ts?my-example=0.ts" => {
+      "code": "export default (async function () {
+  try {
+    if (cond()) {
+      await doStuff(value);
+    } else {
+      return [1, null];
+    }
+    await doMoreStuff();
+  } catch (_error) {
+    return [4, _error];
+  }
+  return [3];
+});",
+      "map": {
+        "file": undefined,
+        "mappings": ";;IAGQ,IAAIA,IAAI,CAAC,CAAC,EAAE;MACV,MAAMC,OAAO,CAACC,KAAK,CAAC;IACtB,CAAC,MAAM;MAAA;IAEP;IACA,MAAMC,WAAW,CAAC,CAAC;EAAC,SAAAC,MAAA;IAAA,WAAAA,MAAA;EAAA;EAAA;AAAA",
+        "names": [
+          "cond",
+          "doStuff",
+          "value",
+          "doMoreStuff",
+          "_error",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=1.ts" => {
+      "code": "import { server as _entry } from "my-example/server";
+import _root from "./example.ts?my-example=0.ts";
+export default _entry("26ecc3a5-0-anonymous", _root);",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
+  },
+  "map": {
+    "file": undefined,
+    "mappings": ";AACM;EAAA,OAAAA,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;EAAA,IAAAH,KAAA;IAAA;EAAA;AAAA,SAQSI,IAAI,CAAC,CAAC",
+    "names": [
+      "_type",
+      "_result",
+      "_$$func",
+      "default",
+      "cond",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "/path/to/example.ts",
+    ],
+    "sourcesContent": [
+      "
+      do {
+        'use server';
+        if (cond()) {
+          await doStuff(value);
+        } else {
+          continue;
+        }
+        await doMoreStuff();
+      } while (cond())
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "/path/to/example.ts?my-example=0.ts",
+  ],
+}
+`;
+
+exports[`DoWhileStatement > server > should transform labeled break statements 1`] = `
+{
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+foo: do {
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)();
+  if (_type === 0) {
+    if (_result === "foo") {
+      break foo;
+    }
+  }
+} while (cond());",
+  "entries": [
+    "/path/to/example.ts?my-example=1.ts",
+  ],
+  "files": Map {
+    "/path/to/example.ts?my-example=0.ts" => {
+      "code": "export default (async function () {
+  try {
+    if (cond()) {
+      await doStuff(value);
+    } else {
+      return [0, "foo"];
+    }
+    await doMoreStuff();
+  } catch (_error) {
+    return [4, _error];
+  }
+  return [3];
+});",
+      "map": {
+        "file": undefined,
+        "mappings": ";;IAGQ,IAAIA,IAAI,CAAC,CAAC,EAAE;MACV,MAAMC,OAAO,CAACC,KAAK,CAAC;IACtB,CAAC,MAAM;MAAA;IAEP;IACA,MAAMC,WAAW,CAAC,CAAC;EAAC,SAAAC,MAAA;IAAA,WAAAA,MAAA;EAAA;EAAA;AAAA",
+        "names": [
+          "cond",
+          "doStuff",
+          "value",
+          "doMoreStuff",
+          "_error",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=1.ts" => {
+      "code": "import { server as _entry } from "my-example/server";
+import _root from "./example.ts?my-example=0.ts";
+export default _entry("26ecc3a5-0-anonymous", _root);",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
+  },
+  "map": {
+    "file": undefined,
+    "mappings": ";AACMA,GAAG,EAAE;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;EAAA,IAAAH,KAAA;IAAA,IAAAC,OAAA;MAAA,MAAAF,GAAA;IAAA;EAAA;AAAA,SAQIK,IAAI,CAAC,CAAC",
+    "names": [
+      "foo",
+      "_type",
+      "_result",
+      "_$$func",
+      "default",
+      "cond",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "/path/to/example.ts",
+    ],
+    "sourcesContent": [
+      "
+      foo: do {
+        'use server';
+        if (cond()) {
+          await doStuff(value);
+        } else {
+          break foo;
+        }
+        await doMoreStuff();
+      } while (cond())
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "/path/to/example.ts?my-example=0.ts",
+  ],
+}
+`;
+
+exports[`DoWhileStatement > server > should transform labeled continue statements 1`] = `
+{
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+foo: do {
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)();
+  if (_type === 1) {
+    if (_result === "foo") {
+      continue foo;
+    }
+  }
+} while (cond());",
+  "entries": [
+    "/path/to/example.ts?my-example=1.ts",
+  ],
+  "files": Map {
+    "/path/to/example.ts?my-example=0.ts" => {
+      "code": "export default (async function () {
+  try {
+    if (cond()) {
+      await doStuff(value);
+    } else {
+      return [1, "foo"];
+    }
+    await doMoreStuff();
+  } catch (_error) {
+    return [4, _error];
+  }
+  return [3];
+});",
+      "map": {
+        "file": undefined,
+        "mappings": ";;IAGQ,IAAIA,IAAI,CAAC,CAAC,EAAE;MACV,MAAMC,OAAO,CAACC,KAAK,CAAC;IACtB,CAAC,MAAM;MAAA;IAEP;IACA,MAAMC,WAAW,CAAC,CAAC;EAAC,SAAAC,MAAA;IAAA,WAAAA,MAAA;EAAA;EAAA;AAAA",
+        "names": [
+          "cond",
+          "doStuff",
+          "value",
+          "doMoreStuff",
+          "_error",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=1.ts" => {
+      "code": "import { server as _entry } from "my-example/server";
+import _root from "./example.ts?my-example=0.ts";
+export default _entry("26ecc3a5-0-anonymous", _root);",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
+  },
+  "map": {
+    "file": undefined,
+    "mappings": ";AACMA,GAAG,EAAE;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;EAAA,IAAAH,KAAA;IAAA,IAAAC,OAAA;MAAA,SAAAF,GAAA;IAAA;EAAA;AAAA,SAQIK,IAAI,CAAC,CAAC",
+    "names": [
+      "foo",
+      "_type",
+      "_result",
+      "_$$func",
+      "default",
+      "cond",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "/path/to/example.ts",
+    ],
+    "sourcesContent": [
+      "
+      foo: do {
+        'use server';
+        if (cond()) {
+          await doStuff(value);
+        } else {
+          continue foo;
+        }
+        await doMoreStuff();
+      } while (cond())
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "/path/to/example.ts?my-example=0.ts",
+  ],
+}
+`;
+
+exports[`DoWhileStatement > server > should transform valid server do-while statements 1`] = `
+{
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+do {
+  const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)();
+} while (cond());",
+  "entries": [
+    "/path/to/example.ts?my-example=1.ts",
+  ],
+  "files": Map {
+    "/path/to/example.ts?my-example=0.ts" => {
+      "code": "export default (async function () {
+  try {
+    await doStuff();
+  } catch (_error) {
+    return [4, _error];
+  }
+  return [3];
+});",
+      "map": {
+        "file": undefined,
+        "mappings": ";;IAGQ,MAAMA,OAAO,CAAC,CAAC;EAAC,SAAAC,MAAA;IAAA,WAAAA,MAAA;EAAA;EAAA;AAAA",
+        "names": [
+          "doStuff",
+          "_error",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=1.ts" => {
+      "code": "import { server as _entry } from "my-example/server";
+import _root from "./example.ts?my-example=0.ts";
+export default _entry("26ecc3a5-0-anonymous", _root);",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
+  },
+  "map": {
+    "file": undefined,
+    "mappings": ";AACM;EAAA,OAAAA,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA;AAAA,SAGSC,IAAI,CAAC,CAAC",
+    "names": [
+      "_type",
+      "_result",
+      "_$$func",
+      "default",
+      "cond",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "/path/to/example.ts",
+    ],
+    "sourcesContent": [
+      "
+      do {
+        'use server';
+        await doStuff();
+      } while (cond())
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "/path/to/example.ts?my-example=0.ts",
+  ],
+}
+`;
+
+exports[`DoWhileStatement > server > should transform valid server functions with scope 1`] = `
+{
+  "code": "import { $$func as _$$func } from "dismantle/runtime";
+async function foo() {
+  const value = 'foo bar';
+  do {
+    const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)(value);
+  } while (cond());
+}",
+  "entries": [
+    "/path/to/example.ts?my-example=1.ts",
+  ],
+  "files": Map {
+    "/path/to/example.ts?my-example=0.ts" => {
+      "code": "export default (async function (value) {
+  try {
+    await doStuff(value);
+  } catch (_error) {
+    return [4, _error];
+  }
+  return [3];
+});",
+      "map": {
+        "file": undefined,
+        "mappings": "gCAEcA,KAAK;EAAA;IAGT,MAAMC,OAAO,CAACD,KAAK,CAAC;EAAC,SAAAE,MAAA;IAAA,WAAAA,MAAA;EAAA;EAAA;AAAA",
+        "names": [
+          "value",
+          "doStuff",
+          "_error",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?my-example=1.ts" => {
+      "code": "import { server as _entry } from "my-example/server";
+import _root from "./example.ts?my-example=0.ts";
+export default _entry("26ecc3a5-0-foo", _root);",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
+  },
+  "map": {
+    "file": undefined,
+    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB;IAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA,QADMJ,KAAK;EAAA,SAIFK,IAAI,CAAC,CAAC;AACjB",
+    "names": [
+      "foo",
+      "value",
+      "_type",
+      "_result",
+      "_$$func",
+      "default",
+      "cond",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "/path/to/example.ts",
+    ],
+    "sourcesContent": [
+      "
+      async function foo() {
+        const value = 'foo bar';
+        do {
+          'use server';
+          await doStuff(value);
+        } while (cond())
+      }
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "/path/to/example.ts?my-example=0.ts",
+  ],
+}
+`;

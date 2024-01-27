@@ -1,17 +1,21 @@
+import type * as babel from '@babel/core';
 import * as t from '@babel/types';
-import * as babel from '@babel/core';
-import assert from './assert';
+import type { ModuleDefinition } from '../types';
 import { getImportSpecifierName } from './get-import-specifier-name';
-import { ModuleDefinition } from '../types';
 import { isPathValid } from './unwrap';
 
-export function getModuleDefinition(path: babel.NodePath): ModuleDefinition {
-  assert(
-    isPathValid(path, t.isImportSpecifier) ||
+export function getModuleDefinition(
+  path: babel.NodePath,
+): ModuleDefinition | undefined {
+  if (
+    !(
+      isPathValid(path, t.isImportSpecifier) ||
       isPathValid(path, t.isImportDefaultSpecifier) ||
-      isPathValid(path, t.isImportNamespaceSpecifier),
-    'invariant',
-  );
+      isPathValid(path, t.isImportNamespaceSpecifier)
+    )
+  ) {
+    return undefined;
+  }
   const parent =
     path.getStatementParent() as babel.NodePath<t.ImportDeclaration>;
   const source = parent.node.source.value;
