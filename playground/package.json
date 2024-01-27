@@ -5,6 +5,9 @@
   "publishConfig": {
     "access": "restricted"
   },
+  "scripts": {
+    "start": "node index.js"
+  },
   "dependencies": {
     "dismantle": "0.1.2"
   }
