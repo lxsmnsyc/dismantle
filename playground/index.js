@@ -1,31 +1,10 @@
 import { compile } from 'dismantle';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 
-const code = `
-import { server$ } from 'my-example';
+const target = path.join(process.cwd(), 'input.js');
 
-async function foo() {
-  let count = 0;
-
-  // const example = server$(() => count++);
-
-  // async function* foo(value) {
-  //   'use server';
-  //   for (let i = 0; i < 10; i++) {
-  //     yield value + i;
-  //   }
-  //   count++;
-  // }
-
-  const bar = server$(async function* (value) {
-    for (let i = 0; i < 10; i++) {
-      yield value + i;
-    }
-    count++;
-  });
-}
-`;
-
-const result = await compile('/path/to/example.ts', code, {
+const result = await compile(target, await fs.readFile(target, 'utf-8'), {
   key: 'example',
   mode: 'server',
   env: 'development',
