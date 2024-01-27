@@ -11,7 +11,8 @@ export interface Output extends CodeOutput {
   roots: string[];
 }
 
-export {
+export type {
+  CodeOutput,
   DefaultImportDefinition,
   DirectiveDefinition,
   ImportDefinition,
