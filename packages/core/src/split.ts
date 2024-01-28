@@ -972,8 +972,8 @@ function getFunctionReplacement(
       path.node.id,
       [t.restElement(rest)],
       t.blockStatement(replacement),
-      true,
       halting.hasYield,
+      true,
     );
   }
   return t.arrowFunctionExpression(

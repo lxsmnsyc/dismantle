@@ -6,7 +6,7 @@ exports[`FunctionExpression > client > should skip top-level values for scope 1`
 import { server$ } from 'my-example';
 import { value } from "./example.ts?my-example=0.ts";
 const outer = () => {
-  const example = function* (..._rest) {
+  const example = async function (..._rest) {
     const [_type, _result] = await _$$func((await import("./example.ts?my-example=2.ts")).default, null)([], ..._rest);
     return _result;
   };
@@ -75,7 +75,7 @@ export default _entry("26ecc3a5-0-example");",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AACM,SAASA,OAAO,QAAQ,YAAY;AAAC,SAAAC,KAAA;AAErC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,OAAO,aAAAA,CAAA,GAAAC,KAAA;IAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA,eAAAJ,KAAA;IAAA,OAAAE,OAAA;EAAA,CAEX;AACJ,CAAC",
+    "mappings": ";AACM,SAASA,OAAO,QAAQ,YAAY;AAAC,SAAAC,KAAA;AAErC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,OAAO,kBAAAA,CAAA,GAAAC,KAAA;IAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA,eAAAJ,KAAA;IAAA,OAAAE,OAAA;EAAA,CAEX;AACJ,CAAC",
     "names": [
       "server$",
       "value",
@@ -114,7 +114,7 @@ exports[`FunctionExpression > client > should transform valid server functions 1
 {
   "code": "import { $$func as _$$func } from "dismantle/runtime";
 import { server$ } from 'my-example';
-const example = function* (..._rest) {
+const example = async function (..._rest) {
   const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)([], ..._rest);
   return _result;
 };",
@@ -163,7 +163,7 @@ export default _entry("26ecc3a5-0-example");",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,OAAO,aAAAA,CAAA,GAAAC,KAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA,eAAAJ,KAAA;EAAA,OAAAE,OAAA;AAAA,CAEX",
+    "mappings": ";AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,OAAO,kBAAAA,CAAA,GAAAC,KAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA,eAAAJ,KAAA;EAAA,OAAAE,OAAA;AAAA,CAEX",
     "names": [
       "server$",
       "example",
@@ -199,7 +199,7 @@ exports[`FunctionExpression > client > should transform valid server functions w
 import { server$ } from 'my-example';
 const outer = () => {
   const value = 'foo bar';
-  const example = function* (..._rest) {
+  const example = async function (..._rest) {
     const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)([value], ..._rest);
     return _result;
   };
@@ -250,7 +250,7 @@ export default _entry("26ecc3a5-0-example");",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,MAAMC,OAAO,aAAAA,CAAA,GAAAC,KAAA;IAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA,SADPN,KAAK,MAAAE,KAAA;IAAA,OAAAE,OAAA;EAAA,CAGT;AACJ,CAAC",
+    "mappings": ";AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,MAAMC,OAAO,kBAAAA,CAAA,GAAAC,KAAA;IAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA,SADPN,KAAK,MAAAE,KAAA;IAAA,OAAAE,OAAA;EAAA,CAGT;AACJ,CAAC",
     "names": [
       "server$",
       "outer",
@@ -291,7 +291,7 @@ exports[`FunctionExpression > server > should skip top-level values for scope 1`
 import { server$ } from 'my-example';
 import { value } from "./example.ts?my-example=0.ts";
 const outer = () => {
-  const example = function* (..._rest) {
+  const example = async function (..._rest) {
     const [_type, _result] = await _$$func((await import("./example.ts?my-example=2.ts")).default, null)([], ..._rest);
     return _result;
   };
@@ -362,7 +362,7 @@ export default _entry("26ecc3a5-0-example", _root);",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AACM,SAASA,OAAO,QAAQ,YAAY;AAAC,SAAAC,KAAA;AAErC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,OAAO,aAAAA,CAAA,GAAAC,KAAA;IAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA,eAAAJ,KAAA;IAAA,OAAAE,OAAA;EAAA,CAEX;AACJ,CAAC",
+    "mappings": ";AACM,SAASA,OAAO,QAAQ,YAAY;AAAC,SAAAC,KAAA;AAErC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,OAAO,kBAAAA,CAAA,GAAAC,KAAA;IAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA,eAAAJ,KAAA;IAAA,OAAAE,OAAA;EAAA,CAEX;AACJ,CAAC",
     "names": [
       "server$",
       "value",
@@ -401,7 +401,7 @@ exports[`FunctionExpression > server > should transform valid server functions 1
 {
   "code": "import { $$func as _$$func } from "dismantle/runtime";
 import { server$ } from 'my-example';
-const example = function* (..._rest) {
+const example = async function (..._rest) {
   const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)([], ..._rest);
   return _result;
 };",
@@ -451,7 +451,7 @@ export default _entry("26ecc3a5-0-example", _root);",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,OAAO,aAAAA,CAAA,GAAAC,KAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA,eAAAJ,KAAA;EAAA,OAAAE,OAAA;AAAA,CAEX",
+    "mappings": ";AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,OAAO,kBAAAA,CAAA,GAAAC,KAAA;EAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA,eAAAJ,KAAA;EAAA,OAAAE,OAAA;AAAA,CAEX",
     "names": [
       "server$",
       "example",
@@ -487,7 +487,7 @@ exports[`FunctionExpression > server > should transform valid server functions w
 import { server$ } from 'my-example';
 const outer = () => {
   const value = 'foo bar';
-  const example = function* (..._rest) {
+  const example = async function (..._rest) {
     const [_type, _result] = await _$$func((await import("./example.ts?my-example=1.ts")).default, null)([value], ..._rest);
     return _result;
   };
@@ -539,7 +539,7 @@ export default _entry("26ecc3a5-0-example", _root);",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,MAAMC,OAAO,aAAAA,CAAA,GAAAC,KAAA;IAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA,SADPN,KAAK,MAAAE,KAAA;IAAA,OAAAE,OAAA;EAAA,CAGT;AACJ,CAAC",
+    "mappings": ";AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,MAAMC,OAAO,kBAAAA,CAAA,GAAAC,KAAA;IAAA,OAAAC,KAAA,EAAAC,OAAA,UAAAC,OAAA,gDAAAC,OAAA,SADPN,KAAK,MAAAE,KAAA;IAAA,OAAAE,OAAA;EAAA,CAGT;AACJ,CAAC",
     "names": [
       "server$",
       "outer",
