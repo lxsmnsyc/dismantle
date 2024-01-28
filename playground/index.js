@@ -27,7 +27,12 @@ const result = await compile(target, await fs.readFile(target, 'utf-8'), {
       },
       target: {
         kind: 'named',
-        name: 'server$',
+        name: 'registerServer$',
+        source: 'my-example/server',
+      },
+      handle: {
+        kind: 'named',
+        name: '$$server',
         source: 'my-example/server',
       },
     },
