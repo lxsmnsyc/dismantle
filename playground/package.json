@@ -9,7 +9,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "dismantle": "0.2.1"
+    "dismantle": "0.2.2"
   },
-  "version": "0.2.1"
+  "version": "0.2.2"
 }
