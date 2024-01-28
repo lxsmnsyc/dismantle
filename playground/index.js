@@ -20,6 +20,7 @@ const result = await compile(target, await fs.readFile(target, 'utf-8'), {
   ],
   functions: [
     {
+      isomorphic: true,
       source: {
         kind: 'named',
         name: 'server$',

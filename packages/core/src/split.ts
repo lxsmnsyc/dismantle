@@ -186,6 +186,7 @@ function createEntryFile(
   path: babel.NodePath,
   rootFile: string,
   imported: ImportDefinition,
+  isomorphic?: boolean,
 ): string {
   // Create an ID
   let id = `${ctx.blocks.hash}-${ctx.blocks.count++}`;
@@ -202,7 +203,7 @@ function createEntryFile(
     },
   ];
   const args: t.Expression[] = [t.stringLiteral(id)];
-  if (ctx.options.mode === 'server') {
+  if (ctx.options.mode === 'server' || isomorphic) {
     const rootID = path.scope.generateUidIdentifier('root');
     entryImports.push({
       kind: 'default',
@@ -753,7 +754,13 @@ function replaceBlock(
       true,
     ),
   );
-  const entryFile = createEntryFile(ctx, path, rootFile, directive.target);
+  const entryFile = createEntryFile(
+    ctx,
+    path,
+    rootFile,
+    directive.target,
+    directive.isomorphic,
+  );
   path.replaceWith(
     getBlockReplacement(ctx, path, entryFile, bindings, halting),
   );
@@ -983,6 +990,59 @@ function replaceIsomorphicFunction(
     body.replaceWith(t.blockStatement([t.returnStatement(body.node)]));
   }
   assert(isPathValid(body, t.isBlockStatement), 'invariant');
+  const rootFile = createRootFile(
+    ctx,
+    bindings,
+    t.isFunctionExpression(path.node)
+      ? t.functionExpression(
+          path.node.id,
+          [t.arrayPattern(bindings.locals), ...path.node.params],
+          path.node.body,
+          path.node.async,
+          path.node.generator,
+        )
+      : t.arrowFunctionExpression(
+          [t.arrayPattern(bindings.locals), ...path.node.params],
+          path.node.body,
+          path.node.async,
+        ),
+  );
+  const entryFile = createEntryFile(
+    ctx,
+    path,
+    rootFile,
+    func.target,
+    func.isomorphic,
+  );
+
+  const source = path.scope.generateUidIdentifier('source');
+  const rest = path.scope.generateUidIdentifier('rest');
+
+  return t.arrowFunctionExpression(
+    [],
+    t.blockStatement([
+      t.variableDeclaration('const', [
+        t.variableDeclarator(
+          source,
+          t.memberExpression(
+            t.awaitExpression(t.importExpression(t.stringLiteral(entryFile))),
+            t.identifier('default'),
+          ),
+        ),
+      ]),
+      t.returnStatement(
+        t.arrowFunctionExpression(
+          [t.restElement(rest)],
+          t.callExpression(source, [
+            t.arrayExpression(bindings.locals),
+            t.spreadElement(rest),
+          ]),
+          path.node.async,
+        ),
+      ),
+    ]),
+    true,
+  );
 }
 
 function replaceFunction(
@@ -1014,8 +1074,13 @@ function replaceFunction(
           path.node.async,
         ),
   );
-
-  const entryFile = createEntryFile(ctx, path, rootFile, func.target);
+  const entryFile = createEntryFile(
+    ctx,
+    path,
+    rootFile,
+    func.target,
+    func.isomorphic,
+  );
 
   return getFunctionReplacement(ctx, path, entryFile, bindings);
 }
@@ -1044,7 +1109,13 @@ function replaceExpression(
   bindings: ExtractedBindings,
 ): t.Expression {
   const rootFile = createRootFile(ctx, bindings, path.node);
-  const entryFile = createEntryFile(ctx, path, rootFile, func.target);
+  const entryFile = createEntryFile(
+    ctx,
+    path,
+    rootFile,
+    func.target,
+    func.isomorphic,
+  );
 
   const rest = path.scope.generateUidIdentifier('rest');
   const source = path.scope.generateUidIdentifier('source');
