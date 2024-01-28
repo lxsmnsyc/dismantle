@@ -16,12 +16,14 @@ export interface DefaultImportDefinition {
 export type ImportDefinition = DefaultImportDefinition | NamedImportDefinition;
 
 export interface DirectiveDefinition {
+  isomorphic?: boolean;
   value: string;
   target: ImportDefinition;
   pure?: boolean;
 }
 
 export interface FunctionDefinition {
+  isomorphic?: boolean;
   source: ImportDefinition;
   target: ImportDefinition;
   handle: ImportDefinition;

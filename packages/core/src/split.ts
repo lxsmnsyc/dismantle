@@ -777,23 +777,16 @@ export function splitBlock(
   );
 }
 
-interface HaltingFunctionResult {
-  hasReturn: boolean;
-  hasYield: boolean;
-}
-
 function transformFunctionContent(
   path: babel.NodePath<t.BlockStatement>,
   mutations: t.Identifier[],
-): HaltingFunctionResult {
+): void {
   const target =
     path.scope.getFunctionParent() || path.scope.getProgramParent();
 
   const applyMutations = mutations.length
     ? path.scope.generateUidIdentifier('mutate')
     : undefined;
-  let hasReturn = false;
-  let hasYield = false;
 
   // Transform the control flow statements
   path.traverse({
@@ -801,7 +794,6 @@ function transformFunctionContent(
       const parent =
         child.scope.getFunctionParent() || child.scope.getProgramParent();
       if (parent === target) {
-        hasReturn = true;
         const replacement: t.Expression[] = [RETURN_KEY];
         if (child.node.argument) {
           replacement.push(child.node.argument);
@@ -813,13 +805,6 @@ function transformFunctionContent(
         }
         child.replaceWith(t.returnStatement(t.arrayExpression(replacement)));
         child.skip();
-      }
-    },
-    YieldExpression(child) {
-      const parent =
-        child.scope.getFunctionParent() || child.scope.getProgramParent();
-      if (parent === target) {
-        hasYield = true;
       }
     },
   });
@@ -863,11 +848,6 @@ function transformFunctionContent(
   }
 
   path.node.body = statements;
-
-  return {
-    hasReturn,
-    hasYield,
-  };
 }
 
 function getFunctionReplacement(
@@ -875,7 +855,6 @@ function getFunctionReplacement(
   path: babel.NodePath<t.ArrowFunctionExpression | t.FunctionExpression>,
   entryFile: string,
   bindings: ExtractedBindings,
-  halting: HaltingFunctionResult,
 ): t.Expression {
   const rest = path.scope.generateUidIdentifier('rest');
 
@@ -886,7 +865,7 @@ function getFunctionReplacement(
   const source = path.scope.generateUidIdentifier('source');
 
   const replacement: t.Statement[] = [];
-  if (halting.hasYield) {
+  if (path.node.generator) {
     const funcID = path.scope.generateUidIdentifier('fn');
     replacement.push(
       t.variableDeclaration('const', [
@@ -979,7 +958,7 @@ function getFunctionReplacement(
               path.node.id,
               [t.restElement(rest)],
               t.blockStatement(replacement),
-              halting.hasYield,
+              path.node.generator,
               true,
             )
           : t.arrowFunctionExpression(
@@ -993,6 +972,19 @@ function getFunctionReplacement(
   );
 }
 
+function replaceIsomorphicFunction(
+  ctx: StateContext,
+  path: babel.NodePath<t.ArrowFunctionExpression | t.FunctionExpression>,
+  func: FunctionDefinition,
+  bindings: ExtractedBindings,
+): t.Expression {
+  const body = path.get('body');
+  if (isPathValid(body, t.isExpression)) {
+    body.replaceWith(t.blockStatement([t.returnStatement(body.node)]));
+  }
+  assert(isPathValid(body, t.isBlockStatement), 'invariant');
+}
+
 function replaceFunction(
   ctx: StateContext,
   path: babel.NodePath<t.ArrowFunctionExpression | t.FunctionExpression>,
@@ -1004,7 +996,7 @@ function replaceFunction(
     body.replaceWith(t.blockStatement([t.returnStatement(body.node)]));
   }
   assert(isPathValid(body, t.isBlockStatement), 'invariant');
-  const halting = transformFunctionContent(body, bindings.mutations);
+  transformFunctionContent(body, bindings.mutations);
   const rootFile = createRootFile(
     ctx,
     bindings,
@@ -1025,7 +1017,7 @@ function replaceFunction(
 
   const entryFile = createEntryFile(ctx, path, rootFile, func.target);
 
-  return getFunctionReplacement(ctx, path, entryFile, bindings, halting);
+  return getFunctionReplacement(ctx, path, entryFile, bindings);
 }
 
 export function splitFunction(
@@ -1033,12 +1025,16 @@ export function splitFunction(
   path: babel.NodePath<t.ArrowFunctionExpression | t.FunctionExpression>,
   func: FunctionDefinition,
 ): t.Expression {
-  return replaceFunction(
+  const bindings = extractBindings(
     ctx,
     path,
-    func,
-    extractBindings(ctx, path, getForeignBindings(path, 'function'), func.pure),
+    getForeignBindings(path, 'function'),
+    func.pure,
   );
+  if (func.isomorphic) {
+    return replaceIsomorphicFunction(ctx, path, func, bindings);
+  }
+  return replaceFunction(ctx, path, func, bindings);
 }
 
 function replaceExpression(
