@@ -15,6 +15,11 @@ export const SERVER: compiler.Options = {
         kind: 'named',
         name: 'registerServerFunction',
       },
+      handle: {
+        source: 'my-example/server',
+        kind: 'named',
+        name: '$$server',
+      },
     },
   ],
   mode: 'server',
@@ -34,6 +39,11 @@ export const CLIENT: compiler.Options = {
         source: 'my-example/server',
         kind: 'named',
         name: 'registerServerFunction',
+      },
+      handle: {
+        source: 'my-example/server',
+        kind: 'named',
+        name: '$$server',
       },
     },
   ],

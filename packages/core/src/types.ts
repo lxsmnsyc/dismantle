@@ -24,7 +24,7 @@ export interface DirectiveDefinition {
 export interface FunctionDefinition {
   source: ImportDefinition;
   target: ImportDefinition;
-  preserve?: boolean;
+  handle: ImportDefinition;
   pure?: boolean;
 }
 

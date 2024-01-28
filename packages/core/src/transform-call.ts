@@ -2,6 +2,7 @@ import type * as babel from '@babel/core';
 import * as t from '@babel/types';
 import { splitExpression, splitFunction } from './split';
 import type { FunctionDefinition, StateContext } from './types';
+import { getImportIdentifier } from './utils/get-import-identifier';
 import { isPathValid, unwrapNode } from './utils/unwrap';
 
 function getFunctionDefinitionFromPropName(
@@ -91,10 +92,10 @@ export function transformCall(
       ? splitFunction(ctx, expr, definition)
       : splitExpression(ctx, expr, definition);
 
-    if (definition.preserve) {
-      expr.replaceWith(t.addComment(replacement, 'leading', '@dismantle skip'));
-    } else {
-      path.replaceWith(replacement);
-    }
+    path.replaceWith(
+      t.callExpression(getImportIdentifier(ctx, path, definition.handle), [
+        t.addComment(replacement, 'leading', '@dismantle skip'),
+      ]),
+    );
   }
 }

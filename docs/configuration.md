@@ -107,16 +107,14 @@ const result = await compile(
           source: 'my-example/server',
         },
         /**
-         * Check if the special function call should be preserved
-         * or not.
-         * 
-         * Setting to `true` means that the function call is preserved
-         * and only the function argument gets replaced.
-         * 
-         * Setting to `false` means that the function call is removed
-         * and only the function argument remains.
+         * Used to replace the `source`. This is for managing the
+         * function instance.
          */
-        preserve: false,
+        handle: {
+          kind: 'named',
+          name: '$$server',
+          source: 'my-example/server',
+        },
       },
     ],
   },

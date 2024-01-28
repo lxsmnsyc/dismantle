@@ -883,6 +883,8 @@ function getFunctionReplacement(
   const returnResult = path.scope.generateUidIdentifier('result');
   const returnMutations = path.scope.generateUidIdentifier('mutations');
 
+  const source = path.scope.generateUidIdentifier('source');
+
   const replacement: t.Statement[] = [];
   if (halting.hasYield) {
     const funcID = path.scope.generateUidIdentifier('fn');
@@ -891,10 +893,7 @@ function getFunctionReplacement(
         t.variableDeclarator(
           funcID,
           t.callExpression(getImportIdentifier(ctx, path, HIDDEN_GENERATOR), [
-            t.memberExpression(
-              t.awaitExpression(t.importExpression(t.stringLiteral(entryFile))),
-              t.identifier('default'),
-            ),
+            source,
             bindings.mutations.length
               ? t.arrowFunctionExpression(
                   [returnMutations],
@@ -936,12 +935,7 @@ function getFunctionReplacement(
           t.awaitExpression(
             t.callExpression(
               t.callExpression(getImportIdentifier(ctx, path, HIDDEN_FUNC), [
-                t.memberExpression(
-                  t.awaitExpression(
-                    t.importExpression(t.stringLiteral(entryFile)),
-                  ),
-                  t.identifier('default'),
-                ),
+                source,
                 bindings.mutations.length
                   ? t.arrowFunctionExpression(
                       [returnMutations],
@@ -967,18 +961,34 @@ function getFunctionReplacement(
 
   replacement.push(t.returnStatement(returnResult));
 
-  if (isPathValid(path, t.isFunctionExpression)) {
-    return t.functionExpression(
-      path.node.id,
-      [t.restElement(rest)],
-      t.blockStatement(replacement),
-      halting.hasYield,
-      true,
-    );
-  }
   return t.arrowFunctionExpression(
-    [t.restElement(rest)],
-    t.blockStatement(replacement),
+    [],
+    t.blockStatement([
+      t.variableDeclaration('const', [
+        t.variableDeclarator(
+          source,
+          t.memberExpression(
+            t.awaitExpression(t.importExpression(t.stringLiteral(entryFile))),
+            t.identifier('default'),
+          ),
+        ),
+      ]),
+      t.returnStatement(
+        isPathValid(path, t.isFunctionExpression)
+          ? t.functionExpression(
+              path.node.id,
+              [t.restElement(rest)],
+              t.blockStatement(replacement),
+              halting.hasYield,
+              true,
+            )
+          : t.arrowFunctionExpression(
+              [t.restElement(rest)],
+              t.blockStatement(replacement),
+              true,
+            ),
+      ),
+    ]),
     true,
   );
 }
@@ -1041,16 +1051,28 @@ function replaceExpression(
   const entryFile = createEntryFile(ctx, path, rootFile, func.target);
 
   const rest = path.scope.generateUidIdentifier('rest');
+  const source = path.scope.generateUidIdentifier('source');
 
   return t.arrowFunctionExpression(
-    [t.restElement(rest)],
-    t.callExpression(
-      t.memberExpression(
-        t.awaitExpression(t.importExpression(t.stringLiteral(entryFile))),
-        t.identifier('default'),
+    [],
+    t.blockStatement([
+      t.variableDeclaration('const', [
+        t.variableDeclarator(
+          source,
+          t.memberExpression(
+            t.awaitExpression(t.importExpression(t.stringLiteral(entryFile))),
+            t.identifier('default'),
+          ),
+        ),
+      ]),
+      t.returnStatement(
+        t.arrowFunctionExpression(
+          [t.restElement(rest)],
+          t.callExpression(source, [t.spreadElement(rest)]),
+          true,
+        ),
       ),
-      [t.spreadElement(rest)],
-    ),
+    ]),
     true,
   );
 }
