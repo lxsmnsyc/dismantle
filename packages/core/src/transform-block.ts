@@ -1,5 +1,5 @@
 import type * as babel from '@babel/core';
-import type * as t from '@babel/types';
+import * as t from '@babel/types';
 import { splitBlock } from './split';
 import type { DirectiveDefinition, StateContext } from './types';
 
@@ -37,8 +37,8 @@ function getDefinitionFromFauxDirectives(
   for (let i = 0, len = path.node.body.length; i < len; i++) {
     const statement = path.node.body[i];
     if (
-      statement.type === 'ExpressionStatement' &&
-      statement.expression.type === 'StringLiteral'
+      t.isExpressionStatement(statement) &&
+      t.isStringLiteral(statement.expression)
     ) {
       const directive = getValidDirectiveFromString(
         ctx,
@@ -90,8 +90,8 @@ function cleanBlockForFauxDirectives(
   for (let i = 0, len = body.length; i < len; i++) {
     const statement = body[i];
     if (
-      statement.node.type === 'ExpressionStatement' &&
-      statement.node.expression.type === 'StringLiteral'
+      t.isExpressionStatement(statement.node) &&
+      t.isStringLiteral(statement.node.expression)
     ) {
       if (statement.node.expression.value === definition.value) {
         statement.remove();
