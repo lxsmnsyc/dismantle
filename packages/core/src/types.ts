@@ -32,6 +32,10 @@ export interface FunctionDirectiveDefinition {
   handle: ImportDefinition;
 }
 
+export type DirectiveDefinition =
+  | BlockDirectiveDefinition
+  | FunctionDirectiveDefinition;
+
 export interface FunctionCallDefinition {
   type: 'function-call';
   isomorphic?: boolean;

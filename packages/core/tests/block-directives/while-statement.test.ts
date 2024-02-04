@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import * as compiler from '../../src';
-import { ID, CLIENT, SERVER } from '../directives/example';
+import { CLIENT, ID, SERVER } from './example';
 
 describe('WhileStatement', () => {
   describe('client', () => {
