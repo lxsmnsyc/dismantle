@@ -16,6 +16,7 @@ import assert from './utils/assert';
 import getForeignBindings from './utils/get-foreign-bindings';
 import { getImportIdentifier } from './utils/get-import-identifier';
 import { isPathValid } from './utils/unwrap';
+import { generateUniqueName } from './utils/generate-unique-name';
 
 function transformFunctionContent(
   path: babel.NodePath<t.BlockStatement>,
@@ -25,7 +26,7 @@ function transformFunctionContent(
     path.scope.getFunctionParent() || path.scope.getProgramParent();
 
   const applyMutations = mutations.length
-    ? path.scope.generateUidIdentifier('mutate')
+    ? generateUniqueName(path, 'mutate')
     : undefined;
 
   // Transform the control flow statements
@@ -49,7 +50,7 @@ function transformFunctionContent(
     },
   });
 
-  const error = path.scope.generateUidIdentifier('error');
+  const error = generateUniqueName(path, 'error');
 
   const throwResult: t.Expression[] = [THROW_KEY, error];
   const haltResult: t.Expression[] = [NO_HALT_KEY];
@@ -96,17 +97,17 @@ function getFunctionReplacement(
   entryFile: string,
   bindings: ExtractedBindings,
 ): t.Expression {
-  const rest = path.scope.generateUidIdentifier('rest');
+  const rest = generateUniqueName(path, 'rest');
 
-  const returnType = path.scope.generateUidIdentifier('type');
-  const returnResult = path.scope.generateUidIdentifier('result');
-  const returnMutations = path.scope.generateUidIdentifier('mutations');
+  const returnType = generateUniqueName(path, 'type');
+  const returnResult = generateUniqueName(path, 'result');
+  const returnMutations = generateUniqueName(path, 'mutations');
 
-  const source = path.scope.generateUidIdentifier('source');
+  const source = generateUniqueName(path, 'source');
 
   const replacement: t.Statement[] = [];
   if (path.node.generator) {
-    const funcID = path.scope.generateUidIdentifier('fn');
+    const funcID = generateUniqueName(path, 'fn');
     replacement.push(
       t.variableDeclaration('const', [
         t.variableDeclarator(
@@ -248,8 +249,8 @@ function replaceIsomorphicFunction(
     func.isomorphic,
   );
 
-  const source = path.scope.generateUidIdentifier('source');
-  const rest = path.scope.generateUidIdentifier('rest');
+  const source = generateUniqueName(path, 'source');
+  const rest = generateUniqueName(path, 'rest');
 
   return t.arrowFunctionExpression(
     [],

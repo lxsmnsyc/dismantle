@@ -1,6 +1,7 @@
 import type * as babel from '@babel/core';
 import * as t from '@babel/types';
 import type { ImportDefinition, StateContext } from '../types';
+import { generateUniqueName } from './generate-unique-name';
 
 export function getImportIdentifier(
   state: StateContext,
@@ -14,7 +15,8 @@ export function getImportIdentifier(
     return current;
   }
   const programParent = path.scope.getProgramParent();
-  const uid = programParent.generateUidIdentifier(
+  const uid = generateUniqueName(
+    programParent.path,
     registration.kind === 'named' ? registration.name : 'default',
   );
   const newPath = (

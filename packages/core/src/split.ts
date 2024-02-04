@@ -2,6 +2,7 @@ import type * as babel from '@babel/core';
 import type { Binding, BindingKind } from '@babel/traverse';
 import * as t from '@babel/types';
 import type { ImportDefinition, ModuleDefinition, StateContext } from './types';
+import { generateUniqueName } from './utils/generate-unique-name';
 import { generateCode } from './utils/generator-shim';
 import { getDescriptiveName } from './utils/get-descriptive-name';
 import getForeignBindings from './utils/get-foreign-bindings';
@@ -184,7 +185,7 @@ export function createEntryFile(
   if (ctx.options.env !== 'production') {
     id += `-${getDescriptiveName(path, 'anonymous')}`;
   }
-  const entryID = path.scope.generateUidIdentifier('entry');
+  const entryID = generateUniqueName(path, 'entry');
   const entryImports: ModuleDefinition[] = [
     {
       kind: imported.kind,
@@ -195,7 +196,7 @@ export function createEntryFile(
   ];
   const args: t.Expression[] = [t.stringLiteral(id)];
   if (ctx.options.mode === 'server' || isomorphic) {
-    const rootID = path.scope.generateUidIdentifier('root');
+    const rootID = generateUniqueName(path, 'root');
     entryImports.push({
       kind: 'default',
       source: rootFile,
@@ -240,7 +241,7 @@ function splitFunctionDeclaration(
 
   const statement = getRootStatementPath(path);
 
-  const identifier = path.node.id || path.scope.generateUidIdentifier('func');
+  const identifier = path.node.id || generateUniqueName(path, 'func');
   const definition: ModuleDefinition = {
     kind: 'named',
     local: identifier.name,
@@ -316,8 +317,8 @@ export function getGeneratorReplacementForBlock(
   registerID: t.Identifier,
   args: (t.Identifier | t.SpreadElement | t.ArrayExpression)[],
 ): [replacements: t.Statement[], step: t.Identifier] {
-  const iterator = path.scope.generateUidIdentifier('iterator');
-  const step = path.scope.generateUidIdentifier('step');
+  const iterator = generateUniqueName(path, 'iterator');
+  const step = generateUniqueName(path, 'step');
   const replacement: t.Statement[] = [
     t.variableDeclaration('let', [
       t.variableDeclarator(step),

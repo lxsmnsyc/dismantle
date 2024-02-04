@@ -15,6 +15,7 @@ import {
   getGeneratorReplacementForBlock,
 } from './split';
 import type { BlockDirectiveDefinition, StateContext } from './types';
+import { generateUniqueName } from './utils/generate-unique-name';
 import getForeignBindings from './utils/get-foreign-bindings';
 import { getImportIdentifier } from './utils/get-import-identifier';
 
@@ -42,7 +43,7 @@ function transformBlockContent(
   let hasYield = false;
 
   const applyMutations = mutations.length
-    ? path.scope.generateUidIdentifier('mutate')
+    ? generateUniqueName(path, 'mutate')
     : undefined;
 
   // Transform the control flow statements
@@ -127,7 +128,7 @@ function transformBlockContent(
     },
   });
 
-  const error = path.scope.generateUidIdentifier('error');
+  const error = generateUniqueName(path, 'error');
 
   const throwResult: t.Expression[] = [THROW_KEY, error];
   const haltResult: t.Expression[] = [NO_HALT_KEY];
@@ -256,9 +257,9 @@ function getBlockDirectiveReplacement(
 ) {
   // Move to the replacement for the server block,
   // declare the type and result based from transformBlockContent
-  const returnType = path.scope.generateUidIdentifier('type');
-  const returnResult = path.scope.generateUidIdentifier('result');
-  const returnMutations = path.scope.generateUidIdentifier('mutations');
+  const returnType = generateUniqueName(path, 'type');
+  const returnResult = generateUniqueName(path, 'result');
+  const returnMutations = generateUniqueName(path, 'mutations');
   let check: t.Statement | undefined;
   // If the block has a return, we need to make sure that the
   // replacement does too.
@@ -291,7 +292,7 @@ function getBlockDirectiveReplacement(
   }
   const replacement: t.Statement[] = [];
   if (halting.hasYield) {
-    const blockID = path.scope.generateUidIdentifier('block');
+    const blockID = generateUniqueName(path, 'block');
     replacement.push(
       t.variableDeclaration('const', [
         t.variableDeclarator(
