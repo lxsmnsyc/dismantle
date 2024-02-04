@@ -2,9 +2,9 @@ import type * as compiler from '../../src';
 
 export const SERVER: compiler.Options = {
   key: 'my-example',
-  directives: [],
-  functions: [
+  definitions: [
     {
+      type: 'function-call',
       source: {
         source: 'my-example',
         kind: 'named',
@@ -27,9 +27,9 @@ export const SERVER: compiler.Options = {
 };
 export const CLIENT: compiler.Options = {
   key: 'my-example',
-  directives: [],
-  functions: [
+  definitions: [
     {
+      type: 'function-call',
       source: {
         source: 'my-example',
         kind: 'named',

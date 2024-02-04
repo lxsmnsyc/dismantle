@@ -12,9 +12,11 @@ export interface Output extends CodeOutput {
 }
 
 export type {
+  BlockDirectiveDefinition,
   CodeOutput,
   DefaultImportDefinition,
-  DirectiveDefinition,
+  FunctionCallDefinition,
+  FunctionDirectiveDefinition,
   ImportDefinition,
   NamedImportDefinition,
   Options,

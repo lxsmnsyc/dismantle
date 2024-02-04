@@ -1,6 +1,6 @@
 import type * as babel from '@babel/core';
 import * as t from '@babel/types';
-import type { FunctionDefinition, StateContext } from '../types';
+import type { FunctionCallDefinition, StateContext } from '../types';
 import { getImportSpecifierName } from './get-import-specifier-name';
 
 function registerImportSpecifier(
@@ -9,7 +9,7 @@ function registerImportSpecifier(
     | t.ImportSpecifier
     | t.ImportDefaultSpecifier
     | t.ImportNamespaceSpecifier,
-  definition: FunctionDefinition,
+  definition: FunctionCallDefinition,
 ): void {
   if (t.isImportSpecifier(node)) {
     if (node.importKind === 'type' || node.importKind === 'typeof') {
@@ -42,7 +42,7 @@ function registerImportSpecifier(
 function registerImportDeclarationByDefinition(
   ctx: StateContext,
   path: babel.NodePath<t.ImportDeclaration>,
-  definition: FunctionDefinition,
+  definition: FunctionCallDefinition,
 ): void {
   for (let i = 0, len = path.node.specifiers.length; i < len; i++) {
     const specifier = path.node.specifiers[i];
@@ -54,7 +54,7 @@ export function registerImportSpecifiers(
   ctx: StateContext,
   programPath: babel.NodePath<t.Program>,
 ): void {
-  const len = ctx.options.functions.length;
+  const len = ctx.options.definitions.length;
   if (!len) {
     return;
   }
@@ -67,8 +67,11 @@ export function registerImportSpecifiers(
         return;
       }
       for (let i = 0; i < len; i++) {
-        const func = ctx.options.functions[i];
-        if (func.source.source === path.node.source.value) {
+        const func = ctx.options.definitions[i];
+        if (
+          func.type === 'function-call' &&
+          func.source.source === path.node.source.value
+        ) {
           registerImportDeclarationByDefinition(ctx, path, func);
         }
       }

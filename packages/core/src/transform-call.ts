@@ -1,14 +1,14 @@
 import type * as babel from '@babel/core';
 import * as t from '@babel/types';
-import { splitExpression, splitFunction } from './split';
-import type { FunctionDefinition, StateContext } from './types';
+import { splitExpressionFromCall, splitFunctionFromCall } from './split-call';
+import type { FunctionCallDefinition, StateContext } from './types';
 import { getImportIdentifier } from './utils/get-import-identifier';
 import { isPathValid, unwrapNode } from './utils/unwrap';
 
 function getFunctionDefinitionFromPropName(
-  definitions: FunctionDefinition[],
+  definitions: FunctionCallDefinition[],
   propName: string,
-): FunctionDefinition | undefined {
+): FunctionCallDefinition | undefined {
   for (let i = 0, len = definitions.length; i < len; i++) {
     const def = definitions[i];
     if (def.source.kind === 'default' && propName === 'default') {
@@ -24,7 +24,7 @@ function getFunctionDefinitionFromPropName(
 function getFunctionDefinitionFromCallee(
   ctx: StateContext,
   path: babel.NodePath<t.CallExpression>,
-): FunctionDefinition | undefined {
+): FunctionCallDefinition | undefined {
   const callee = path.node.callee;
   const id = unwrapNode(callee, t.isIdentifier);
   if (id) {
@@ -84,13 +84,10 @@ export function transformCall(
   }
   const args = path.get('arguments');
   const expr = args[0];
-  if (isPathValid(expr, t.isExpression)) {
-    if (isSkippableFunction(expr.node)) {
-      return;
-    }
+  if (isPathValid(expr, t.isExpression) && !isSkippableFunction(expr.node)) {
     const replacement = isPathValid(expr, isValidFunction)
-      ? splitFunction(ctx, expr, definition)
-      : splitExpression(ctx, expr, definition);
+      ? splitFunctionFromCall(ctx, expr, definition)
+      : splitExpressionFromCall(ctx, expr, definition);
 
     path.replaceWith(
       t.callExpression(getImportIdentifier(ctx, path, definition.handle), [
