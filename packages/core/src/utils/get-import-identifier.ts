@@ -15,10 +15,7 @@ export function getImportIdentifier(
     return current;
   }
   const programParent = path.scope.getProgramParent();
-  const uid = generateUniqueName(
-    programParent.path,
-    registration.kind === 'named' ? registration.name : 'default',
-  );
+  const uid = generateUniqueName(programParent.path, name);
   programParent.registerDeclaration(
     (programParent.path as babel.NodePath<t.Program>).unshiftContainer(
       'body',
