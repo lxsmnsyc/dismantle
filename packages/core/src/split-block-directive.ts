@@ -387,23 +387,23 @@ function replaceBlockDirective(
 ): void {
   // Transform all control statements
   const halting = transformBlockContent(path, bindings.mutations);
-  const rootFile = createRootFile(
-    ctx,
-    bindings,
-    t.functionExpression(
-      undefined,
-      bindings.locals,
-      t.blockStatement(path.node.body),
-      halting.hasYield,
-      true,
-    ),
-  );
   const entryFile = createEntryFile(
     ctx,
     path,
-    rootFile,
+    ctx.options.mode === 'server' || directive.isomorphic
+      ? createRootFile(
+          ctx,
+          bindings,
+          t.functionExpression(
+            undefined,
+            bindings.locals,
+            t.blockStatement(path.node.body),
+            halting.hasYield,
+            true,
+          ),
+        )
+      : undefined,
     directive.target,
-    directive.isomorphic,
   );
   path.replaceWith(
     getBlockDirectiveReplacement(ctx, path, entryFile, bindings, halting),

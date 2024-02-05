@@ -176,9 +176,8 @@ export function createRootFile(
 export function createEntryFile(
   ctx: StateContext,
   path: babel.NodePath,
-  rootFile: string,
+  rootFile: string | undefined,
   imported: ImportDefinition,
-  isomorphic?: boolean,
 ): string {
   // Create an ID
   let id = `${ctx.blocks.hash}-${ctx.blocks.count++}`;
@@ -195,7 +194,7 @@ export function createEntryFile(
     },
   ];
   const args: t.Expression[] = [t.stringLiteral(id)];
-  if (ctx.options.mode === 'server' || isomorphic) {
+  if (rootFile) {
     const rootID = generateUniqueName(path, 'root');
     entryImports.push({
       kind: 'default',

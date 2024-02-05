@@ -13,10 +13,10 @@ import {
 } from './split';
 import type { FunctionDirectiveDefinition, StateContext } from './types';
 import assert from './utils/assert';
+import { generateUniqueName } from './utils/generate-unique-name';
 import getForeignBindings from './utils/get-foreign-bindings';
 import { getImportIdentifier } from './utils/get-import-identifier';
 import { isPathValid } from './utils/unwrap';
-import { generateUniqueName } from './utils/generate-unique-name';
 
 function transformFunctionContent(
   path: babel.NodePath<t.BlockStatement>,
@@ -216,7 +216,7 @@ function getFunctionReplacement(
 function replaceIsomorphicFunction(
   ctx: StateContext,
   path: babel.NodePath<t.ArrowFunctionExpression | t.FunctionExpression>,
-  func: FunctionDirectiveDefinition,
+  directive: FunctionDirectiveDefinition,
   bindings: ExtractedBindings,
 ): t.Expression {
   const body = path.get('body');
@@ -224,29 +224,27 @@ function replaceIsomorphicFunction(
     body.replaceWith(t.blockStatement([t.returnStatement(body.node)]));
   }
   assert(isPathValid(body, t.isBlockStatement), 'invariant');
-  const rootFile = createRootFile(
-    ctx,
-    bindings,
-    t.isFunctionExpression(path.node)
-      ? t.functionExpression(
-          path.node.id,
-          [t.arrayPattern(bindings.locals), ...path.node.params],
-          path.node.body,
-          path.node.async,
-          path.node.generator,
-        )
-      : t.arrowFunctionExpression(
-          [t.arrayPattern(bindings.locals), ...path.node.params],
-          path.node.body,
-          path.node.async,
-        ),
-  );
   const entryFile = createEntryFile(
     ctx,
     path,
-    rootFile,
-    func.target,
-    func.isomorphic,
+    createRootFile(
+      ctx,
+      bindings,
+      t.isFunctionExpression(path.node)
+        ? t.functionExpression(
+            path.node.id,
+            [t.arrayPattern(bindings.locals), ...path.node.params],
+            path.node.body,
+            path.node.async,
+            path.node.generator,
+          )
+        : t.arrowFunctionExpression(
+            [t.arrayPattern(bindings.locals), ...path.node.params],
+            path.node.body,
+            path.node.async,
+          ),
+    ),
+    directive.target,
   );
 
   const source = generateUniqueName(path, 'source');
@@ -279,10 +277,10 @@ function replaceIsomorphicFunction(
   );
 }
 
-function replaceFunctionFromCall(
+function replaceFunctionDirective(
   ctx: StateContext,
   path: babel.NodePath<t.ArrowFunctionExpression | t.FunctionExpression>,
-  func: FunctionDirectiveDefinition,
+  directive: FunctionDirectiveDefinition,
   bindings: ExtractedBindings,
 ): t.Expression {
   const body = path.get('body');
@@ -291,29 +289,29 @@ function replaceFunctionFromCall(
   }
   assert(isPathValid(body, t.isBlockStatement), 'invariant');
   transformFunctionContent(body, bindings.mutations);
-  const rootFile = createRootFile(
-    ctx,
-    bindings,
-    t.isFunctionExpression(path.node)
-      ? t.functionExpression(
-          path.node.id,
-          [t.arrayPattern(bindings.locals), ...path.node.params],
-          path.node.body,
-          path.node.async,
-          path.node.generator,
-        )
-      : t.arrowFunctionExpression(
-          [t.arrayPattern(bindings.locals), ...path.node.params],
-          path.node.body,
-          path.node.async,
-        ),
-  );
   const entryFile = createEntryFile(
     ctx,
     path,
-    rootFile,
-    func.target,
-    func.isomorphic,
+    ctx.options.mode === 'server' || directive.isomorphic
+      ? createRootFile(
+          ctx,
+          bindings,
+          t.isFunctionExpression(path.node)
+            ? t.functionExpression(
+                path.node.id,
+                [t.arrayPattern(bindings.locals), ...path.node.params],
+                path.node.body,
+                path.node.async,
+                path.node.generator,
+              )
+            : t.arrowFunctionExpression(
+                [t.arrayPattern(bindings.locals), ...path.node.params],
+                path.node.body,
+                path.node.async,
+              ),
+        )
+      : undefined,
+    directive.target,
   );
 
   return getFunctionReplacement(ctx, path, entryFile, bindings);
@@ -322,16 +320,16 @@ function replaceFunctionFromCall(
 export function splitFunctionDirective(
   ctx: StateContext,
   path: babel.NodePath<t.ArrowFunctionExpression | t.FunctionExpression>,
-  func: FunctionDirectiveDefinition,
+  directive: FunctionDirectiveDefinition,
 ): t.Expression {
   const bindings = extractBindings(
     ctx,
     path,
     getForeignBindings(path, 'function'),
-    func.pure,
+    directive.pure,
   );
-  if (func.isomorphic) {
-    return replaceIsomorphicFunction(ctx, path, func, bindings);
+  if (directive.isomorphic) {
+    return replaceIsomorphicFunction(ctx, path, directive, bindings);
   }
-  return replaceFunctionFromCall(ctx, path, func, bindings);
+  return replaceFunctionDirective(ctx, path, directive, bindings);
 }

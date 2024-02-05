@@ -224,29 +224,27 @@ function replaceIsomorphicFunction(
     body.replaceWith(t.blockStatement([t.returnStatement(body.node)]));
   }
   assert(isPathValid(body, t.isBlockStatement), 'invariant');
-  const rootFile = createRootFile(
-    ctx,
-    bindings,
-    t.isFunctionExpression(path.node)
-      ? t.functionExpression(
-          path.node.id,
-          [t.arrayPattern(bindings.locals), ...path.node.params],
-          path.node.body,
-          path.node.async,
-          path.node.generator,
-        )
-      : t.arrowFunctionExpression(
-          [t.arrayPattern(bindings.locals), ...path.node.params],
-          path.node.body,
-          path.node.async,
-        ),
-  );
   const entryFile = createEntryFile(
     ctx,
     path,
-    rootFile,
+    createRootFile(
+      ctx,
+      bindings,
+      t.isFunctionExpression(path.node)
+        ? t.functionExpression(
+            path.node.id,
+            [t.arrayPattern(bindings.locals), ...path.node.params],
+            path.node.body,
+            path.node.async,
+            path.node.generator,
+          )
+        : t.arrowFunctionExpression(
+            [t.arrayPattern(bindings.locals), ...path.node.params],
+            path.node.body,
+            path.node.async,
+          ),
+    ),
     func.target,
-    func.isomorphic,
   );
 
   const source = generateUniqueName(path, 'source');
@@ -291,29 +289,29 @@ function replaceFunctionFromCall(
   }
   assert(isPathValid(body, t.isBlockStatement), 'invariant');
   transformFunctionContent(body, bindings.mutations);
-  const rootFile = createRootFile(
-    ctx,
-    bindings,
-    t.isFunctionExpression(path.node)
-      ? t.functionExpression(
-          path.node.id,
-          [t.arrayPattern(bindings.locals), ...path.node.params],
-          path.node.body,
-          path.node.async,
-          path.node.generator,
-        )
-      : t.arrowFunctionExpression(
-          [t.arrayPattern(bindings.locals), ...path.node.params],
-          path.node.body,
-          path.node.async,
-        ),
-  );
   const entryFile = createEntryFile(
     ctx,
     path,
-    rootFile,
+    ctx.options.mode === 'server' || func.isomorphic
+      ? createRootFile(
+          ctx,
+          bindings,
+          t.isFunctionExpression(path.node)
+            ? t.functionExpression(
+                path.node.id,
+                [t.arrayPattern(bindings.locals), ...path.node.params],
+                path.node.body,
+                path.node.async,
+                path.node.generator,
+              )
+            : t.arrowFunctionExpression(
+                [t.arrayPattern(bindings.locals), ...path.node.params],
+                path.node.body,
+                path.node.async,
+              ),
+        )
+      : undefined,
     func.target,
-    func.isomorphic,
   );
 
   return getFunctionReplacement(ctx, path, entryFile, bindings);
@@ -342,13 +340,13 @@ function replaceExpressionFromCall(
   func: FunctionCallDefinition,
   bindings: ExtractedBindings,
 ): t.Expression {
-  const rootFile = createRootFile(ctx, bindings, path.node);
   const entryFile = createEntryFile(
     ctx,
     path,
-    rootFile,
+    ctx.options.mode === 'server' || func.isomorphic
+      ? createRootFile(ctx, bindings, path.node)
+      : undefined,
     func.target,
-    func.isomorphic,
   );
 
   const rest = generateUniqueName(path, 'rest');
