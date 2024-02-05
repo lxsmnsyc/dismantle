@@ -51,9 +51,9 @@ A block directive's output involves a function derived from the block. The compi
 
 ```js
 // Output
-import { $$func as _$$func } from "dismantle/runtime";
+import { $$func as $$func_1 } from "dismantle/runtime";
 async function foo(value) {
-  const [_type, _result] = await _$$func((await import("./input.js?example=1.js")).default, null)(value);
+  const [type_1, result_1] = await $$func_1((await import("./input.js?example=1.js")).default, null)(value);
 }
 
 // Root file
@@ -61,17 +61,17 @@ async function foo(value) {
 export default (async function (value) {
   try {
     console.log('Server logged with', value);
-  } catch (_error) {
-    return [4, _error];
+  } catch (error_1) {
+    return [4, error_1];
   }
   return [3];
 });
 
 // Entry file
 // ./input.js?example=1.js
-import { $$server as _entry } from "my-example";
-import _root from "./input.js?example=0.js";
-export default _entry("fa84d07f-0-foo", _root);
+import { $$server as entry_1 } from "my-example";
+import root_1 from "./input.js?example=0.js";
+export default entry_1("fa84d07f-0-foo", root_1);
 ```
 
 ### Client output
@@ -218,3 +218,92 @@ export default entry_1("fa84d07f-0-foo");
 `return` statements in the output function is also transformed like in block directives but since split happens on function-level, stuff like `break` and `continue` is no longer considered.
 
 ## Function Call
+
+A function call definition relies on the use of function calls rather than directives. You can think of this as ["macros"](https://en.wikipedia.org/wiki/Macro_(computer_science)).
+
+The function call to be checked is limited only to imported functions, and is defined by `definition.source`. The rest is similar to function directives.
+
+Given the example input and definition:
+
+```js
+import { server$ } from 'my-example';
+
+const foo = server$(value => {
+  console.log('Server logged with', value);
+});
+```
+
+```js
+{
+  type: 'function-call',
+  source: {
+    kind: 'named',
+    name: 'server$',
+    source: 'my-example',
+  },
+  target: {
+    kind: 'named',
+    name: 'registerServer$',
+    source: 'my-example/server',
+  },
+  handle: {
+    kind: 'named',
+    name: '$$server',
+    source: 'my-example/server',
+  },
+},
+```
+
+### Server output
+
+```js
+// Output
+import { $$server as $$server_1 } from "my-example/server";
+import { $$func as $$func_1 } from "dismantle/runtime";
+import { server$ } from 'my-example';
+const foo = $$server_1( /*@dismantle skip*/async () => {
+  const source_1 = (await import("./input.js?example=1.js")).default;
+  return async (...rest_1) => {
+    const [type_1, result_1] = await $$func_1(source_1, null)([], ...rest_1);
+    return result_1;
+  };
+});
+
+// Root file
+// ./input.js?example=0.js
+export default (([], value) => {
+  try {
+    console.log('Server logged with', value);
+  } catch (error_1) {
+    return [4, error_1];
+  }
+  return [3];
+});
+
+// Entry file
+// ./input.js?example=1.js
+import { registerServer$ as entry_1 } from "my-example/server";
+import root_1 from "./input.js?example=0.js";
+export default entry_1("fa84d07f-0-foo", root_1);
+```
+
+### Client output
+
+```js
+// Output
+import { $$server as $$server_1 } from "my-example/server";
+import { $$func as $$func_1 } from "dismantle/runtime";
+import { server$ } from 'my-example';
+const foo = $$server_1( /*@dismantle skip*/async () => {
+  const source_1 = (await import("./input.js?example=0.js")).default;
+  return async (...rest_1) => {
+    const [type_1, result_1] = await $$func_1(source_1, null)([], ...rest_1);
+    return result_1;
+  };
+});
+
+// Entry file
+// ./input.js?example=0.js
+import { registerServer$ as entry_1 } from "my-example/server";
+export default entry_1("fa84d07f-0-foo");
+```
