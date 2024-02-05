@@ -42,16 +42,22 @@ const result = await compile(
     /**
      * Array of defined directives
      */
-    directives: [
+    definitions: [
+      /**
+       * An example of a block directive
+       */
       {
-        // Value of the directive
-        value: 'use server',
+        type: 'block-directive',
+        /**
+         * Value of the directive
+         */
+        directive: 'use server',
         /**
          * Which function to import and call
          * to handle the newly produced function
          * 
-         * This function is called at top-level
-         * and as a module side-effect.
+         * This function is called in entry files
+         * for registration.
          */
         target: {
           /**
@@ -79,16 +85,57 @@ const result = await compile(
           source: 'my-example',
         },
         /**
-         * If the function should skip closure extraction
+         * If the compilation should skip closure extraction
+         * 
+         * Defaults to `false`
          */
         pure: false,
+        /**
+         * If the resulting function should exist in both server
+         * and client.
+         * 
+         * The idea is that you don't have to setup a remote
+         * function call since the function exists on the same
+         * runtime.
+         * 
+         * Defaults to `false`
+         */
+        isomorphic: false,
       },
-    ],
-    /**
-     * Array of defined special functions
-     */
-    functions: [
+      /**
+       * An example of a function directive
+       */
       {
+        type: 'function-directive',
+        /**
+         * Value of the directive
+         */
+        directive: 'use server',
+        /**
+         * Defines which function to import and call. This
+         * function is used in entry files.
+         */
+        target: {
+          kind: 'named',
+          name: 'server$',
+          source: 'my-example/server',
+        },
+        /**
+         * Used to handle the "client" function.
+         */
+        handle: {
+          kind: 'named',
+          name: '$$server',
+          source: 'my-example/server',
+        },
+        pure: false,
+        isomorphic: false,
+      },
+      /**
+       *  An example of function call definition
+       */
+      {
+        type: 'function-call',
         /**
          * Defines the special function to be transformed
          */
@@ -98,8 +145,9 @@ const result = await compile(
           source: 'my-example',
         },
         /**
-         * Defines which function to import and call. Behaves
-         * the same way like in `directives`
+         * Defines which function to import and call.
+         * 
+         * Used in entry files.
          */
         target: {
           kind: 'named',
@@ -115,6 +163,8 @@ const result = await compile(
           name: '$$server',
           source: 'my-example/server',
         },
+        pure: false,
+        isomorphic: false,
       },
     ],
   },
