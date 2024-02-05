@@ -317,7 +317,7 @@ const outer = () => {
     },
     "/path/to/example.ts?my-example=1.ts" => {
       "code": "import { value } from "./example.ts?my-example=0.ts";
-export default (function* ([]) {
+export default (async function ([]) {
   try {
     return [2, value];
   } catch (error_1) {
@@ -327,7 +327,7 @@ export default (function* ([]) {
 });",
       "map": {
         "file": undefined,
-        "mappings": ";+BAG0C;EAAA;IAAA,WAEzBA,KAAK;EAAA,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AACd,CAAC",
+        "mappings": ";oCAG0C;EAAA;IAAA,WAEzBA,KAAK;EAAA,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AACd,CAAC",
         "names": [
           "value",
           "error_1",
@@ -410,7 +410,7 @@ const example = $$server_1(async () => {
   ],
   "files": Map {
     "/path/to/example.ts?my-example=0.ts" => {
-      "code": "export default (function* ([]) {
+      "code": "export default (async function ([]) {
   try {
     return [2, 'foo bar'];
   } catch (error_1) {
@@ -420,7 +420,7 @@ const example = $$server_1(async () => {
 });",
       "map": {
         "file": undefined,
-        "mappings": "+BACwC;EAAA;IAAA,WAEzB,SAAS;EAAA,SAAAA,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAClB,CAAC",
+        "mappings": "oCACwC;EAAA;IAAA,WAEzB,SAAS;EAAA,SAAAA,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAClB,CAAC",
         "names": [
           "error_1",
         ],
@@ -501,7 +501,7 @@ const outer = () => {
   ],
   "files": Map {
     "/path/to/example.ts?my-example=0.ts" => {
-      "code": "export default (function* ([value]) {
+      "code": "export default (async function ([value]) {
   try {
     return [2, value];
   } catch (error_1) {
@@ -511,7 +511,7 @@ const outer = () => {
 });",
       "map": {
         "file": undefined,
-        "mappings": "4BAEcA,KAAK,GACuB;EAAA;IAAA,WAEzBA,KAAK;EAAA,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AACd,CAAC",
+        "mappings": "iCAEcA,KAAK,GACuB;EAAA;IAAA,WAEzBA,KAAK;EAAA,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AACd,CAAC",
         "names": [
           "value",
           "error_1",

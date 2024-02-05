@@ -265,7 +265,7 @@ const example = $$server_1(async () => {
   ],
   "files": Map {
     "/path/to/example.ts?my-example=0.ts" => {
-      "code": "export default (function* example([]) {
+      "code": "export default (async function example([]) {
   try {
     return [2, 'foo bar'];
   } catch (error_1) {
@@ -275,7 +275,7 @@ const example = $$server_1(async () => {
 });",
       "map": {
         "file": undefined,
-        "mappings": "0BACqBA,OAAOA,CAAA,IAAG;EAAA;IAAA,WAEhB,SAAS;EAAA,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAClB,CAAC",
+        "mappings": "+BACqBA,OAAOA,CAAA,IAAG;EAAA;IAAA,WAEhB,SAAS;EAAA,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAClB,CAAC",
         "names": [
           "example",
           "error_1",

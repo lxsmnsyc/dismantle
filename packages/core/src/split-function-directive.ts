@@ -235,8 +235,8 @@ function replaceIsomorphicFunction(
             path.node.id,
             [t.arrayPattern(bindings.locals), ...path.node.params],
             path.node.body,
-            path.node.async,
             path.node.generator,
+            path.node.async,
           )
         : t.arrowFunctionExpression(
             [t.arrayPattern(bindings.locals), ...path.node.params],
@@ -301,8 +301,8 @@ function replaceFunctionDirective(
                 path.node.id,
                 [t.arrayPattern(bindings.locals), ...path.node.params],
                 path.node.body,
-                path.node.async,
                 path.node.generator,
+                path.node.async,
               )
             : t.arrowFunctionExpression(
                 [t.arrayPattern(bindings.locals), ...path.node.params],
