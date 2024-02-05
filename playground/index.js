@@ -6,7 +6,7 @@ const target = path.join(process.cwd(), 'input.js');
 
 const result = await compile(target, await fs.readFile(target, 'utf-8'), {
   key: 'example',
-  mode: 'client',
+  mode: 'server',
   env: 'development',
   definitions: [
     {
@@ -19,8 +19,23 @@ const result = await compile(target, await fs.readFile(target, 'utf-8'), {
       },
     },
     {
+      type: 'function-directive',
+      directive: 'use server',
+      target: {
+        kind: 'named',
+        name: '$$server',
+        source: 'my-example',
+      },
+      handle: {
+        kind: 'named',
+        name: '$$server',
+        source: 'my-example/server',
+      },
+      // isomorphic: true,
+    },
+    {
       type: 'function-call',
-      isomorphic: true,
+      // isomorphic: true,
       source: {
         kind: 'named',
         name: 'server$',
