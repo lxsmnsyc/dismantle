@@ -61,7 +61,7 @@ importers:
   playground:
     dependencies:
       dismantle:
-        specifier: 0.2.2
+        specifier: 0.3.0
         version: link:../packages/core
 
 packages:
