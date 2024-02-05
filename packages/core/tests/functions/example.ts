@@ -2,9 +2,9 @@ import type * as compiler from '../../src';
 
 export const SERVER: compiler.Options = {
   key: 'my-example',
-  directives: [],
-  functions: [
+  definitions: [
     {
+      type: 'function-call',
       source: {
         source: 'my-example',
         kind: 'named',
@@ -14,6 +14,11 @@ export const SERVER: compiler.Options = {
         source: 'my-example/server',
         kind: 'named',
         name: 'registerServerFunction',
+      },
+      handle: {
+        source: 'my-example/server',
+        kind: 'named',
+        name: '$$server',
       },
     },
   ],
@@ -22,9 +27,9 @@ export const SERVER: compiler.Options = {
 };
 export const CLIENT: compiler.Options = {
   key: 'my-example',
-  directives: [],
-  functions: [
+  definitions: [
     {
+      type: 'function-call',
       source: {
         source: 'my-example',
         kind: 'named',
@@ -34,6 +39,11 @@ export const CLIENT: compiler.Options = {
         source: 'my-example/server',
         kind: 'named',
         name: 'registerServerFunction',
+      },
+      handle: {
+        source: 'my-example/server',
+        kind: 'named',
+        name: '$$server',
       },
     },
   ],

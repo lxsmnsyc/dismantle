@@ -15,25 +15,45 @@ export interface DefaultImportDefinition {
 
 export type ImportDefinition = DefaultImportDefinition | NamedImportDefinition;
 
-export interface DirectiveDefinition {
-  value: string;
-  target: ImportDefinition;
+export interface BlockDirectiveDefinition {
+  type: 'block-directive';
+  isomorphic?: boolean;
   pure?: boolean;
+  directive: string;
+  target: ImportDefinition;
 }
 
-export interface FunctionDefinition {
+export interface FunctionDirectiveDefinition {
+  type: 'function-directive';
+  isomorphic?: boolean;
+  pure?: boolean;
+  directive: string;
+  target: ImportDefinition;
+  handle: ImportDefinition;
+}
+
+export type DirectiveDefinition =
+  | BlockDirectiveDefinition
+  | FunctionDirectiveDefinition;
+
+export interface FunctionCallDefinition {
+  type: 'function-call';
+  isomorphic?: boolean;
+  pure?: boolean;
   source: ImportDefinition;
   target: ImportDefinition;
-  preserve?: boolean;
-  pure?: boolean;
+  handle: ImportDefinition;
 }
 
 export interface Options {
   key: string;
   mode: 'server' | 'client';
   env: 'production' | 'development';
-  directives: DirectiveDefinition[];
-  functions: FunctionDefinition[];
+  definitions: (
+    | BlockDirectiveDefinition
+    | FunctionDirectiveDefinition
+    | FunctionCallDefinition
+  )[];
 }
 
 export interface ModuleDefinition {
@@ -67,7 +87,7 @@ export interface StateContext {
     mode: 'entry' | 'root' | 'none',
   ) => void;
   registrations: {
-    identifiers: Map<t.Identifier, FunctionDefinition>;
-    namespaces: Map<t.Identifier, FunctionDefinition[]>;
+    identifiers: Map<t.Identifier, FunctionCallDefinition>;
+    namespaces: Map<t.Identifier, FunctionCallDefinition[]>;
   };
 }

@@ -1,7 +1,9 @@
 import type * as babel from '@babel/core';
-import { transformBlock } from './transform-block';
+import { transformBlockDirective } from './transform-block-directive';
 import { transformCall } from './transform-call';
+import { transformFunctionDirective } from './transform-function-directive';
 import type { StateContext } from './types';
+import { bubbleFunctionDeclaration } from './utils/bubble-function-declaration';
 import { registerImportSpecifiers } from './utils/register-import-specifiers';
 
 interface State extends babel.PluginPass {
@@ -12,11 +14,22 @@ export function plugin(): babel.PluginObj<State> {
   return {
     name: 'dismantle',
     visitor: {
-      Program(path, ctx) {
-        registerImportSpecifiers(ctx.opts, path);
+      Program(programPath, ctx) {
+        registerImportSpecifiers(ctx.opts, programPath);
+        programPath.traverse({
+          FunctionDeclaration(path) {
+            bubbleFunctionDeclaration(ctx.opts, programPath, path);
+          },
+        });
+      },
+      ArrowFunctionExpression(path, ctx) {
+        transformFunctionDirective(ctx.opts, path);
+      },
+      FunctionExpression(path, ctx) {
+        transformFunctionDirective(ctx.opts, path);
       },
       BlockStatement(path, ctx) {
-        transformBlock(ctx.opts, path);
+        transformBlockDirective(ctx.opts, path);
       },
       CallExpression(path, ctx) {
         transformCall(ctx.opts, path);

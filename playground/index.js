@@ -8,18 +8,34 @@ const result = await compile(target, await fs.readFile(target, 'utf-8'), {
   key: 'example',
   mode: 'server',
   env: 'development',
-  directives: [
+  definitions: [
     {
-      value: 'use server',
+      type: 'block-directive',
+      directive: 'use server',
       target: {
         kind: 'named',
         name: '$$server',
         source: 'my-example',
       },
     },
-  ],
-  functions: [
     {
+      type: 'function-directive',
+      directive: 'use server',
+      target: {
+        kind: 'named',
+        name: '$$server',
+        source: 'my-example',
+      },
+      handle: {
+        kind: 'named',
+        name: '$$server',
+        source: 'my-example/server',
+      },
+      // isomorphic: true,
+    },
+    {
+      type: 'function-call',
+      // isomorphic: true,
       source: {
         kind: 'named',
         name: 'server$',
@@ -27,7 +43,12 @@ const result = await compile(target, await fs.readFile(target, 'utf-8'), {
       },
       target: {
         kind: 'named',
-        name: 'server$',
+        name: 'registerServer$',
+        source: 'my-example/server',
+      },
+      handle: {
+        kind: 'named',
+        name: '$$server',
         source: 'my-example/server',
       },
     },
@@ -41,7 +62,7 @@ console.log(result.map);
 console.log('\nVIRTUALS');
 for (const [name, content] of result.files) {
   console.log('FILE', name);
-  console.log(content);
+  console.log(content.code);
 }
 
 console.log('\nENTRIES');
