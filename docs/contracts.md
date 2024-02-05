@@ -1,67 +1,99 @@
-# Internal functions contract
+# Contracts
 
-> [!NOTE]
-> The terms "server" and "client" are metaphors: "server" signifies where the function exists and is called
-> remotely, "client" is where the function call request comes from.
+This guide is specifically setting up the necessary requirements to provide a runtime for your custom definitions
 
-## Directives
+## General features
 
-An internal function for directives are called on top-level. This behavior is to allow the function to be registered on a user-based implementation. The registration's purpose is to allow mapping the function in the "server" from a "client" request.
+### Isomorphic mode
+
+If `definition.isomorphic` is set to `true`, the output bypasses the compilation mode such that the output function exists on both `server` and `client`. In this case, the output is similar to `server` mode.
+
+### Closure extraction
+
+Closure extraction involves picking up variables in the same lexical scope. The captured variables is only up to the scope that isn't module-level, as module-level works with import statements rather than serialization.
+
+If `definition.pure` is set to `true`, closure extraction is disabled.
+
+### Remote mutations
+
+Remote mutations involves updating a locally-declared variable if that said variable is mutated in a remote context. Like closure extraction, module-level bindings are not captured.
+
+If `definition.pure` is set to `true`, remote mutations is disabled.
+
+## Block Directives
+
+A "block directive" allows the use of directive at block-level. It doesn't necessarily have to be a function, it can be any other block statements like `if-else`, `try-catch` and even `for` loops.
+
+Given the example input and definition:
 
 ```js
-export function myInternalFunc(
-  /**
-   * ID of the function
-   * 
-   * Use this for mapping to the function's instance
-   */
-  id,
-  /**
-   * The function to be managed. You can do
-   * whatever you want here.
-   * 
-   * The functions arguments is composed of the "closure" variables.
-   */
-  func,
-) {
-  /**
-   * Registration stuff goes here
-   */
-
-  /**
-   * The newly returned function.
-   * 
-   * You can choose to return the `func` if you want.
-   */
-  return newFunc;
+async function foo(value) {
+  'use server';
+  console.log('Server logged with', value);
 }
 ```
 
-On the "client" side, the API required is almost similar except that the function only accepts the `id`.
-
-Here's how an example output would look like:
-
 ```js
-// server.js
-import { myInternalFunc } from 'my-example/server';
-import root from '/path/to/file.ts?example=0';
-export default myInternalFunc('<unique id>', root);
-
-// client.js
-import { myInternalFunc } from 'my-example/server';
-import root from '/path/to/file.ts?example=0';
-export default myInternalFunc('<unique id>');
+{
+  type: 'block-directive',
+  directive: 'use server',
+  target: {
+    kind: 'named',
+    name: '$$server',
+    source: 'my-example',
+  },
+},
 ```
 
-### Remote Control Flow
+### Server output
 
-Directives understands its original control flow, but the delegation of its interpretation is up to the user. 
+A block directive's output involves a function derived from the block. The compilation outputs a root file (the file that contains the new function), the entry file (a file that performs the function registration using the `definition.target`) and the rest of the files (produced by the module-level closure extraction).
 
-A function produced by `dismantle`, which is derived from the user's block, has modified `return` output: the function returns a tuple that contains the kind of control flow, the value associated to the control flow, and the mutations that needs to happen at the client.
+```js
+// Output
+import { $$func as _$$func } from "dismantle/runtime";
+async function foo(value) {
+  const [_type, _result] = await _$$func((await import("./input.js?example=1.js")).default, null)(value);
+}
 
-Client compilation understands this contract, and so it's important that the shape of the tuple must be preserved between the "server" and the "client".
+// Root file
+// ./input.js?example=0.js
+export default (async function (value) {
+  try {
+    console.log('Server logged with', value);
+  } catch (_error) {
+    return [4, _error];
+  }
+  return [3];
+});
 
-Here's the following tuples:
+// Entry file
+// ./input.js?example=1.js
+import { $$server as _entry } from "my-example";
+import _root from "./input.js?example=0.js";
+export default _entry("fa84d07f-0-foo", _root);
+```
+
+### Client output
+
+Similar to server output except that the root file is excluded.
+
+```js
+// Output
+import { $$func as $$func_1 } from "dismantle/runtime";
+async function foo(value) {
+  const [type_1, result_1] = await $$func_1((await import("./input.js?example=0.js")).default, null)(value);
+}
+
+// Entry file
+// ./input.js?example=0.js
+import { $$server as entry_1 } from "my-example";
+export default entry_1("fa84d07f-0-foo");
+```
+
+### Remote control flow
+
+To incorporate consistency in control flow, parts of the block is converted into `return` statements. The converted `return` statements contains a tuple of a `key` code, a `value` and the `mutation`. A `key` signifies how should the `client` interpret the tuple. `value` depends on the kind of `key`. `mutation` contains the updates to be performed by the client.
 
 ```js
 /**
@@ -97,33 +129,92 @@ Here's the following tuples:
 [4, value, mutations];
 ```
 
-### Remote Mutations
+## Function Directives
 
-Directives also understands mutations, but is only limited to local `let` variables and params.
+A function directive allows the use of directive at function-level.
 
-## Function Calls
+Compared to a block directive, a function directive requires a `definition.handle`, which is used to define which function to import and called on the `client` part of the function. On top of that, the `client` output involves a higher-order function that produces the new `client` function. It's up to `definition.handle` how to manage both the higher-order function and the produced `client` function.
 
-A bit similar to the directives, with the exception of how the function definition can decide
-if the original call must be retained or replaced by the new function as a whole.
-
-This is useful for deciding whether or not you wanted a function or a side-effect.
+Given the example input and definition:
 
 ```js
-import { lazy$ } from 'my-example';
-
-async function foo() {
-  const result = await lazy$(() => {
-    return 'foo';
-  });
-
-  console.log(result); // 'foo'
+async function foo(value) {
+  'use server';
+  console.log('Server logged with', value);
 }
 ```
 
-### Remote Control Flow
+```js
+{
+  type: 'function-directive',
+  directive: 'use server',
+  target: {
+    kind: 'named',
+    name: '$$server',
+    source: 'my-example',
+  },
+  handle: {
+    kind: 'named',
+    name: '$$server',
+    source: 'my-example/server',
+  },
+},
+```
 
-Similar to directives, function calls allows remote control flows, excluding `break` and `continue` statements.
+### Server output
 
-### Remote Mutations
+```js
+// Output
+import { $$server as $$server_1 } from "my-example/server";
+import { $$func as $$func_1 } from "dismantle/runtime";
+const foo = $$server_1(async () => {
+  const source_1 = (await import("./input.js?example=1.js")).default;
+  return async function foo(...rest_1) {
+    const [type_1, result_1] = await $$func_1(source_1, null)([], ...rest_1);
+    return result_1;
+  };
+});
 
-Remote mutations are also supported in "server" functions.
+// Root file
+// ./input.js?example=0.js
+export default (async function foo([], value) {
+  try {
+    console.log('Server logged with', value);
+  } catch (error_1) {
+    return [4, error_1];
+  }
+  return [3];
+});
+
+// Entry file
+// ./input.js?example=1.js
+import { $$server as entry_1 } from "my-example";
+import root_1 from "./input.js?example=0.js";
+export default entry_1("fa84d07f-0-foo", root_1);
+```
+
+### Client output
+
+```js
+// Output
+import { $$server as $$server_1 } from "my-example/server";
+import { $$func as $$func_1 } from "dismantle/runtime";
+const foo = $$server_1(async () => {
+  const source_1 = (await import("./input.js?example=0.js")).default;
+  return async function foo(...rest_1) {
+    const [type_1, result_1] = await $$func_1(source_1, null)([], ...rest_1);
+    return result_1;
+  };
+});
+
+// Entry file
+// ./input.js?example=0.js
+import { $$server as entry_1 } from "my-example";
+export default entry_1("fa84d07f-0-foo");
+```
+
+### Remote control flow
+
+`return` statements in the output function is also transformed like in block directives but since split happens on function-level, stuff like `break` and `continue` is no longer considered.
+
+## Function Call
