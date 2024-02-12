@@ -9,11 +9,14 @@ export interface Options extends Pick<dismantle.Options, 'mode' | 'env'> {
   pure?: boolean;
 }
 
+export type Output = dismantle.Output;
+export type CodeOutput = dismantle.CodeOutput;
+
 export async function compile(
   id: string,
   code: string,
   options: Options,
-): Promise<dismantle.Output> {
+): Promise<Output> {
   return await dismantle.compile(id, code, {
     key: 'use-server-directive',
     mode: options.mode,
