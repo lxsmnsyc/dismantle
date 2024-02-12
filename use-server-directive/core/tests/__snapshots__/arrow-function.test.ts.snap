@@ -1,0 +1,550 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ArrowFunctionExpression > client > should skip non-async server functions 1`] = `
+{
+  "code": "const example = () => {
+  'use server';
+
+  return 'foo bar';
+};",
+  "entries": [],
+  "files": Map {},
+  "map": {
+    "file": undefined,
+    "mappings": "AACM,MAAMA,OAAO,GAAGA,CAAA,KAAM;EACpB,YAAY;;EACZ,OAAO,SAAS;AAClB,CAAC",
+    "names": [
+      "example",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "example.ts",
+    ],
+    "sourcesContent": [
+      "
+      const example = () => {
+        'use server';
+        return 'foo bar';
+      };
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [],
+}
+`;
+
+exports[`ArrowFunctionExpression > client > should skip top-level values for scope 1`] = `
+{
+  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+import { value } from "./example.ts?use-server-directive=0.ts";
+const outer = () => {
+  const example = async () => {
+    const [type_1, result_1] = await $$func_1((await import("./example.ts?use-server-directive=1.ts")).default, null)();
+    if (type_1 === 2) {
+      return result_1;
+    }
+  };
+};",
+  "entries": [
+    "example.ts?use-server-directive=1.ts",
+  ],
+  "files": Map {
+    "example.ts?use-server-directive=0.ts" => {
+      "code": "export const value = 'foo bar';",
+      "map": {
+        "file": undefined,
+        "mappings": "aACYA,KAAK,GAAG,SAAS",
+        "names": [
+          "value",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "example.ts?use-server-directive=1.ts" => {
+      "code": "import { $$server as entry_1 } from "use-server-directive/client";
+export default entry_1("/__server/bb5fd6ee-0-example");",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
+  },
+  "map": {
+    "file": undefined,
+    "mappings": ";;AAEM,MAAMA,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,OAAO,GAAG,MAAAA,CAAA;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,0DAAAC,OAAA;IAAA,IAAAH,MAAA;MAAA,OAAAC,QAAA;IAAA;EAAA,CAGf;AACH,CAAC",
+    "names": [
+      "outer",
+      "example",
+      "type_1",
+      "result_1",
+      "$$func_1",
+      "default",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "example.ts",
+    ],
+    "sourcesContent": [
+      "
+      const value = 'foo bar';
+      const outer = () => {
+        const example = async () => {
+          'use server';
+          return value;
+        };
+      }
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [],
+}
+`;
+
+exports[`ArrowFunctionExpression > client > should transform valid server functions 1`] = `
+{
+  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+const example = async () => {
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?use-server-directive=0.ts")).default, null)();
+  if (type_1 === 2) {
+    return result_1;
+  }
+};",
+  "entries": [
+    "example.ts?use-server-directive=0.ts",
+  ],
+  "files": Map {
+    "example.ts?use-server-directive=0.ts" => {
+      "code": "import { $$server as entry_1 } from "use-server-directive/client";
+export default entry_1("/__server/bb5fd6ee-0-example");",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
+  },
+  "map": {
+    "file": undefined,
+    "mappings": ";AACM,MAAMA,OAAO,GAAG,MAAAA,CAAA;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,0DAAAC,OAAA;EAAA,IAAAH,MAAA;IAAA,OAAAC,QAAA;EAAA;AAAA,CAGf",
+    "names": [
+      "example",
+      "type_1",
+      "result_1",
+      "$$func_1",
+      "default",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "example.ts",
+    ],
+    "sourcesContent": [
+      "
+      const example = async () => {
+        'use server';
+        return 'foo bar';
+      };
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [],
+}
+`;
+
+exports[`ArrowFunctionExpression > client > should transform valid server functions with scope 1`] = `
+{
+  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+const outer = () => {
+  const value = 'foo bar';
+  const example = async () => {
+    const [type_1, result_1] = await $$func_1((await import("./example.ts?use-server-directive=0.ts")).default, null)(value);
+    if (type_1 === 2) {
+      return result_1;
+    }
+  };
+};",
+  "entries": [
+    "example.ts?use-server-directive=0.ts",
+  ],
+  "files": Map {
+    "example.ts?use-server-directive=0.ts" => {
+      "code": "import { $$server as entry_1 } from "use-server-directive/client";
+export default entry_1("/__server/bb5fd6ee-0-example");",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
+  },
+  "map": {
+    "file": undefined,
+    "mappings": ";AACM,MAAMA,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,MAAMC,OAAO,GAAG,MAAAA,CAAA;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,0DAAAC,OAAA,QADVL,KAAK;IAAA,IAAAE,MAAA;MAAA,OAAAC,QAAA;IAAA;EAAA,CAIV;AACH,CAAC",
+    "names": [
+      "outer",
+      "value",
+      "example",
+      "type_1",
+      "result_1",
+      "$$func_1",
+      "default",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "example.ts",
+    ],
+    "sourcesContent": [
+      "
+      const outer = () => {
+        const value = 'foo bar';
+        const example = async () => {
+          'use server';
+          return value;
+        };
+      }
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [],
+}
+`;
+
+exports[`ArrowFunctionExpression > server > should skip non-async server functions 1`] = `
+{
+  "code": "const example = () => {
+  'use server';
+
+  return 'foo bar';
+};",
+  "entries": [],
+  "files": Map {},
+  "map": {
+    "file": undefined,
+    "mappings": "AACM,MAAMA,OAAO,GAAGA,CAAA,KAAM;EACpB,YAAY;;EACZ,OAAO,SAAS;AAClB,CAAC",
+    "names": [
+      "example",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "example.ts",
+    ],
+    "sourcesContent": [
+      "
+      const example = () => {
+        'use server';
+        return 'foo bar';
+      };
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [],
+}
+`;
+
+exports[`ArrowFunctionExpression > server > should skip top-level values for scope 1`] = `
+{
+  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+import { value } from "./example.ts?use-server-directive=0.ts";
+const outer = () => {
+  const example = async () => {
+    const [type_1, result_1] = await $$func_1((await import("./example.ts?use-server-directive=2.ts")).default, null)();
+    if (type_1 === 2) {
+      return result_1;
+    }
+  };
+};",
+  "entries": [
+    "example.ts?use-server-directive=2.ts",
+  ],
+  "files": Map {
+    "example.ts?use-server-directive=0.ts" => {
+      "code": "export const value = 'foo bar';",
+      "map": {
+        "file": undefined,
+        "mappings": "aACYA,KAAK,GAAG,SAAS",
+        "names": [
+          "value",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "example.ts?use-server-directive=1.ts" => {
+      "code": "import { value } from "./example.ts?use-server-directive=0.ts";
+export default (async function () {
+  try {
+    return [2, value, null];
+  } catch (error_1) {
+    return [4, error_1];
+  }
+  return [3];
+});",
+      "map": {
+        "file": undefined,
+        "mappings": ";;;IAKU,WAAOA,KAAK;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAAA",
+        "names": [
+          "value",
+          "error_1",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "example.ts?use-server-directive=2.ts" => {
+      "code": "import { $$server as entry_1 } from "use-server-directive/server";
+import root_1 from "./example.ts?use-server-directive=1.ts";
+export default entry_1("/__server/bb5fd6ee-0-example", root_1);",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
+  },
+  "map": {
+    "file": undefined,
+    "mappings": ";;AAEM,MAAMA,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,OAAO,GAAG,MAAAA,CAAA;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,0DAAAC,OAAA;IAAA,IAAAH,MAAA;MAAA,OAAAC,QAAA;IAAA;EAAA,CAGf;AACH,CAAC",
+    "names": [
+      "outer",
+      "example",
+      "type_1",
+      "result_1",
+      "$$func_1",
+      "default",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "example.ts",
+    ],
+    "sourcesContent": [
+      "
+      const value = 'foo bar';
+      const outer = () => {
+        const example = async () => {
+          'use server';
+          return value;
+        };
+      }
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "example.ts?use-server-directive=1.ts",
+  ],
+}
+`;
+
+exports[`ArrowFunctionExpression > server > should transform valid server functions 1`] = `
+{
+  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+const example = async () => {
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?use-server-directive=1.ts")).default, null)();
+  if (type_1 === 2) {
+    return result_1;
+  }
+};",
+  "entries": [
+    "example.ts?use-server-directive=1.ts",
+  ],
+  "files": Map {
+    "example.ts?use-server-directive=0.ts" => {
+      "code": "export default (async function () {
+  try {
+    return [2, 'foo bar', null];
+  } catch (error_1) {
+    return [4, error_1];
+  }
+  return [3];
+});",
+      "map": {
+        "file": undefined,
+        "mappings": ";;IAGQ,WAAO,SAAS;EAAC,SAAAA,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAAA",
+        "names": [
+          "error_1",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "example.ts?use-server-directive=1.ts" => {
+      "code": "import { $$server as entry_1 } from "use-server-directive/server";
+import root_1 from "./example.ts?use-server-directive=0.ts";
+export default entry_1("/__server/bb5fd6ee-0-example", root_1);",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
+  },
+  "map": {
+    "file": undefined,
+    "mappings": ";AACM,MAAMA,OAAO,GAAG,MAAAA,CAAA;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,0DAAAC,OAAA;EAAA,IAAAH,MAAA;IAAA,OAAAC,QAAA;EAAA;AAAA,CAGf",
+    "names": [
+      "example",
+      "type_1",
+      "result_1",
+      "$$func_1",
+      "default",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "example.ts",
+    ],
+    "sourcesContent": [
+      "
+      const example = async () => {
+        'use server';
+        return 'foo bar';
+      };
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "example.ts?use-server-directive=0.ts",
+  ],
+}
+`;
+
+exports[`ArrowFunctionExpression > server > should transform valid server functions with scope 1`] = `
+{
+  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+const outer = () => {
+  const value = 'foo bar';
+  const example = async () => {
+    const [type_1, result_1] = await $$func_1((await import("./example.ts?use-server-directive=1.ts")).default, null)(value);
+    if (type_1 === 2) {
+      return result_1;
+    }
+  };
+};",
+  "entries": [
+    "example.ts?use-server-directive=1.ts",
+  ],
+  "files": Map {
+    "example.ts?use-server-directive=0.ts" => {
+      "code": "export default (async function (value) {
+  try {
+    return [2, value, null];
+  } catch (error_1) {
+    return [4, error_1];
+  }
+  return [3];
+});",
+      "map": {
+        "file": undefined,
+        "mappings": "gCAEcA,KAAK;EAAA;IAGT,WAAOA,KAAK;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAAA",
+        "names": [
+          "value",
+          "error_1",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "example.ts?use-server-directive=1.ts" => {
+      "code": "import { $$server as entry_1 } from "use-server-directive/server";
+import root_1 from "./example.ts?use-server-directive=0.ts";
+export default entry_1("/__server/bb5fd6ee-0-example", root_1);",
+      "map": {
+        "file": undefined,
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
+  },
+  "map": {
+    "file": undefined,
+    "mappings": ";AACM,MAAMA,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,MAAMC,OAAO,GAAG,MAAAA,CAAA;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,0DAAAC,OAAA,QADVL,KAAK;IAAA,IAAAE,MAAA;MAAA,OAAAC,QAAA;IAAA;EAAA,CAIV;AACH,CAAC",
+    "names": [
+      "outer",
+      "value",
+      "example",
+      "type_1",
+      "result_1",
+      "$$func_1",
+      "default",
+    ],
+    "sourceRoot": undefined,
+    "sources": [
+      "example.ts",
+    ],
+    "sourcesContent": [
+      "
+      const outer = () => {
+        const value = 'foo bar';
+        const example = async () => {
+          'use server';
+          return value;
+        };
+      }
+      ",
+    ],
+    "version": 3,
+  },
+  "roots": [
+    "example.ts?use-server-directive=0.ts",
+  ],
+}
+`;

@@ -64,6 +64,34 @@ importers:
         specifier: 0.3.0
         version: link:../packages/core
 
+  use-server-directive/core:
+    dependencies:
+      dismantle:
+        specifier: ^0.3.0
+        version: link:../../packages/core
+      seroval:
+        specifier: ^1.0.4
+        version: 1.0.4
+      seroval-plugins:
+        specifier: ^1.0.4
+        version: 1.0.4(seroval@1.0.4)
+    devDependencies:
+      '@types/node':
+        specifier: ^20.11.2
+        version: 20.11.6
+      pridepack:
+        specifier: 2.6.0
+        version: 2.6.0(tslib@2.6.2)(typescript@5.3.3)
+      tslib:
+        specifier: ^2.6.2
+        version: 2.6.2
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+      vitest:
+        specifier: ^1.1.0
+        version: 1.2.1(@types/node@20.11.6)
+
 packages:
 
   /@ampproject/remapping@2.2.1:
@@ -4670,6 +4698,20 @@ packages:
     dependencies:
       lru-cache: 6.0.0
     dev: true
+
+  /seroval-plugins@1.0.4(seroval@1.0.4):
+    resolution: {integrity: sha512-DQ2IK6oQVvy8k+c2V5x5YCtUa/GGGsUwUBNN9UqohrZ0rWdUapBFpNMYP1bCyRHoxOJjdKGl+dieacFIpU/i1A==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      seroval: ^1.0
+    dependencies:
+      seroval: 1.0.4
+    dev: false
+
+  /seroval@1.0.4:
+    resolution: {integrity: sha512-qQs/N+KfJu83rmszFQaTxcoJoPn6KNUruX4KmnmyD0oZkUoiNvJ1rpdYKDf4YHM05k+HOgCxa3yvf15QbVijGg==}
+    engines: {node: '>=10'}
+    dev: false
 
   /set-blocking@2.0.0:
     resolution: {integrity: sha512-KiKBS8AnWGEyLzofFfmvKwpdPzqiy16LvQfK3yv/fVH7Bj13/wl3JSR1J+rfgRE9q7xUJK4qvgS8raSOeLUehw==}

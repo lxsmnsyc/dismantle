@@ -2,3 +2,4 @@ packages:
 - 'packages/**/*'
 - 'examples/**/*'
 - 'playground'
+- 'use-server-directive/**/*'
