@@ -245,6 +245,7 @@ function replaceIsomorphicFunction(
           ),
     ),
     func.target,
+    func.idPrefix,
   );
 
   const source = generateUniqueName(path, 'source');
@@ -312,6 +313,7 @@ function replaceFunctionFromCall(
         )
       : undefined,
     func.target,
+    func.idPrefix,
   );
 
   return getFunctionReplacement(ctx, path, entryFile, bindings);
@@ -347,6 +349,7 @@ function replaceExpressionFromCall(
       ? createRootFile(ctx, bindings, path.node)
       : undefined,
     func.target,
+    func.idPrefix,
   );
 
   const rest = generateUniqueName(path, 'rest');

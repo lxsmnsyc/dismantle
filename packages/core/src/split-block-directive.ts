@@ -404,6 +404,7 @@ function replaceBlockDirective(
         )
       : undefined,
     directive.target,
+    directive.idPrefix,
   );
   path.replaceWith(
     getBlockDirectiveReplacement(ctx, path, entryFile, bindings, halting),

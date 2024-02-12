@@ -245,6 +245,7 @@ function replaceIsomorphicFunction(
           ),
     ),
     directive.target,
+    directive.idPrefix,
   );
 
   const source = generateUniqueName(path, 'source');
@@ -312,6 +313,7 @@ function replaceFunctionDirective(
         )
       : undefined,
     directive.target,
+    directive.idPrefix,
   );
 
   return getFunctionReplacement(ctx, path, entryFile, bindings);
