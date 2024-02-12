@@ -57,7 +57,7 @@
   "typesVersions": {
     "*": {
       "runtime": [
-        "./dist/types/index.d.ts"
+        "./dist/types/runtime/index.d.ts"
       ]
     }
   },
@@ -69,7 +69,7 @@
       },
       "require": "./dist/cjs/production/index.cjs",
       "import": "./dist/esm/production/index.mjs",
-      "types": "./dist/types/index.d.ts"
+      "types": "./dist/types/src/index.d.ts"
     },
     "./runtime": {
       "development": {
@@ -78,10 +78,10 @@
       },
       "require": "./dist/cjs/production/runtime.cjs",
       "import": "./dist/esm/production/runtime.mjs",
-      "types": "./dist/types/index.d.ts"
+      "types": "./dist/types/runtime/index.d.ts"
     }
   },
-  "types": "./dist/types/index.d.ts",
+  "types": "./dist/types/src/index.d.ts",
   "main": "./dist/cjs/production/index.cjs",
   "module": "./dist/esm/production/index.mjs"
 }
