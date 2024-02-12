@@ -50,6 +50,7 @@ export interface FunctionCallDefinition {
 
 export interface Options {
   key: string;
+  runtime: string;
   mode: 'server' | 'client';
   env: 'production' | 'development';
   definitions: (
