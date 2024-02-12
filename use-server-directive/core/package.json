@@ -59,6 +59,9 @@
       ],
       "server": [
         "./dist/types/server/index.d.ts"
+      ],
+      "runtime": [
+        "./dist/types/runtime/index.d.ts"
       ]
     }
   },
@@ -89,6 +92,15 @@
       "require": "./dist/cjs/production/server.cjs",
       "import": "./dist/esm/production/server.mjs",
       "types": "./dist/types/server/index.d.ts"
+    },
+    "./runtime": {
+      "development": {
+        "require": "./dist/cjs/development/runtime.cjs",
+        "import": "./dist/esm/development/runtime.mjs"
+      },
+      "require": "./dist/cjs/production/runtime.cjs",
+      "import": "./dist/esm/production/runtime.mjs",
+      "types": "./dist/types/runtime/index.d.ts"
     }
   }
 }

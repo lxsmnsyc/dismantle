@@ -18,6 +18,7 @@ export async function compile(
   options: Options,
 ): Promise<Output> {
   return await dismantle.compile(id, code, {
+    runtime: 'use-server-directive/runtime',
     key: 'use-server-directive',
     mode: options.mode,
     env: options.env,
