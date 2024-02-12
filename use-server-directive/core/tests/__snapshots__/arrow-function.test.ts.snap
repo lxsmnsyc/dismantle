@@ -35,7 +35,7 @@ exports[`ArrowFunctionExpression > client > should skip non-async server functio
 
 exports[`ArrowFunctionExpression > client > should skip top-level values for scope 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "use-server-directive/runtime";
 import { value } from "./example.ts?use-server-directive=0.ts";
 const outer = () => {
   const example = async () => {
@@ -115,7 +115,7 @@ export default entry_1("/__server/bb5fd6ee-0-example");",
 
 exports[`ArrowFunctionExpression > client > should transform valid server functions 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "use-server-directive/runtime";
 const example = async () => {
   const [type_1, result_1] = await $$func_1((await import("./example.ts?use-server-directive=0.ts")).default, null)();
   if (type_1 === 2) {
@@ -170,7 +170,7 @@ export default entry_1("/__server/bb5fd6ee-0-example");",
 
 exports[`ArrowFunctionExpression > client > should transform valid server functions with scope 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "use-server-directive/runtime";
 const outer = () => {
   const value = 'foo bar';
   const example = async () => {
@@ -266,7 +266,7 @@ exports[`ArrowFunctionExpression > server > should skip non-async server functio
 
 exports[`ArrowFunctionExpression > server > should skip top-level values for scope 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "use-server-directive/runtime";
 import { value } from "./example.ts?use-server-directive=0.ts";
 const outer = () => {
   const example = async () => {
@@ -376,7 +376,7 @@ export default entry_1("/__server/bb5fd6ee-0-example", root_1);",
 
 exports[`ArrowFunctionExpression > server > should transform valid server functions 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "use-server-directive/runtime";
 const example = async () => {
   const [type_1, result_1] = await $$func_1((await import("./example.ts?use-server-directive=1.ts")).default, null)();
   if (type_1 === 2) {
@@ -459,7 +459,7 @@ export default entry_1("/__server/bb5fd6ee-0-example", root_1);",
 
 exports[`ArrowFunctionExpression > server > should transform valid server functions with scope 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "use-server-directive/runtime";
 const outer = () => {
   const value = 'foo bar';
   const example = async () => {

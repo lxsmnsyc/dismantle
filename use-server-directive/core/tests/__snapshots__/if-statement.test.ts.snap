@@ -40,7 +40,7 @@ exports[`IfStatement > client > should skip server if statements in non-async fu
 
 exports[`IfStatement > client > should skip top-level values for scope 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "use-server-directive/runtime";
 import { value } from "./example.ts?use-server-directive=0.ts";
 if (cond()) {
   const [type_1, result_1] = await $$func_1((await import("./example.ts?use-server-directive=1.ts")).default, null)();
@@ -112,7 +112,7 @@ export default entry_1("/__server/bb5fd6ee-0-anonymous");",
 
 exports[`IfStatement > client > should transform valid server functions with scope 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "use-server-directive/runtime";
 async function foo() {
   const value = 'foo bar';
   if (cond()) {
@@ -172,7 +172,7 @@ export default entry_1("/__server/bb5fd6ee-0-foo");",
 
 exports[`IfStatement > client > should transform valid server if statements 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "use-server-directive/runtime";
 if (cond()) {
   const [type_1, result_1] = await $$func_1((await import("./example.ts?use-server-directive=0.ts")).default, null)();
 }",
@@ -262,7 +262,7 @@ exports[`IfStatement > server > should skip server if statements in non-async fu
 
 exports[`IfStatement > server > should skip top-level values for scope 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "use-server-directive/runtime";
 import { value } from "./example.ts?use-server-directive=0.ts";
 if (cond()) {
   const [type_1, result_1] = await $$func_1((await import("./example.ts?use-server-directive=2.ts")).default, null)();
@@ -365,7 +365,7 @@ export default entry_1("/__server/bb5fd6ee-0-anonymous", root_1);",
 
 exports[`IfStatement > server > should transform valid server functions with scope 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "use-server-directive/runtime";
 async function foo() {
   const value = 'foo bar';
   if (cond()) {
@@ -455,7 +455,7 @@ export default entry_1("/__server/bb5fd6ee-0-foo", root_1);",
 
 exports[`IfStatement > server > should transform valid server if statements 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "use-server-directive/runtime";
 if (cond()) {
   const [type_1, result_1] = await $$func_1((await import("./example.ts?use-server-directive=1.ts")).default, null)();
 }",

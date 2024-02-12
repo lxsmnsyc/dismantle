@@ -39,7 +39,7 @@ exports[`BlockStatement > client > should skip server block statements in non-as
 
 exports[`BlockStatement > client > should skip top-level values for scope 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "use-server-directive/runtime";
 import { value } from "./example.ts?use-server-directive=0.ts";
 {
   const [type_1, result_1] = await $$func_1((await import("./example.ts?use-server-directive=1.ts")).default, null)();
@@ -105,7 +105,7 @@ export default entry_1("/__server/bb5fd6ee-0-anonymous");",
 
 exports[`BlockStatement > client > should transform valid server block statements 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "use-server-directive/runtime";
 {
   const [type_1, result_1] = await $$func_1((await import("./example.ts?use-server-directive=0.ts")).default, null)();
 }",
@@ -151,7 +151,7 @@ export default entry_1("/__server/bb5fd6ee-0-anonymous");",
 
 exports[`BlockStatement > client > should transform valid server functions with scope 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "use-server-directive/runtime";
 async function foo() {
   const value = 'foo bar';
   {
@@ -247,7 +247,7 @@ exports[`BlockStatement > server > should skip server block statements in non-as
 
 exports[`BlockStatement > server > should skip top-level values for scope 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "use-server-directive/runtime";
 import { value } from "./example.ts?use-server-directive=0.ts";
 {
   const [type_1, result_1] = await $$func_1((await import("./example.ts?use-server-directive=2.ts")).default, null)();
@@ -344,7 +344,7 @@ export default entry_1("/__server/bb5fd6ee-0-anonymous", root_1);",
 
 exports[`BlockStatement > server > should transform valid server block statements 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "use-server-directive/runtime";
 {
   const [type_1, result_1] = await $$func_1((await import("./example.ts?use-server-directive=1.ts")).default, null)();
 }",
@@ -419,7 +419,7 @@ export default entry_1("/__server/bb5fd6ee-0-anonymous", root_1);",
 
 exports[`BlockStatement > server > should transform valid server functions with scope 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "use-server-directive/runtime";
 async function foo() {
   const value = 'foo bar';
   {
