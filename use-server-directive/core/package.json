@@ -62,6 +62,9 @@
       ],
       "runtime": [
         "./dist/types/runtime/index.d.ts"
+      ],
+      "preload": [
+        "./dist/types/preload/index.d.ts"
       ]
     }
   },
@@ -101,6 +104,15 @@
       "require": "./dist/cjs/production/runtime.cjs",
       "import": "./dist/esm/production/runtime.mjs",
       "types": "./dist/types/runtime/index.d.ts"
+    },
+    "./preload": {
+      "development": {
+        "require": "./dist/cjs/development/preload.cjs",
+        "import": "./dist/esm/development/preload.mjs"
+      },
+      "require": "./dist/cjs/production/preload.cjs",
+      "import": "./dist/esm/production/preload.mjs",
+      "types": "./dist/types/preload/index.d.ts"
     }
   }
 }

@@ -4,6 +4,7 @@
     "./compiler": "compiler/index.ts",
     "./client": "client/index.ts",
     "./server": "server/index.ts",
-    "./runtime": "runtime/index.ts"
+    "./runtime": "runtime/index.ts",
+    "./preload": "preload/index.ts"
   }
 }

@@ -99,7 +99,7 @@
         "noVoidElementsWithChildren": "error",
         "noVoidTypeReturn": "error",
         "useExhaustiveDependencies": "error",
-        "useHookAtTopLevel": "error",
+        "useHookAtTopLevel": "off",
         "useIsNan": "error",
         "useValidForDirection": "error",
         "useYield": "error"

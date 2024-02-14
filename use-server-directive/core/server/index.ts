@@ -5,11 +5,6 @@ import {
   getCrossReferenceHeader,
 } from 'seroval';
 import {
-  type ServerHandler,
-  USE_SERVER_DIRECTIVE_INDEX_HEADER,
-  USE_SERVER_DIRECTIVE_ID_HEADER,
-} from '../shared/utils';
-import {
   BlobPlugin,
   CustomEventPlugin,
   DOMExceptionPlugin,
@@ -20,9 +15,14 @@ import {
   ReadableStreamPlugin,
   RequestPlugin,
   ResponsePlugin,
-  URLSearchParamsPlugin,
   URLPlugin,
+  URLSearchParamsPlugin,
 } from 'seroval-plugins/web';
+import {
+  USE_SERVER_DIRECTIVE_ID_HEADER,
+  USE_SERVER_DIRECTIVE_INDEX_HEADER,
+  type ServerHandler,
+} from '../shared/utils';
 
 type HandlerRegistration = [
   id: string,
