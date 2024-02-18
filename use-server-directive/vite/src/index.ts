@@ -17,6 +17,51 @@ const DEFAULT_EXCLUDE = 'node_modules/**/*.{jsx,tsx,ts,js,mjs,cjs}';
 
 const VIRTUAL_MODULE = 'use-server-directive/preload';
 
+interface DeferredPromise<T> {
+  reference: Promise<T>;
+  resolve: (value: T) => void;
+  reject: (value: any) => void;
+}
+
+function createDeferredPromise<T>(): DeferredPromise<T> {
+  let resolve: DeferredPromise<T>['resolve'];
+  let reject: DeferredPromise<T>['reject'];
+
+  return {
+    reference: new Promise((res, rej) => {
+      resolve = res;
+      reject = rej;
+    }),
+    resolve(value) {
+      resolve(value);
+    },
+    reject(value) {
+      reject(value);
+    },
+  };
+}
+
+class Debouncer<T> {
+  promise: DeferredPromise<T>;
+
+  private timeout: ReturnType<typeof setTimeout> | undefined;
+
+  constructor(private source: () => T) {
+    this.promise = createDeferredPromise();
+    this.defer();
+  }
+
+  defer(): void {
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+      this.timeout = undefined;
+    }
+    this.timeout = setTimeout(() => {
+      this.promise.resolve(this.source());
+    }, 1000);
+  }
+}
+
 const useServerDirectivePlugin = (
   options: UseServerDirectivePluginOptions,
 ): Plugin[] => {
@@ -33,6 +78,11 @@ const useServerDirectivePlugin = (
   const entries: Record<Options['mode'], Set<string>> = {
     server: new Set(),
     client: new Set(),
+  };
+
+  const preload: Record<Options['mode'], Debouncer<string> | undefined> = {
+    server: undefined,
+    client: undefined,
   };
 
   return [
@@ -61,9 +111,11 @@ const useServerDirectivePlugin = (
       load(id, opts) {
         const mode = opts?.ssr ? 'server' : 'client';
         if (id === VIRTUAL_MODULE) {
-          return [...entries[mode]]
-            .map(entry => `import "${entry}";`)
-            .join('\n');
+          const current = new Debouncer(() =>
+            [...entries[mode]].map(entry => `import "${entry}";`).join('\n'),
+          );
+          preload[mode] = current;
+          return current.promise.reference;
         }
         return null;
       },
@@ -98,6 +150,10 @@ const useServerDirectivePlugin = (
       async transform(code, id, opts) {
         const mode = opts?.ssr ? 'server' : 'client';
         if (filter(id)) {
+          const preloader = preload[mode];
+          if (preloader) {
+            preloader.defer();
+          }
           const result = await compile(id, code, {
             ...options,
             mode,
