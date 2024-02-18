@@ -1,6 +1,6 @@
 import type { Options, Output } from 'use-server-directive/compiler';
 import { compile } from 'use-server-directive/compiler';
-import type { FilterPattern, Plugin } from 'vite';
+import type { FilterPattern, Plugin, ViteDevServer } from 'vite';
 import { createFilter } from 'vite';
 
 export interface UseServerDirectivePluginFilter {
@@ -85,12 +85,17 @@ const useServerDirectivePlugin = (
     client: undefined,
   };
 
+  let currentServer: ViteDevServer;
+
   return [
     {
       name: 'use-server-directive/setup',
       enforce: 'pre',
       configResolved(config) {
         env = config.mode !== 'production' ? 'development' : 'production';
+      },
+      configureServer(server) {
+        currentServer = server;
       },
       buildStart() {
         files.client.clear();
@@ -149,28 +154,36 @@ const useServerDirectivePlugin = (
       name: 'use-server-directive/compiler',
       async transform(code, id, opts) {
         const mode = opts?.ssr ? 'server' : 'client';
-        if (filter(id)) {
-          const preloader = preload[mode];
-          if (preloader) {
-            preloader.defer();
-          }
-          const result = await compile(id, code, {
-            ...options,
-            mode,
-            env,
-          });
-          for (const [file, content] of result.files) {
-            files[mode].set(file, content);
-          }
-          for (const entry of result.entries) {
-            entries[mode].add(entry);
-          }
-          return {
-            code: result.code || '',
-            map: result.map,
-          };
+        if (!filter(id)) {
+          return null;
         }
-        return null;
+        const preloader = preload[mode];
+        if (preloader) {
+          preloader.defer();
+        }
+        const result = await compile(id, code, {
+          ...options,
+          mode,
+          env,
+        });
+        for (const [file, content] of result.files) {
+          files[mode].set(file, content);
+        }
+        for (const entry of result.entries) {
+          entries[mode].add(entry);
+        }
+
+        if (currentServer) {
+          const target =
+            currentServer.moduleGraph.getModuleById(VIRTUAL_MODULE);
+          if (target) {
+            currentServer.moduleGraph.invalidateModule(target);
+          }
+        }
+        return {
+          code: result.code || '',
+          map: result.map,
+        };
       },
     },
   ];
