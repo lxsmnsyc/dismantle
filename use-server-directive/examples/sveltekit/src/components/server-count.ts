@@ -3,7 +3,7 @@ const prefix = 'Server Count';
 export async function serverCount(value: number) {
   'use server';
 
-  console.log('Received', value);
+  console.log('Received', prefix, value);
   const immediate = `${prefix}: ${value}`;
   return {
     immediate,
