@@ -9,7 +9,8 @@ export interface UseServerDirectivePluginFilter {
   exclude?: FilterPattern;
 }
 
-export interface UseServerDirectivePluginOptions extends Omit<Options, 'mode'> {
+export interface UseServerDirectivePluginOptions
+  extends Omit<Options, 'mode' | 'env'> {
   filter?: UseServerDirectivePluginFilter;
 }
 
@@ -91,7 +92,7 @@ const useServerDirectivePlugin = (
     options.filter?.exclude || DEFAULT_EXCLUDE,
   );
 
-  let env: UseServerDirectivePluginOptions['env'] = options.env;
+  let env: Options['env'];
 
   const manifest = createManifest();
 
