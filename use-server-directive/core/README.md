@@ -136,6 +136,16 @@ async function getMessage() {
 - [Astro](https://github.com/lxsmnsyc/dismantle/tree/main/use-server-directive/examples/astro)
 - [SvelteKit](https://github.com/lxsmnsyc/dismantle/tree/main/use-server-directive/examples/sveltekit)
 
+## Preloading
+
+There are instances where a server function is only imported through a dynamic import, which causes unspecified registration timing, wherein the function might be available on the client but not on the server.
+
+To allow registration of server functions immediately, you can import `use-server-directive/preload` on any server entrypoints that will load immediately when the server runs.
+
+```js
+import 'use-server-directive/preload';
+```
+
 ## Sponsors
 
 ![Sponsors](https://github.com/lxsmnsyc/sponsors/blob/main/sponsors.svg?raw=true)

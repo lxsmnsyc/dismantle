@@ -17,6 +17,9 @@ export default defineConfig({
     plugins: [
       useServerDirective({
         directive: 'use server',
+        filter: {
+          include: 'src/**/*.{ts,tsx}',
+        },
       }),
       inspect(),
     ],
