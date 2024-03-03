@@ -16,18 +16,12 @@
       "types": "./dist/types/index.d.ts"
     }
   },
-  "files": [
-    "dist",
-    "src"
-  ],
+  "files": ["dist", "src"],
   "engines": {
     "node": ">=10"
   },
   "license": "MIT",
-  "keywords": [
-    "pridepack",
-    "babel"
-  ],
+  "keywords": ["pridepack", "babel"],
   "devDependencies": {
     "@types/node": "^20.11.24",
     "pridepack": "2.6.0",
@@ -49,12 +43,12 @@
   },
   "description": "Universal \"use server\" functions",
   "repository": {
-    "url": "https://github.com/lxsmnsyc/use-server-directive.git",
+    "url": "https://github.com/lxsmnsyc/dismantle.git",
     "type": "git"
   },
-  "homepage": "https://github.com/lxsmnsyc/use-server-directive/tree/main/packages/vite",
+  "homepage": "https://github.com/lxsmnsyc/dismantle/tree/main/use-server-directive/core",
   "bugs": {
-    "url": "https://github.com/lxsmnsyc/use-server-directive/issues"
+    "url": "https://github.com/lxsmnsyc/dismantle/issues"
   },
   "publishConfig": {
     "access": "public"

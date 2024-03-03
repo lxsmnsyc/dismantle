@@ -1,6 +1,6 @@
 # vite-plugin-use-server-directive
 
-> Vite plugin for [`use-server-directive`](https://github.com/lxsmnsyc/use-server-directive)
+> Vite plugin for [`use-server-directive`](https://github.com/lxsmnsyc/dismantle/tree/main/use-server-directive/core)
 
 [![NPM](https://img.shields.io/npm/v/vite-plugin-use-server-directive.svg)](https://www.npmjs.com/package/vite-plugin-use-server-directive) [![JavaScript Style Guide](https://badgen.net/badge/code%20style/airbnb/ff5a5f?icon=airbnb)](https://github.com/airbnb/javascript)
 
