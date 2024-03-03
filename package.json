@@ -4,7 +4,7 @@
   "workspaces": ["packages/*", "examples/*", "playground"],
   "devDependencies": {
     "@biomejs/biome": "^1.5.3",
-    "lerna": "^8.0.2",
+    "lerna": "^8.1.2",
     "typescript": "^5.3.3"
   }
 }
