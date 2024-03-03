@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-use-server-directive",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "type": "module",
   "types": "./dist/types/index.d.ts",
   "main": "./dist/cjs/production/index.cjs",
@@ -33,7 +33,7 @@
     "pridepack": "2.6.0",
     "tslib": "^2.6.2",
     "typescript": "^5.3.3",
-    "use-server-directive": "0.4.0",
+    "use-server-directive": "0.4.1",
     "vite": "^5.1.4"
   },
   "peerDependencies": {
