@@ -129,7 +129,7 @@ async function getMessage() {
 
 ## Integrations
 
-- [Unplugin](https://github.com/lxsmnsyc/dismantle/tree/main/use-server-directive/unplugin)
+- [Vite](https://github.com/lxsmnsyc/dismantle/tree/main/use-server-directive/vite)
 
 ## Examples
 
