@@ -26,6 +26,9 @@ importers:
       '@babel/generator':
         specifier: ^7.23.6
         version: 7.23.6
+      '@babel/traverse':
+        specifier: ^7.24.0
+        version: 7.24.0
       '@babel/types':
         specifier: ^7.24.0
         version: 7.24.0
@@ -36,6 +39,9 @@ importers:
       '@types/babel__generator':
         specifier: ^7.6.8
         version: 7.6.8
+      '@types/babel__traverse':
+        specifier: ^7.20.5
+        version: 7.20.5
       '@types/node':
         specifier: ^20.11.24
         version: 20.11.24
@@ -357,7 +363,7 @@ packages:
     resolution: {integrity: sha512-OErEqsrxjZTJciZ4Oo+eoZqeW9UIiOcuYKRJA4ZAgV9myA+pOXhhmpfNCKjEH/auVfEYVFJ6y1Tc4r0eIApqiw==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      '@babel/template': 7.22.15
+      '@babel/template': 7.24.0
       '@babel/types': 7.24.0
 
   /@babel/helper-hoist-variables@7.22.5:
@@ -474,14 +480,6 @@ packages:
       '@babel/plugin-syntax-jsx': 7.23.3(@babel/core@7.24.0)
       '@babel/types': 7.24.0
 
-  /@babel/template@7.22.15:
-    resolution: {integrity: sha512-QPErUVm4uyJa60rkI73qneDacvdvzxshT3kksGqlGWYdOTIUOwJ7RDUL8sGqslY1uXWSL6xMFKEXDS3ox2uF0w==}
-    engines: {node: '>=6.9.0'}
-    dependencies:
-      '@babel/code-frame': 7.23.5
-      '@babel/parser': 7.23.6
-      '@babel/types': 7.24.0
-
   /@babel/template@7.24.0:
     resolution: {integrity: sha512-Bkf2q8lMB0AFpX0NFEqSbx1OkTHf0f+0j82mkw+ZpzBnkk7e9Ql0891vlfgi+kHwOk8tQjiQHpqh4LaSa0fKEA==}
     engines: {node: '>=6.9.0'}
@@ -489,23 +487,6 @@ packages:
       '@babel/code-frame': 7.23.5
       '@babel/parser': 7.24.0
       '@babel/types': 7.24.0
-
-  /@babel/traverse@7.23.7:
-    resolution: {integrity: sha512-tY3mM8rH9jM0YHFGyfC0/xf+SB5eKUu7HPj7/k3fpi9dAlsMc5YbQvDi0Sh2QTPXqMhyaAtzAr807TIyfQrmyg==}
-    engines: {node: '>=6.9.0'}
-    dependencies:
-      '@babel/code-frame': 7.23.5
-      '@babel/generator': 7.23.6
-      '@babel/helper-environment-visitor': 7.22.20
-      '@babel/helper-function-name': 7.23.0
-      '@babel/helper-hoist-variables': 7.22.5
-      '@babel/helper-split-export-declaration': 7.22.6
-      '@babel/parser': 7.23.6
-      '@babel/types': 7.24.0
-      debug: 4.3.4
-      globals: 11.12.0
-    transitivePeerDependencies:
-      - supports-color
 
   /@babel/traverse@7.24.0:
     resolution: {integrity: sha512-HfuJlI8qq3dEDmNU5ChzzpZRWq+oxCZQyMzIMEqLho+AQnhMnKQUzH6ydo3RBl/YjPCuk68Y6s0Gx0AeyULiWw==}
@@ -1888,7 +1869,7 @@ packages:
       '@babel/generator': 7.23.6
       '@babel/parser': 7.23.6
       '@babel/plugin-transform-react-jsx': 7.23.4(@babel/core@7.24.0)
-      '@babel/traverse': 7.23.7
+      '@babel/traverse': 7.24.0
       '@babel/types': 7.24.0
       '@types/babel__core': 7.20.5
       acorn: 8.11.3
