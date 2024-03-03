@@ -21,6 +21,7 @@ export interface BlockDirectiveDefinition {
   pure?: boolean;
   directive: string;
   target: ImportDefinition;
+  idPrefix?: string;
 }
 
 export interface FunctionDirectiveDefinition {
@@ -30,6 +31,7 @@ export interface FunctionDirectiveDefinition {
   directive: string;
   target: ImportDefinition;
   handle: ImportDefinition;
+  idPrefix?: string;
 }
 
 export type DirectiveDefinition =
@@ -43,10 +45,12 @@ export interface FunctionCallDefinition {
   source: ImportDefinition;
   target: ImportDefinition;
   handle: ImportDefinition;
+  idPrefix?: string;
 }
 
 export interface Options {
   key: string;
+  runtime: string;
   mode: 'server' | 'client';
   env: 'production' | 'development';
   definitions: (

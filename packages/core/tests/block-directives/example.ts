@@ -1,6 +1,7 @@
 import type * as compiler from '../../src';
 
 export const SERVER: compiler.Options = {
+  runtime: 'my-example/runtime',
   key: 'my-example',
   definitions: [
     {
@@ -17,6 +18,7 @@ export const SERVER: compiler.Options = {
   env: 'development',
 };
 export const CLIENT: compiler.Options = {
+  runtime: 'my-example/runtime',
   key: 'my-example',
   definitions: [
     {

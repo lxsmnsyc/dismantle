@@ -2,6 +2,6 @@
   "target": "es2018",
   "entrypoints": {
     ".": "src/index.ts",
-    "./runtime": "src/index.ts"
+    "./runtime": "runtime/index.ts"
   }
 }

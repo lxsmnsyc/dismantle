@@ -1,0 +1,61 @@
+{
+  "name": "vite-plugin-use-server-directive",
+  "version": "0.3.1",
+  "type": "module",
+  "types": "./dist/types/index.d.ts",
+  "main": "./dist/cjs/production/index.cjs",
+  "module": "./dist/esm/production/index.mjs",
+  "exports": {
+    ".": {
+      "development": {
+        "require": "./dist/cjs/development/index.cjs",
+        "import": "./dist/esm/development/index.mjs"
+      },
+      "require": "./dist/cjs/production/index.cjs",
+      "import": "./dist/esm/production/index.mjs",
+      "types": "./dist/types/index.d.ts"
+    }
+  },
+  "files": ["dist", "src"],
+  "engines": {
+    "node": ">=10"
+  },
+  "license": "MIT",
+  "keywords": ["pridepack", "babel"],
+  "devDependencies": {
+    "@types/node": "^20.11.24",
+    "pridepack": "2.6.0",
+    "tslib": "^2.6.2",
+    "typescript": "^5.3.3",
+    "use-server-directive": "0.3.1",
+    "vite": "^5.1.4"
+  },
+  "peerDependencies": {
+    "use-server-directive": "^0.3.0",
+    "vite": "^4 || ^5"
+  },
+  "scripts": {
+    "prepublish": "pridepack clean && pridepack build",
+    "build": "pridepack build",
+    "type-check": "pridepack check",
+    "clean": "pridepack clean",
+    "watch": "pridepack watch"
+  },
+  "description": "Universal \"use server\" functions",
+  "repository": {
+    "url": "https://github.com/lxsmnsyc/use-server-directive.git",
+    "type": "git"
+  },
+  "homepage": "https://github.com/lxsmnsyc/use-server-directive/tree/main/packages/vite",
+  "bugs": {
+    "url": "https://github.com/lxsmnsyc/use-server-directive/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "Alexis Munsayac",
+  "private": false,
+  "typesVersions": {
+    "*": {}
+  }
+}

@@ -178,9 +178,10 @@ export function createEntryFile(
   path: babel.NodePath,
   rootFile: string | undefined,
   imported: ImportDefinition,
+  idPrefix?: string,
 ): string {
   // Create an ID
-  let id = `${ctx.blocks.hash}-${ctx.blocks.count++}`;
+  let id = `${idPrefix || ''}${ctx.blocks.hash}-${ctx.blocks.count++}`;
   if (ctx.options.env !== 'production') {
     id += `-${getDescriptiveName(path, 'anonymous')}`;
   }

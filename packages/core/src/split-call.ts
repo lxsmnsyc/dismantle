@@ -112,23 +112,29 @@ function getFunctionReplacement(
       t.variableDeclaration('const', [
         t.variableDeclarator(
           funcID,
-          t.callExpression(getImportIdentifier(ctx, path, HIDDEN_GENERATOR), [
-            source,
-            bindings.mutations.length
-              ? t.arrowFunctionExpression(
-                  [returnMutations],
-                  t.assignmentExpression(
-                    '=',
-                    t.objectPattern(
-                      bindings.mutations.map(item =>
-                        t.objectProperty(item, item, false, true),
+          t.callExpression(
+            getImportIdentifier(ctx, path, {
+              ...HIDDEN_GENERATOR,
+              source: ctx.options.runtime,
+            }),
+            [
+              source,
+              bindings.mutations.length
+                ? t.arrowFunctionExpression(
+                    [returnMutations],
+                    t.assignmentExpression(
+                      '=',
+                      t.objectPattern(
+                        bindings.mutations.map(item =>
+                          t.objectProperty(item, item, false, true),
+                        ),
                       ),
+                      returnMutations,
                     ),
-                    returnMutations,
-                  ),
-                )
-              : t.nullLiteral(),
-          ]),
+                  )
+                : t.nullLiteral(),
+            ],
+          ),
         ),
       ]),
     );
@@ -154,23 +160,29 @@ function getFunctionReplacement(
           t.arrayPattern([returnType, returnResult]),
           t.awaitExpression(
             t.callExpression(
-              t.callExpression(getImportIdentifier(ctx, path, HIDDEN_FUNC), [
-                source,
-                bindings.mutations.length
-                  ? t.arrowFunctionExpression(
-                      [returnMutations],
-                      t.assignmentExpression(
-                        '=',
-                        t.objectPattern(
-                          bindings.mutations.map(item =>
-                            t.objectProperty(item, item, false, true),
+              t.callExpression(
+                getImportIdentifier(ctx, path, {
+                  ...HIDDEN_FUNC,
+                  source: ctx.options.runtime,
+                }),
+                [
+                  source,
+                  bindings.mutations.length
+                    ? t.arrowFunctionExpression(
+                        [returnMutations],
+                        t.assignmentExpression(
+                          '=',
+                          t.objectPattern(
+                            bindings.mutations.map(item =>
+                              t.objectProperty(item, item, false, true),
+                            ),
                           ),
+                          returnMutations,
                         ),
-                        returnMutations,
-                      ),
-                    )
-                  : t.nullLiteral(),
-              ]),
+                      )
+                    : t.nullLiteral(),
+                ],
+              ),
               [t.arrayExpression(bindings.locals), t.spreadElement(rest)],
             ),
           ),
@@ -245,6 +257,7 @@ function replaceIsomorphicFunction(
           ),
     ),
     func.target,
+    func.idPrefix,
   );
 
   const source = generateUniqueName(path, 'source');
@@ -312,6 +325,7 @@ function replaceFunctionFromCall(
         )
       : undefined,
     func.target,
+    func.idPrefix,
   );
 
   return getFunctionReplacement(ctx, path, entryFile, bindings);
@@ -347,6 +361,7 @@ function replaceExpressionFromCall(
       ? createRootFile(ctx, bindings, path.node)
       : undefined,
     func.target,
+    func.idPrefix,
   );
 
   const rest = generateUniqueName(path, 'rest');

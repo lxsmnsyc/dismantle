@@ -1,0 +1,8 @@
+---
+import { handleRequest } from "use-server-directive/server";
+const result = await handleRequest(Astro.request);
+
+if (result) {
+  return result;
+}
+---

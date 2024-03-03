@@ -297,26 +297,34 @@ function getBlockDirectiveReplacement(
       t.variableDeclaration('const', [
         t.variableDeclarator(
           blockID,
-          t.callExpression(getImportIdentifier(ctx, path, HIDDEN_GENERATOR), [
-            t.memberExpression(
-              t.awaitExpression(t.importExpression(t.stringLiteral(entryFile))),
-              t.identifier('default'),
-            ),
-            bindings.mutations.length
-              ? t.arrowFunctionExpression(
-                  [returnMutations],
-                  t.assignmentExpression(
-                    '=',
-                    t.objectPattern(
-                      bindings.mutations.map(item =>
-                        t.objectProperty(item, item, false, true),
+          t.callExpression(
+            getImportIdentifier(ctx, path, {
+              ...HIDDEN_GENERATOR,
+              source: ctx.options.runtime,
+            }),
+            [
+              t.memberExpression(
+                t.awaitExpression(
+                  t.importExpression(t.stringLiteral(entryFile)),
+                ),
+                t.identifier('default'),
+              ),
+              bindings.mutations.length
+                ? t.arrowFunctionExpression(
+                    [returnMutations],
+                    t.assignmentExpression(
+                      '=',
+                      t.objectPattern(
+                        bindings.mutations.map(item =>
+                          t.objectProperty(item, item, false, true),
+                        ),
                       ),
+                      returnMutations,
                     ),
-                    returnMutations,
-                  ),
-                )
-              : t.nullLiteral(),
-          ]),
+                  )
+                : t.nullLiteral(),
+            ],
+          ),
         ),
       ]),
     );
@@ -343,28 +351,34 @@ function getBlockDirectiveReplacement(
           t.arrayPattern([returnType, returnResult]),
           t.awaitExpression(
             t.callExpression(
-              t.callExpression(getImportIdentifier(ctx, path, HIDDEN_FUNC), [
-                t.memberExpression(
-                  t.awaitExpression(
-                    t.importExpression(t.stringLiteral(entryFile)),
+              t.callExpression(
+                getImportIdentifier(ctx, path, {
+                  ...HIDDEN_FUNC,
+                  source: ctx.options.runtime,
+                }),
+                [
+                  t.memberExpression(
+                    t.awaitExpression(
+                      t.importExpression(t.stringLiteral(entryFile)),
+                    ),
+                    t.identifier('default'),
                   ),
-                  t.identifier('default'),
-                ),
-                bindings.mutations.length
-                  ? t.arrowFunctionExpression(
-                      [returnMutations],
-                      t.assignmentExpression(
-                        '=',
-                        t.objectPattern(
-                          bindings.mutations.map(item =>
-                            t.objectProperty(item, item, false, true),
+                  bindings.mutations.length
+                    ? t.arrowFunctionExpression(
+                        [returnMutations],
+                        t.assignmentExpression(
+                          '=',
+                          t.objectPattern(
+                            bindings.mutations.map(item =>
+                              t.objectProperty(item, item, false, true),
+                            ),
                           ),
+                          returnMutations,
                         ),
-                        returnMutations,
-                      ),
-                    )
-                  : t.nullLiteral(),
-              ]),
+                      )
+                    : t.nullLiteral(),
+                ],
+              ),
               bindings.locals,
             ),
           ),
@@ -404,6 +418,7 @@ function replaceBlockDirective(
         )
       : undefined,
     directive.target,
+    directive.idPrefix,
   );
   path.replaceWith(
     getBlockDirectiveReplacement(ctx, path, entryFile, bindings, halting),
