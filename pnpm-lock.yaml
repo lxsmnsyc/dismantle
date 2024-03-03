@@ -55,13 +55,13 @@ importers:
   playground:
     dependencies:
       dismantle:
-        specifier: 0.3.0
+        specifier: 0.4.0
         version: link:../packages/core
 
   use-server-directive/core:
     dependencies:
       dismantle:
-        specifier: ^0.3.0
+        specifier: 0.4.0
         version: link:../../packages/core
       seroval:
         specifier: ^1.0.4
@@ -104,7 +104,7 @@ importers:
         specifier: ^3.4.1
         version: 3.4.1
       use-server-directive:
-        specifier: 0.3.1
+        specifier: 0.4.0
         version: link:../../core
       vite-plugin-inspect:
         specifier: ^0.8.3
@@ -123,7 +123,7 @@ importers:
         specifier: ^5.3.3
         version: 5.3.3
       vite-plugin-use-server-directive:
-        specifier: 0.3.1
+        specifier: 0.4.0
         version: link:../../vite
 
   use-server-directive/examples/sveltekit:
@@ -132,7 +132,7 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2(svelte@4.2.12)(vite@5.1.4)
       use-server-directive:
-        specifier: 0.3.1
+        specifier: 0.4.0
         version: link:../../core
     devDependencies:
       '@sveltejs/adapter-auto':
@@ -163,7 +163,7 @@ importers:
         specifier: ^0.8.3
         version: 0.8.3(vite@5.1.4)
       vite-plugin-use-server-directive:
-        specifier: 0.3.1
+        specifier: 0.4.0
         version: link:../../vite
 
   use-server-directive/vite:
@@ -181,7 +181,7 @@ importers:
         specifier: ^5.3.3
         version: 5.3.3
       use-server-directive:
-        specifier: 0.3.1
+        specifier: 0.4.0
         version: link:../core
       vite:
         specifier: ^5.1.4

@@ -1,13 +1,18 @@
 {
   "name": "dismantle",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "type": "module",
-  "files": ["dist", "src"],
+  "files": [
+    "dist",
+    "src"
+  ],
   "engines": {
     "node": ">=10"
   },
   "license": "MIT",
-  "keywords": ["pridepack"],
+  "keywords": [
+    "pridepack"
+  ],
   "devDependencies": {
     "@types/babel__core": "^7.20.5",
     "@types/babel__generator": "^7.6.8",
@@ -49,7 +54,9 @@
   "private": false,
   "typesVersions": {
     "*": {
-      "runtime": ["./dist/types/runtime/index.d.ts"]
+      "runtime": [
+        "./dist/types/runtime/index.d.ts"
+      ]
     }
   },
   "exports": {
