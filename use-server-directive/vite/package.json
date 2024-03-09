@@ -32,7 +32,7 @@
     "@types/node": "^20.11.24",
     "pridepack": "2.6.0",
     "tslib": "^2.6.2",
-    "typescript": "^5.3.3",
+    "typescript": "^5.4.2",
     "use-server-directive": "0.4.2",
     "vite": "^5.1.4"
   },
