@@ -1,7 +1,13 @@
 {
   "name": "root",
   "private": true,
-  "workspaces": ["packages/*", "examples/*", "playground"],
+  "workspaces": [
+    "packages/*",
+    "examples/*",
+    "playground",
+    "use-server-directive/*",
+    "use-worker-directive/*"
+  ],
   "devDependencies": {
     "@biomejs/biome": "^1.6.0",
     "lerna": "^8.1.2",
