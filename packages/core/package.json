@@ -2,17 +2,12 @@
   "name": "dismantle",
   "version": "0.4.1",
   "type": "module",
-  "files": [
-    "dist",
-    "src"
-  ],
+  "files": ["dist", "src"],
   "engines": {
     "node": ">=10"
   },
   "license": "MIT",
-  "keywords": [
-    "pridepack"
-  ],
+  "keywords": ["pridepack"],
   "devDependencies": {
     "@types/babel__core": "^7.20.5",
     "@types/babel__generator": "^7.6.8",
@@ -40,7 +35,7 @@
     "dev": "pridepack dev",
     "test": "vitest"
   },
-  "description": "Universal \"use-server\" functions",
+  "description": "Universal semi-automatic code splitter",
   "repository": {
     "url": "https://github.com/lxsmnsyc/dismantle.git",
     "type": "git"
@@ -56,9 +51,7 @@
   "private": false,
   "typesVersions": {
     "*": {
-      "runtime": [
-        "./dist/types/runtime/index.d.ts"
-      ]
+      "runtime": ["./dist/types/runtime/index.d.ts"]
     }
   },
   "exports": {

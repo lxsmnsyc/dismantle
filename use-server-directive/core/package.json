@@ -2,17 +2,12 @@
   "name": "use-server-directive",
   "version": "0.4.2",
   "type": "module",
-  "files": [
-    "dist",
-    "src"
-  ],
+  "files": ["dist", "src"],
   "engines": {
     "node": ">=10"
   },
   "license": "MIT",
-  "keywords": [
-    "pridepack"
-  ],
+  "keywords": ["pridepack"],
   "devDependencies": {
     "@types/node": "^20.11.24",
     "pridepack": "2.6.0",
@@ -35,7 +30,7 @@
     "dev": "pridepack dev",
     "test": "vitest"
   },
-  "description": "Universal \"use-server\" functions",
+  "description": "Universal \"use server\" functions",
   "repository": {
     "url": "https://github.com/lxsmnsyc/dismantle.git",
     "type": "git"
@@ -51,21 +46,11 @@
   "private": false,
   "typesVersions": {
     "*": {
-      "compiler": [
-        "./dist/types/compiler/index.d.ts"
-      ],
-      "client": [
-        "./dist/types/client/index.d.ts"
-      ],
-      "server": [
-        "./dist/types/server/index.d.ts"
-      ],
-      "runtime": [
-        "./dist/types/runtime/index.d.ts"
-      ],
-      "preload": [
-        "./dist/types/preload/index.d.ts"
-      ]
+      "compiler": ["./dist/types/compiler/index.d.ts"],
+      "client": ["./dist/types/client/index.d.ts"],
+      "server": ["./dist/types/server/index.d.ts"],
+      "runtime": ["./dist/types/runtime/index.d.ts"],
+      "preload": ["./dist/types/preload/index.d.ts"]
     }
   },
   "exports": {
