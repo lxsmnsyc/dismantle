@@ -40,16 +40,16 @@ exports[`DoWhileStatement > client > should skip server do-while statements in n
 
 exports[`DoWhileStatement > client > should skip top-level values for scope 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
-import { value } from "./example.ts?my-example=0.ts";
+  "code": "import { $$func as $$func_1 } from "my-example/runtime";
+import { value } from "./example.ts?mode=client&my-example=0.ts";
 do {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?my-example=1.ts")).default, null)();
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=1.ts")).default, null)();
 } while (cond());",
   "entries": [
-    "/path/to/example.ts?my-example=1.ts",
+    "/path/to/example.ts?mode=client&my-example=1.ts",
   ],
   "files": Map {
-    "/path/to/example.ts?my-example=0.ts" => {
+    "/path/to/example.ts?mode=client&my-example=0.ts" => {
       "code": "export const value = 'foo bar';",
       "map": {
         "file": undefined,
@@ -67,7 +67,7 @@ do {
         "version": 3,
       },
     },
-    "/path/to/example.ts?my-example=1.ts" => {
+    "/path/to/example.ts?mode=client&my-example=1.ts" => {
       "code": "import { server as entry_1 } from "my-example/client";
 export default entry_1("26ecc3a5-0-anonymous");",
       "map": {
@@ -83,7 +83,7 @@ export default entry_1("26ecc3a5-0-anonymous");",
   },
   "map": {
     "file": undefined,
-    "mappings": ";;AAEM;EAAA,OAAAA,MAAA,EAAAC,QAAA,UAAAC,QAAA,gDAAAC,OAAA;AAAA,SAGSC,IAAI,CAAC,CAAC",
+    "mappings": ";;AAEM;EAAA,OAAAA,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;AAAA,SAGSC,IAAI,CAAC,CAAC",
     "names": [
       "type_1",
       "result_1",
@@ -112,18 +112,18 @@ export default entry_1("26ecc3a5-0-anonymous");",
 
 exports[`DoWhileStatement > client > should transform break statements 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "my-example/runtime";
 do {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?my-example=0.ts")).default, null)();
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)();
   if (type_1 === 0) {
     break;
   }
 } while (cond());",
   "entries": [
-    "/path/to/example.ts?my-example=0.ts",
+    "/path/to/example.ts?mode=client&my-example=0.ts",
   ],
   "files": Map {
-    "/path/to/example.ts?my-example=0.ts" => {
+    "/path/to/example.ts?mode=client&my-example=0.ts" => {
       "code": "import { server as entry_1 } from "my-example/client";
 export default entry_1("26ecc3a5-0-anonymous");",
       "map": {
@@ -139,7 +139,7 @@ export default entry_1("26ecc3a5-0-anonymous");",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AACM;EAAA,OAAAA,MAAA,EAAAC,QAAA,UAAAC,QAAA,gDAAAC,OAAA;EAAA,IAAAH,MAAA;IAAA;EAAA;AAAA,SAQSI,IAAI,CAAC,CAAC",
+    "mappings": ";AACM;EAAA,OAAAA,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;EAAA,IAAAH,MAAA;IAAA;EAAA;AAAA,SAQSI,IAAI,CAAC,CAAC",
     "names": [
       "type_1",
       "result_1",
@@ -172,18 +172,18 @@ export default entry_1("26ecc3a5-0-anonymous");",
 
 exports[`DoWhileStatement > client > should transform continue statements 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "my-example/runtime";
 do {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?my-example=0.ts")).default, null)();
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)();
   if (type_1 === 1) {
     continue;
   }
 } while (cond());",
   "entries": [
-    "/path/to/example.ts?my-example=0.ts",
+    "/path/to/example.ts?mode=client&my-example=0.ts",
   ],
   "files": Map {
-    "/path/to/example.ts?my-example=0.ts" => {
+    "/path/to/example.ts?mode=client&my-example=0.ts" => {
       "code": "import { server as entry_1 } from "my-example/client";
 export default entry_1("26ecc3a5-0-anonymous");",
       "map": {
@@ -199,7 +199,7 @@ export default entry_1("26ecc3a5-0-anonymous");",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AACM;EAAA,OAAAA,MAAA,EAAAC,QAAA,UAAAC,QAAA,gDAAAC,OAAA;EAAA,IAAAH,MAAA;IAAA;EAAA;AAAA,SAQSI,IAAI,CAAC,CAAC",
+    "mappings": ";AACM;EAAA,OAAAA,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;EAAA,IAAAH,MAAA;IAAA;EAAA;AAAA,SAQSI,IAAI,CAAC,CAAC",
     "names": [
       "type_1",
       "result_1",
@@ -232,9 +232,9 @@ export default entry_1("26ecc3a5-0-anonymous");",
 
 exports[`DoWhileStatement > client > should transform labeled break statements 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "my-example/runtime";
 foo: do {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?my-example=0.ts")).default, null)();
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)();
   if (type_1 === 0) {
     if (result_1 === "foo") {
       break foo;
@@ -242,10 +242,10 @@ foo: do {
   }
 } while (cond());",
   "entries": [
-    "/path/to/example.ts?my-example=0.ts",
+    "/path/to/example.ts?mode=client&my-example=0.ts",
   ],
   "files": Map {
-    "/path/to/example.ts?my-example=0.ts" => {
+    "/path/to/example.ts?mode=client&my-example=0.ts" => {
       "code": "import { server as entry_1 } from "my-example/client";
 export default entry_1("26ecc3a5-0-anonymous");",
       "map": {
@@ -261,7 +261,7 @@ export default entry_1("26ecc3a5-0-anonymous");",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AACMA,GAAG,EAAE;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,gDAAAC,OAAA;EAAA,IAAAH,MAAA;IAAA,IAAAC,QAAA;MAAA,MAAAF,GAAA;IAAA;EAAA;AAAA,SAQIK,IAAI,CAAC,CAAC",
+    "mappings": ";AACMA,GAAG,EAAE;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;EAAA,IAAAH,MAAA;IAAA,IAAAC,QAAA;MAAA,MAAAF,GAAA;IAAA;EAAA;AAAA,SAQIK,IAAI,CAAC,CAAC",
     "names": [
       "foo",
       "type_1",
@@ -295,9 +295,9 @@ export default entry_1("26ecc3a5-0-anonymous");",
 
 exports[`DoWhileStatement > client > should transform labeled continue statements 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "my-example/runtime";
 foo: do {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?my-example=0.ts")).default, null)();
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)();
   if (type_1 === 1) {
     if (result_1 === "foo") {
       continue foo;
@@ -305,10 +305,10 @@ foo: do {
   }
 } while (cond());",
   "entries": [
-    "/path/to/example.ts?my-example=0.ts",
+    "/path/to/example.ts?mode=client&my-example=0.ts",
   ],
   "files": Map {
-    "/path/to/example.ts?my-example=0.ts" => {
+    "/path/to/example.ts?mode=client&my-example=0.ts" => {
       "code": "import { server as entry_1 } from "my-example/client";
 export default entry_1("26ecc3a5-0-anonymous");",
       "map": {
@@ -324,7 +324,7 @@ export default entry_1("26ecc3a5-0-anonymous");",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AACMA,GAAG,EAAE;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,gDAAAC,OAAA;EAAA,IAAAH,MAAA;IAAA,IAAAC,QAAA;MAAA,SAAAF,GAAA;IAAA;EAAA;AAAA,SAQIK,IAAI,CAAC,CAAC",
+    "mappings": ";AACMA,GAAG,EAAE;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;EAAA,IAAAH,MAAA;IAAA,IAAAC,QAAA;MAAA,SAAAF,GAAA;IAAA;EAAA;AAAA,SAQIK,IAAI,CAAC,CAAC",
     "names": [
       "foo",
       "type_1",
@@ -358,15 +358,15 @@ export default entry_1("26ecc3a5-0-anonymous");",
 
 exports[`DoWhileStatement > client > should transform valid server do-while statements 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "my-example/runtime";
 do {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?my-example=0.ts")).default, null)();
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)();
 } while (cond());",
   "entries": [
-    "/path/to/example.ts?my-example=0.ts",
+    "/path/to/example.ts?mode=client&my-example=0.ts",
   ],
   "files": Map {
-    "/path/to/example.ts?my-example=0.ts" => {
+    "/path/to/example.ts?mode=client&my-example=0.ts" => {
       "code": "import { server as entry_1 } from "my-example/client";
 export default entry_1("26ecc3a5-0-anonymous");",
       "map": {
@@ -382,7 +382,7 @@ export default entry_1("26ecc3a5-0-anonymous");",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AACM;EAAA,OAAAA,MAAA,EAAAC,QAAA,UAAAC,QAAA,gDAAAC,OAAA;AAAA,SAGSC,IAAI,CAAC,CAAC",
+    "mappings": ";AACM;EAAA,OAAAA,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;AAAA,SAGSC,IAAI,CAAC,CAAC",
     "names": [
       "type_1",
       "result_1",
@@ -410,18 +410,18 @@ export default entry_1("26ecc3a5-0-anonymous");",
 
 exports[`DoWhileStatement > client > should transform valid server functions with scope 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "my-example/runtime";
 async function foo() {
   const value = 'foo bar';
   do {
-    const [type_1, result_1] = await $$func_1((await import("./example.ts?my-example=0.ts")).default, null)(value);
+    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)(value);
   } while (cond());
 }",
   "entries": [
-    "/path/to/example.ts?my-example=0.ts",
+    "/path/to/example.ts?mode=client&my-example=0.ts",
   ],
   "files": Map {
-    "/path/to/example.ts?my-example=0.ts" => {
+    "/path/to/example.ts?mode=client&my-example=0.ts" => {
       "code": "import { server as entry_1 } from "my-example/client";
 export default entry_1("26ecc3a5-0-foo");",
       "map": {
@@ -437,7 +437,7 @@ export default entry_1("26ecc3a5-0-foo");",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,gDAAAC,OAAA,QADMJ,KAAK;EAAA,SAIFK,IAAI,CAAC,CAAC;AACjB",
+    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA,QADMJ,KAAK;EAAA,SAIFK,IAAI,CAAC,CAAC;AACjB",
     "names": [
       "foo",
       "value",
@@ -508,16 +508,16 @@ exports[`DoWhileStatement > server > should skip server do-while statements in n
 
 exports[`DoWhileStatement > server > should skip top-level values for scope 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
-import { value } from "./example.ts?my-example=0.ts";
+  "code": "import { $$func as $$func_1 } from "my-example/runtime";
+import { value } from "./example.ts?mode=server&my-example=0.ts";
 do {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?my-example=2.ts")).default, null)();
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=2.ts")).default, null)();
 } while (cond());",
   "entries": [
-    "/path/to/example.ts?my-example=2.ts",
+    "/path/to/example.ts?mode=server&my-example=2.ts",
   ],
   "files": Map {
-    "/path/to/example.ts?my-example=0.ts" => {
+    "/path/to/example.ts?mode=server&my-example=0.ts" => {
       "code": "export const value = 'foo bar';",
       "map": {
         "file": undefined,
@@ -535,8 +535,8 @@ do {
         "version": 3,
       },
     },
-    "/path/to/example.ts?my-example=1.ts" => {
-      "code": "import { value } from "./example.ts?my-example=0.ts";
+    "/path/to/example.ts?mode=server&my-example=1.ts" => {
+      "code": "import { value } from "./example.ts?mode=server&my-example=0.ts";
 export default (async function () {
   try {
     await doStuff(value);
@@ -563,9 +563,9 @@ export default (async function () {
         "version": 3,
       },
     },
-    "/path/to/example.ts?my-example=2.ts" => {
+    "/path/to/example.ts?mode=server&my-example=2.ts" => {
       "code": "import { server as entry_1 } from "my-example/server";
-import root_1 from "./example.ts?my-example=1.ts";
+import root_1 from "./example.ts?mode=server&my-example=1.ts";
 export default entry_1("26ecc3a5-0-anonymous", root_1);",
       "map": {
         "file": undefined,
@@ -580,7 +580,7 @@ export default entry_1("26ecc3a5-0-anonymous", root_1);",
   },
   "map": {
     "file": undefined,
-    "mappings": ";;AAEM;EAAA,OAAAA,MAAA,EAAAC,QAAA,UAAAC,QAAA,gDAAAC,OAAA;AAAA,SAGSC,IAAI,CAAC,CAAC",
+    "mappings": ";;AAEM;EAAA,OAAAA,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;AAAA,SAGSC,IAAI,CAAC,CAAC",
     "names": [
       "type_1",
       "result_1",
@@ -604,25 +604,25 @@ export default entry_1("26ecc3a5-0-anonymous", root_1);",
     "version": 3,
   },
   "roots": [
-    "/path/to/example.ts?my-example=1.ts",
+    "/path/to/example.ts?mode=server&my-example=1.ts",
   ],
 }
 `;
 
 exports[`DoWhileStatement > server > should transform break statements 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "my-example/runtime";
 do {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?my-example=1.ts")).default, null)();
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)();
   if (type_1 === 0) {
     break;
   }
 } while (cond());",
   "entries": [
-    "/path/to/example.ts?my-example=1.ts",
+    "/path/to/example.ts?mode=server&my-example=1.ts",
   ],
   "files": Map {
-    "/path/to/example.ts?my-example=0.ts" => {
+    "/path/to/example.ts?mode=server&my-example=0.ts" => {
       "code": "export default (async function () {
   try {
     if (cond()) {
@@ -656,9 +656,9 @@ do {
         "version": 3,
       },
     },
-    "/path/to/example.ts?my-example=1.ts" => {
+    "/path/to/example.ts?mode=server&my-example=1.ts" => {
       "code": "import { server as entry_1 } from "my-example/server";
-import root_1 from "./example.ts?my-example=0.ts";
+import root_1 from "./example.ts?mode=server&my-example=0.ts";
 export default entry_1("26ecc3a5-0-anonymous", root_1);",
       "map": {
         "file": undefined,
@@ -673,7 +673,7 @@ export default entry_1("26ecc3a5-0-anonymous", root_1);",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AACM;EAAA,OAAAA,MAAA,EAAAC,QAAA,UAAAC,QAAA,gDAAAC,OAAA;EAAA,IAAAH,MAAA;IAAA;EAAA;AAAA,SAQSI,IAAI,CAAC,CAAC",
+    "mappings": ";AACM;EAAA,OAAAA,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;EAAA,IAAAH,MAAA;IAAA;EAAA;AAAA,SAQSI,IAAI,CAAC,CAAC",
     "names": [
       "type_1",
       "result_1",
@@ -701,25 +701,25 @@ export default entry_1("26ecc3a5-0-anonymous", root_1);",
     "version": 3,
   },
   "roots": [
-    "/path/to/example.ts?my-example=0.ts",
+    "/path/to/example.ts?mode=server&my-example=0.ts",
   ],
 }
 `;
 
 exports[`DoWhileStatement > server > should transform continue statements 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "my-example/runtime";
 do {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?my-example=1.ts")).default, null)();
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)();
   if (type_1 === 1) {
     continue;
   }
 } while (cond());",
   "entries": [
-    "/path/to/example.ts?my-example=1.ts",
+    "/path/to/example.ts?mode=server&my-example=1.ts",
   ],
   "files": Map {
-    "/path/to/example.ts?my-example=0.ts" => {
+    "/path/to/example.ts?mode=server&my-example=0.ts" => {
       "code": "export default (async function () {
   try {
     if (cond()) {
@@ -753,9 +753,9 @@ do {
         "version": 3,
       },
     },
-    "/path/to/example.ts?my-example=1.ts" => {
+    "/path/to/example.ts?mode=server&my-example=1.ts" => {
       "code": "import { server as entry_1 } from "my-example/server";
-import root_1 from "./example.ts?my-example=0.ts";
+import root_1 from "./example.ts?mode=server&my-example=0.ts";
 export default entry_1("26ecc3a5-0-anonymous", root_1);",
       "map": {
         "file": undefined,
@@ -770,7 +770,7 @@ export default entry_1("26ecc3a5-0-anonymous", root_1);",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AACM;EAAA,OAAAA,MAAA,EAAAC,QAAA,UAAAC,QAAA,gDAAAC,OAAA;EAAA,IAAAH,MAAA;IAAA;EAAA;AAAA,SAQSI,IAAI,CAAC,CAAC",
+    "mappings": ";AACM;EAAA,OAAAA,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;EAAA,IAAAH,MAAA;IAAA;EAAA;AAAA,SAQSI,IAAI,CAAC,CAAC",
     "names": [
       "type_1",
       "result_1",
@@ -798,16 +798,16 @@ export default entry_1("26ecc3a5-0-anonymous", root_1);",
     "version": 3,
   },
   "roots": [
-    "/path/to/example.ts?my-example=0.ts",
+    "/path/to/example.ts?mode=server&my-example=0.ts",
   ],
 }
 `;
 
 exports[`DoWhileStatement > server > should transform labeled break statements 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "my-example/runtime";
 foo: do {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?my-example=1.ts")).default, null)();
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)();
   if (type_1 === 0) {
     if (result_1 === "foo") {
       break foo;
@@ -815,10 +815,10 @@ foo: do {
   }
 } while (cond());",
   "entries": [
-    "/path/to/example.ts?my-example=1.ts",
+    "/path/to/example.ts?mode=server&my-example=1.ts",
   ],
   "files": Map {
-    "/path/to/example.ts?my-example=0.ts" => {
+    "/path/to/example.ts?mode=server&my-example=0.ts" => {
       "code": "export default (async function () {
   try {
     if (cond()) {
@@ -852,9 +852,9 @@ foo: do {
         "version": 3,
       },
     },
-    "/path/to/example.ts?my-example=1.ts" => {
+    "/path/to/example.ts?mode=server&my-example=1.ts" => {
       "code": "import { server as entry_1 } from "my-example/server";
-import root_1 from "./example.ts?my-example=0.ts";
+import root_1 from "./example.ts?mode=server&my-example=0.ts";
 export default entry_1("26ecc3a5-0-anonymous", root_1);",
       "map": {
         "file": undefined,
@@ -869,7 +869,7 @@ export default entry_1("26ecc3a5-0-anonymous", root_1);",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AACMA,GAAG,EAAE;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,gDAAAC,OAAA;EAAA,IAAAH,MAAA;IAAA,IAAAC,QAAA;MAAA,MAAAF,GAAA;IAAA;EAAA;AAAA,SAQIK,IAAI,CAAC,CAAC",
+    "mappings": ";AACMA,GAAG,EAAE;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;EAAA,IAAAH,MAAA;IAAA,IAAAC,QAAA;MAAA,MAAAF,GAAA;IAAA;EAAA;AAAA,SAQIK,IAAI,CAAC,CAAC",
     "names": [
       "foo",
       "type_1",
@@ -898,16 +898,16 @@ export default entry_1("26ecc3a5-0-anonymous", root_1);",
     "version": 3,
   },
   "roots": [
-    "/path/to/example.ts?my-example=0.ts",
+    "/path/to/example.ts?mode=server&my-example=0.ts",
   ],
 }
 `;
 
 exports[`DoWhileStatement > server > should transform labeled continue statements 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "my-example/runtime";
 foo: do {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?my-example=1.ts")).default, null)();
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)();
   if (type_1 === 1) {
     if (result_1 === "foo") {
       continue foo;
@@ -915,10 +915,10 @@ foo: do {
   }
 } while (cond());",
   "entries": [
-    "/path/to/example.ts?my-example=1.ts",
+    "/path/to/example.ts?mode=server&my-example=1.ts",
   ],
   "files": Map {
-    "/path/to/example.ts?my-example=0.ts" => {
+    "/path/to/example.ts?mode=server&my-example=0.ts" => {
       "code": "export default (async function () {
   try {
     if (cond()) {
@@ -952,9 +952,9 @@ foo: do {
         "version": 3,
       },
     },
-    "/path/to/example.ts?my-example=1.ts" => {
+    "/path/to/example.ts?mode=server&my-example=1.ts" => {
       "code": "import { server as entry_1 } from "my-example/server";
-import root_1 from "./example.ts?my-example=0.ts";
+import root_1 from "./example.ts?mode=server&my-example=0.ts";
 export default entry_1("26ecc3a5-0-anonymous", root_1);",
       "map": {
         "file": undefined,
@@ -969,7 +969,7 @@ export default entry_1("26ecc3a5-0-anonymous", root_1);",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AACMA,GAAG,EAAE;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,gDAAAC,OAAA;EAAA,IAAAH,MAAA;IAAA,IAAAC,QAAA;MAAA,SAAAF,GAAA;IAAA;EAAA;AAAA,SAQIK,IAAI,CAAC,CAAC",
+    "mappings": ";AACMA,GAAG,EAAE;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;EAAA,IAAAH,MAAA;IAAA,IAAAC,QAAA;MAAA,SAAAF,GAAA;IAAA;EAAA;AAAA,SAQIK,IAAI,CAAC,CAAC",
     "names": [
       "foo",
       "type_1",
@@ -998,22 +998,22 @@ export default entry_1("26ecc3a5-0-anonymous", root_1);",
     "version": 3,
   },
   "roots": [
-    "/path/to/example.ts?my-example=0.ts",
+    "/path/to/example.ts?mode=server&my-example=0.ts",
   ],
 }
 `;
 
 exports[`DoWhileStatement > server > should transform valid server do-while statements 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "my-example/runtime";
 do {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?my-example=1.ts")).default, null)();
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)();
 } while (cond());",
   "entries": [
-    "/path/to/example.ts?my-example=1.ts",
+    "/path/to/example.ts?mode=server&my-example=1.ts",
   ],
   "files": Map {
-    "/path/to/example.ts?my-example=0.ts" => {
+    "/path/to/example.ts?mode=server&my-example=0.ts" => {
       "code": "export default (async function () {
   try {
     await doStuff();
@@ -1039,9 +1039,9 @@ do {
         "version": 3,
       },
     },
-    "/path/to/example.ts?my-example=1.ts" => {
+    "/path/to/example.ts?mode=server&my-example=1.ts" => {
       "code": "import { server as entry_1 } from "my-example/server";
-import root_1 from "./example.ts?my-example=0.ts";
+import root_1 from "./example.ts?mode=server&my-example=0.ts";
 export default entry_1("26ecc3a5-0-anonymous", root_1);",
       "map": {
         "file": undefined,
@@ -1056,7 +1056,7 @@ export default entry_1("26ecc3a5-0-anonymous", root_1);",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AACM;EAAA,OAAAA,MAAA,EAAAC,QAAA,UAAAC,QAAA,gDAAAC,OAAA;AAAA,SAGSC,IAAI,CAAC,CAAC",
+    "mappings": ";AACM;EAAA,OAAAA,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;AAAA,SAGSC,IAAI,CAAC,CAAC",
     "names": [
       "type_1",
       "result_1",
@@ -1079,25 +1079,25 @@ export default entry_1("26ecc3a5-0-anonymous", root_1);",
     "version": 3,
   },
   "roots": [
-    "/path/to/example.ts?my-example=0.ts",
+    "/path/to/example.ts?mode=server&my-example=0.ts",
   ],
 }
 `;
 
 exports[`DoWhileStatement > server > should transform valid server functions with scope 1`] = `
 {
-  "code": "import { $$func as $$func_1 } from "dismantle/runtime";
+  "code": "import { $$func as $$func_1 } from "my-example/runtime";
 async function foo() {
   const value = 'foo bar';
   do {
-    const [type_1, result_1] = await $$func_1((await import("./example.ts?my-example=1.ts")).default, null)(value);
+    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)(value);
   } while (cond());
 }",
   "entries": [
-    "/path/to/example.ts?my-example=1.ts",
+    "/path/to/example.ts?mode=server&my-example=1.ts",
   ],
   "files": Map {
-    "/path/to/example.ts?my-example=0.ts" => {
+    "/path/to/example.ts?mode=server&my-example=0.ts" => {
       "code": "export default (async function (value) {
   try {
     await doStuff(value);
@@ -1124,9 +1124,9 @@ async function foo() {
         "version": 3,
       },
     },
-    "/path/to/example.ts?my-example=1.ts" => {
+    "/path/to/example.ts?mode=server&my-example=1.ts" => {
       "code": "import { server as entry_1 } from "my-example/server";
-import root_1 from "./example.ts?my-example=0.ts";
+import root_1 from "./example.ts?mode=server&my-example=0.ts";
 export default entry_1("26ecc3a5-0-foo", root_1);",
       "map": {
         "file": undefined,
@@ -1141,7 +1141,7 @@ export default entry_1("26ecc3a5-0-foo", root_1);",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,gDAAAC,OAAA,QADMJ,KAAK;EAAA,SAIFK,IAAI,CAAC,CAAC;AACjB",
+    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA,QADMJ,KAAK;EAAA,SAIFK,IAAI,CAAC,CAAC;AACjB",
     "names": [
       "foo",
       "value",
@@ -1169,7 +1169,7 @@ export default entry_1("26ecc3a5-0-foo", root_1);",
     "version": 3,
   },
   "roots": [
-    "/path/to/example.ts?my-example=0.ts",
+    "/path/to/example.ts?mode=server&my-example=0.ts",
   ],
 }
 `;
