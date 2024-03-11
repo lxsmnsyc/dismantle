@@ -1,0 +1,24 @@
+{
+  "name": "use-worker-directive-vite-demo",
+  "private": true,
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "start": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.2",
+    "vite": "^5.1.5",
+    "vite-plugin-inspect": "^0.8.3",
+    "vite-plugin-solid": "^2.10.1",
+    "vite-plugin-use-worker-directive": "0.4.2"
+  },
+  "dependencies": {
+    "solid-js": "^1.8.15",
+    "use-worker-directive": "0.4.2"
+  }
+}
