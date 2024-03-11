@@ -1,5 +1,5 @@
 {
-  "name": "sveltekit-demo",
+  "name": "use-server-directive-sveltekit-demo",
   "version": "0.4.2",
   "private": true,
   "scripts": {
@@ -21,7 +21,7 @@
     "svelte-check": "^3.6.6",
     "tslib": "^2.6.2",
     "typescript": "^5.3.2",
-    "vite": "^5.1.4",
+    "vite": "^5.1.5",
     "vite-plugin-inspect": "^0.8.3",
     "vite-plugin-use-server-directive": "0.4.2"
   },

@@ -16,25 +16,19 @@
       "types": "./dist/types/index.d.ts"
     }
   },
-  "files": [
-    "dist",
-    "src"
-  ],
+  "files": ["dist", "src"],
   "engines": {
     "node": ">=10"
   },
   "license": "MIT",
-  "keywords": [
-    "pridepack",
-    "babel"
-  ],
+  "keywords": ["pridepack", "babel"],
   "devDependencies": {
     "@types/node": "^20.11.24",
     "pridepack": "2.6.0",
     "tslib": "^2.6.2",
     "typescript": "^5.4.2",
     "use-server-directive": "0.4.2",
-    "vite": "^5.1.4"
+    "vite": "^5.1.5"
   },
   "peerDependencies": {
     "use-server-directive": "^0.3.0",

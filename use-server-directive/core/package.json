@@ -17,8 +17,8 @@
   },
   "dependencies": {
     "dismantle": "0.4.1",
-    "seroval": "^1.0.4",
-    "seroval-plugins": "^1.0.4"
+    "seroval": "^1.0.5",
+    "seroval-plugins": "^1.0.5"
   },
   "scripts": {
     "prepublishOnly": "pridepack clean && pridepack build",

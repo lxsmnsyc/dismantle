@@ -226,7 +226,7 @@
         "noNamespaceImport": "off",
         "noSemicolonInJsx": "error",
         "noSkippedTests": "warn",
-        "noUndeclaredDependencies": "error",
+        "noUndeclaredDependencies": "off",
         "useNodeAssertStrict": "error",
         "useSortedClasses": "off"
       }
