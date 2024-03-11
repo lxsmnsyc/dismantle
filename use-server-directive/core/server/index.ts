@@ -115,7 +115,7 @@ export async function handleRequest(
           URLPlugin,
         ],
       });
-      const result = callback(...args);
+      const result = callback.apply(null, args);
       return new Response(serializeToStream(instance, result), {
         headers: {
           'Content-Type': 'text/javascript',
