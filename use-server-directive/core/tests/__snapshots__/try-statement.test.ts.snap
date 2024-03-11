@@ -46,17 +46,17 @@ exports[`TryStatement > client > should skip server try statements in non-async 
 exports[`TryStatement > client > should skip top-level values for scope 1`] = `
 {
   "code": "import { $$func as $$func_1 } from "use-server-directive/runtime";
-import { value } from "./example.ts?use-server-directive=0.ts";
+import { value } from "./example.ts?mode=client&use-server-directive=0.ts";
 try {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?use-server-directive=1.ts")).default, null)();
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&use-server-directive=1.ts")).default, null)();
 } catch (err) {
   report(err);
 }",
   "entries": [
-    "example.ts?use-server-directive=1.ts",
+    "example.ts?mode=client&use-server-directive=1.ts",
   ],
   "files": Map {
-    "example.ts?use-server-directive=0.ts" => {
+    "example.ts?mode=client&use-server-directive=0.ts" => {
       "code": "export const value = 'foo bar';",
       "map": {
         "file": undefined,
@@ -74,7 +74,7 @@ try {
         "version": 3,
       },
     },
-    "example.ts?use-server-directive=1.ts" => {
+    "example.ts?mode=client&use-server-directive=1.ts" => {
       "code": "import { $$server as entry_1 } from "use-server-directive/client";
 export default entry_1("/__server/bb5fd6ee-0-anonymous");",
       "map": {
@@ -90,7 +90,7 @@ export default entry_1("/__server/bb5fd6ee-0-anonymous");",
   },
   "map": {
     "file": undefined,
-    "mappings": ";;AAEM;EAAA,OAAAA,MAAA,EAAAC,QAAA,UAAAC,QAAA,0DAAAC,OAAA;AAAA,EAGE,OAAOC,GAAG,EAAE;EACZC,MAAM,CAACD,GAAG,CAAC;AACb",
+    "mappings": ";;AAEM;EAAA,OAAAA,MAAA,EAAAC,QAAA,UAAAC,QAAA,sEAAAC,OAAA;AAAA,EAGE,OAAOC,GAAG,EAAE;EACZC,MAAM,CAACD,GAAG,CAAC;AACb",
     "names": [
       "type_1",
       "result_1",
@@ -126,16 +126,16 @@ exports[`TryStatement > client > should transform valid server functions with sc
 async function foo() {
   const value = 'foo bar';
   try {
-    const [type_1, result_1] = await $$func_1((await import("./example.ts?use-server-directive=0.ts")).default, null)(value);
+    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&use-server-directive=0.ts")).default, null)(value);
   } catch (err) {
     report(err);
   }
 }",
   "entries": [
-    "example.ts?use-server-directive=0.ts",
+    "example.ts?mode=client&use-server-directive=0.ts",
   ],
   "files": Map {
-    "example.ts?use-server-directive=0.ts" => {
+    "example.ts?mode=client&use-server-directive=0.ts" => {
       "code": "import { $$server as entry_1 } from "use-server-directive/client";
 export default entry_1("/__server/bb5fd6ee-0-foo");",
       "map": {
@@ -151,7 +151,7 @@ export default entry_1("/__server/bb5fd6ee-0-foo");",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,0DAAAC,OAAA,QADMJ,KAAK;EAAA,EAIT,OAAOK,GAAG,EAAE;IACZC,MAAM,CAACD,GAAG,CAAC;EACb;AACF",
+    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,sEAAAC,OAAA,QADMJ,KAAK;EAAA,EAIT,OAAOK,GAAG,EAAE;IACZC,MAAM,CAACD,GAAG,CAAC;EACb;AACF",
     "names": [
       "foo",
       "value",
@@ -189,15 +189,15 @@ exports[`TryStatement > client > should transform valid server try statements 1`
 {
   "code": "import { $$func as $$func_1 } from "use-server-directive/runtime";
 try {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?use-server-directive=0.ts")).default, null)();
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&use-server-directive=0.ts")).default, null)();
 } catch (err) {
   report(err);
 }",
   "entries": [
-    "example.ts?use-server-directive=0.ts",
+    "example.ts?mode=client&use-server-directive=0.ts",
   ],
   "files": Map {
-    "example.ts?use-server-directive=0.ts" => {
+    "example.ts?mode=client&use-server-directive=0.ts" => {
       "code": "import { $$server as entry_1 } from "use-server-directive/client";
 export default entry_1("/__server/bb5fd6ee-0-anonymous");",
       "map": {
@@ -213,7 +213,7 @@ export default entry_1("/__server/bb5fd6ee-0-anonymous");",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AACM;EAAA,OAAAA,MAAA,EAAAC,QAAA,UAAAC,QAAA,0DAAAC,OAAA;AAAA,EAGE,OAAOC,GAAG,EAAE;EACZC,MAAM,CAACD,GAAG,CAAC;AACb",
+    "mappings": ";AACM;EAAA,OAAAA,MAAA,EAAAC,QAAA,UAAAC,QAAA,sEAAAC,OAAA;AAAA,EAGE,OAAOC,GAAG,EAAE;EACZC,MAAM,CAACD,GAAG,CAAC;AACb",
     "names": [
       "type_1",
       "result_1",
@@ -288,17 +288,17 @@ exports[`TryStatement > server > should skip server try statements in non-async 
 exports[`TryStatement > server > should skip top-level values for scope 1`] = `
 {
   "code": "import { $$func as $$func_1 } from "use-server-directive/runtime";
-import { value } from "./example.ts?use-server-directive=0.ts";
+import { value } from "./example.ts?mode=server&use-server-directive=0.ts";
 try {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?use-server-directive=2.ts")).default, null)();
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&use-server-directive=2.ts")).default, null)();
 } catch (err) {
   report(err);
 }",
   "entries": [
-    "example.ts?use-server-directive=2.ts",
+    "example.ts?mode=server&use-server-directive=2.ts",
   ],
   "files": Map {
-    "example.ts?use-server-directive=0.ts" => {
+    "example.ts?mode=server&use-server-directive=0.ts" => {
       "code": "export const value = 'foo bar';",
       "map": {
         "file": undefined,
@@ -316,8 +316,8 @@ try {
         "version": 3,
       },
     },
-    "example.ts?use-server-directive=1.ts" => {
-      "code": "import { value } from "./example.ts?use-server-directive=0.ts";
+    "example.ts?mode=server&use-server-directive=1.ts" => {
+      "code": "import { value } from "./example.ts?mode=server&use-server-directive=0.ts";
 export default (async function () {
   try {
     await doStuff(value);
@@ -344,9 +344,9 @@ export default (async function () {
         "version": 3,
       },
     },
-    "example.ts?use-server-directive=2.ts" => {
+    "example.ts?mode=server&use-server-directive=2.ts" => {
       "code": "import { $$server as entry_1 } from "use-server-directive/server";
-import root_1 from "./example.ts?use-server-directive=1.ts";
+import root_1 from "./example.ts?mode=server&use-server-directive=1.ts";
 export default entry_1("/__server/bb5fd6ee-0-anonymous", root_1);",
       "map": {
         "file": undefined,
@@ -361,7 +361,7 @@ export default entry_1("/__server/bb5fd6ee-0-anonymous", root_1);",
   },
   "map": {
     "file": undefined,
-    "mappings": ";;AAEM;EAAA,OAAAA,MAAA,EAAAC,QAAA,UAAAC,QAAA,0DAAAC,OAAA;AAAA,EAGE,OAAOC,GAAG,EAAE;EACZC,MAAM,CAACD,GAAG,CAAC;AACb",
+    "mappings": ";;AAEM;EAAA,OAAAA,MAAA,EAAAC,QAAA,UAAAC,QAAA,sEAAAC,OAAA;AAAA,EAGE,OAAOC,GAAG,EAAE;EACZC,MAAM,CAACD,GAAG,CAAC;AACb",
     "names": [
       "type_1",
       "result_1",
@@ -388,7 +388,7 @@ export default entry_1("/__server/bb5fd6ee-0-anonymous", root_1);",
     "version": 3,
   },
   "roots": [
-    "example.ts?use-server-directive=1.ts",
+    "example.ts?mode=server&use-server-directive=1.ts",
   ],
 }
 `;
@@ -399,16 +399,16 @@ exports[`TryStatement > server > should transform valid server functions with sc
 async function foo() {
   const value = 'foo bar';
   try {
-    const [type_1, result_1] = await $$func_1((await import("./example.ts?use-server-directive=1.ts")).default, null)(value);
+    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&use-server-directive=1.ts")).default, null)(value);
   } catch (err) {
     report(err);
   }
 }",
   "entries": [
-    "example.ts?use-server-directive=1.ts",
+    "example.ts?mode=server&use-server-directive=1.ts",
   ],
   "files": Map {
-    "example.ts?use-server-directive=0.ts" => {
+    "example.ts?mode=server&use-server-directive=0.ts" => {
       "code": "export default (async function (value) {
   try {
     await doStuff(value);
@@ -435,9 +435,9 @@ async function foo() {
         "version": 3,
       },
     },
-    "example.ts?use-server-directive=1.ts" => {
+    "example.ts?mode=server&use-server-directive=1.ts" => {
       "code": "import { $$server as entry_1 } from "use-server-directive/server";
-import root_1 from "./example.ts?use-server-directive=0.ts";
+import root_1 from "./example.ts?mode=server&use-server-directive=0.ts";
 export default entry_1("/__server/bb5fd6ee-0-foo", root_1);",
       "map": {
         "file": undefined,
@@ -452,7 +452,7 @@ export default entry_1("/__server/bb5fd6ee-0-foo", root_1);",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,0DAAAC,OAAA,QADMJ,KAAK;EAAA,EAIT,OAAOK,GAAG,EAAE;IACZC,MAAM,CAACD,GAAG,CAAC;EACb;AACF",
+    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,sEAAAC,OAAA,QADMJ,KAAK;EAAA,EAIT,OAAOK,GAAG,EAAE;IACZC,MAAM,CAACD,GAAG,CAAC;EACb;AACF",
     "names": [
       "foo",
       "value",
@@ -483,7 +483,7 @@ export default entry_1("/__server/bb5fd6ee-0-foo", root_1);",
     "version": 3,
   },
   "roots": [
-    "example.ts?use-server-directive=0.ts",
+    "example.ts?mode=server&use-server-directive=0.ts",
   ],
 }
 `;
@@ -492,15 +492,15 @@ exports[`TryStatement > server > should transform valid server try statements 1`
 {
   "code": "import { $$func as $$func_1 } from "use-server-directive/runtime";
 try {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?use-server-directive=1.ts")).default, null)();
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&use-server-directive=1.ts")).default, null)();
 } catch (err) {
   report(err);
 }",
   "entries": [
-    "example.ts?use-server-directive=1.ts",
+    "example.ts?mode=server&use-server-directive=1.ts",
   ],
   "files": Map {
-    "example.ts?use-server-directive=0.ts" => {
+    "example.ts?mode=server&use-server-directive=0.ts" => {
       "code": "export default (async function () {
   try {
     await doStuff();
@@ -526,9 +526,9 @@ try {
         "version": 3,
       },
     },
-    "example.ts?use-server-directive=1.ts" => {
+    "example.ts?mode=server&use-server-directive=1.ts" => {
       "code": "import { $$server as entry_1 } from "use-server-directive/server";
-import root_1 from "./example.ts?use-server-directive=0.ts";
+import root_1 from "./example.ts?mode=server&use-server-directive=0.ts";
 export default entry_1("/__server/bb5fd6ee-0-anonymous", root_1);",
       "map": {
         "file": undefined,
@@ -543,7 +543,7 @@ export default entry_1("/__server/bb5fd6ee-0-anonymous", root_1);",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AACM;EAAA,OAAAA,MAAA,EAAAC,QAAA,UAAAC,QAAA,0DAAAC,OAAA;AAAA,EAGE,OAAOC,GAAG,EAAE;EACZC,MAAM,CAACD,GAAG,CAAC;AACb",
+    "mappings": ";AACM;EAAA,OAAAA,MAAA,EAAAC,QAAA,UAAAC,QAAA,sEAAAC,OAAA;AAAA,EAGE,OAAOC,GAAG,EAAE;EACZC,MAAM,CAACD,GAAG,CAAC;AACb",
     "names": [
       "type_1",
       "result_1",
@@ -569,7 +569,7 @@ export default entry_1("/__server/bb5fd6ee-0-anonymous", root_1);",
     "version": 3,
   },
   "roots": [
-    "example.ts?use-server-directive=0.ts",
+    "example.ts?mode=server&use-server-directive=0.ts",
   ],
 }
 `;
