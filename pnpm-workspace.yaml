@@ -3,3 +3,4 @@ packages:
 - 'examples/**/*'
 - 'playground'
 - 'use-server-directive/**/*'
+- 'use-worker-directive/**/*'

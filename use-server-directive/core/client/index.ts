@@ -14,8 +14,8 @@ import {
   URLSearchParamsPlugin,
 } from 'seroval-plugins/web';
 import {
-  USE_SERVER_DIRECTIVE_INDEX_HEADER,
   USE_SERVER_DIRECTIVE_ID_HEADER,
+  USE_SERVER_DIRECTIVE_INDEX_HEADER,
 } from '../shared/utils';
 
 export type MaybePromise<T> = T | Promise<T>;
@@ -132,7 +132,7 @@ async function deserializeResponse<T>(
         delete $R[instance];
       },
       () => {
-        // no-op
+        delete $R[instance];
       },
     );
   }

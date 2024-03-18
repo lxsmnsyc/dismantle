@@ -145,9 +145,8 @@ export function extractBindings(
 }
 
 function createVirtualFileName(ctx: StateContext) {
-  return `./${ctx.path.base}?${ctx.options.key}=${ctx.virtual.count++}${
-    ctx.path.ext
-  }`;
+  return `./${ctx.path.base}?mode=${ctx.options.mode}&${ctx.options.key}=${ctx
+    .virtual.count++}${ctx.path.ext}`;
 }
 
 export function createRootFile(
