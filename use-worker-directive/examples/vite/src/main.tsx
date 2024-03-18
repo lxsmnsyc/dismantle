@@ -1,7 +1,7 @@
 import { render } from 'solid-js/web';
 import { App } from './App';
 
-import 'use-worker-directive/setup-client';
+import 'use-worker-directive/setup';
 
 const root = document.getElementById('root');
 

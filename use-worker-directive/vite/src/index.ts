@@ -16,14 +16,14 @@ export interface UseWorkerDirectivePluginOptions
 const DEFAULT_INCLUDE = 'src/**/*.{jsx,tsx,ts,js,mjs,cjs}';
 const DEFAULT_EXCLUDE = 'node_modules/**/*.{jsx,tsx,ts,js,mjs,cjs}';
 
-const CLIENT_VIRTUAL_MODULE = 'use-worker-directive/setup-client';
-const SERVER_VIRTUAL_MODULE = 'use-worker-directive:server?worker';
+const CLIENT_VIRTUAL_MODULE = 'use-worker-directive/setup';
+const SERVER_VIRTUAL_MODULE = '/@use-worker-directive';
 
 const FOOTER_SCRIPT = `import { $$setup } from 'use-worker-directive/server';
             
 $$setup();`;
 
-const SETUP_SCRIPT = `import CustomWorker from '${SERVER_VIRTUAL_MODULE}';
+const SETUP_SCRIPT = `import CustomWorker from '${SERVER_VIRTUAL_MODULE}?worker';
 import { $$worker } from 'use-worker-directive/client';
 
 $$worker(new CustomWorker());`;
@@ -85,29 +85,19 @@ const useWorkerDirectivePlugin = (
 
   const manifest = createManifest();
 
-  const preload: Record<Options['mode'], Debouncer<string> | undefined> = {
-    server: undefined,
-    client: undefined,
-  };
+  let serverPreload: Debouncer<string> | undefined;
 
   const workerPlugin: Plugin[] = [
     {
-      name: 'use-worker-directive/setup',
-      enforce: 'pre',
+      name: 'use-worker-directive/setup-server',
       resolveId(source) {
-        if (source === SERVER_VIRTUAL_MODULE) {
-          return { id: SERVER_VIRTUAL_MODULE, moduleSideEffects: true };
-        }
-        if (source === CLIENT_VIRTUAL_MODULE) {
-          return { id: CLIENT_VIRTUAL_MODULE, moduleSideEffects: true };
+        if (source.startsWith(SERVER_VIRTUAL_MODULE)) {
+          return { id: source, moduleSideEffects: true };
         }
         return null;
       },
       load(id) {
-        if (
-          id === SERVER_VIRTUAL_MODULE ||
-          id === '/use-worker-directive:server?worker_file&type=module'
-        ) {
+        if (id.startsWith(SERVER_VIRTUAL_MODULE)) {
           const current = new Debouncer(() => {
             const result = [...manifest.server.entries]
               .map(entry => `import "${entry}";`)
@@ -115,9 +105,22 @@ const useWorkerDirectivePlugin = (
 
             return `${result}\n${FOOTER_SCRIPT}`;
           });
-          preload.server = current;
+          serverPreload = current;
           return current.promise.reference;
         }
+        return null;
+      },
+    },
+    {
+      name: 'use-worker-directive/setup-client',
+      enforce: 'pre',
+      resolveId(source) {
+        if (source === CLIENT_VIRTUAL_MODULE) {
+          return { id: CLIENT_VIRTUAL_MODULE, moduleSideEffects: true };
+        }
+        return null;
+      },
+      load(id) {
         if (id === CLIENT_VIRTUAL_MODULE) {
           return SETUP_SCRIPT;
         }
@@ -170,10 +173,6 @@ const useWorkerDirectivePlugin = (
         if (!filter(id)) {
           return null;
         }
-        const clientPreloader = preload.client;
-        if (clientPreloader) {
-          clientPreloader.defer();
-        }
         const clientResult = await compile(id, code, {
           ...options,
           mode: 'client',
@@ -185,9 +184,8 @@ const useWorkerDirectivePlugin = (
           entries: new Set(clientResult.entries),
         });
 
-        const serverPreloader = preload.server;
-        if (serverPreloader) {
-          serverPreloader.defer();
+        if (serverPreload) {
+          serverPreload.defer();
         }
         const serverResult = await compile(id, code, {
           ...options,

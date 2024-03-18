@@ -63,10 +63,7 @@
       "runtime": [
         "./dist/types/runtime/index.d.ts"
       ],
-      "setup-client": [
-        "./dist/types/setup/index.d.ts"
-      ],
-      "setup-server": [
+      "setup": [
         "./dist/types/setup/index.d.ts"
       ]
     }
@@ -108,22 +105,13 @@
       "import": "./dist/esm/production/runtime.mjs",
       "types": "./dist/types/runtime/index.d.ts"
     },
-    "./setup-client": {
+    "./setup": {
       "development": {
-        "require": "./dist/cjs/development/setup-client.cjs",
-        "import": "./dist/esm/development/setup-client.mjs"
+        "require": "./dist/cjs/development/setup.cjs",
+        "import": "./dist/esm/development/setup.mjs"
       },
-      "require": "./dist/cjs/production/setup-client.cjs",
-      "import": "./dist/esm/production/setup-client.mjs",
-      "types": "./dist/types/setup/index.d.ts"
-    },
-    "./setup-server": {
-      "development": {
-        "require": "./dist/cjs/development/setup-server.cjs",
-        "import": "./dist/esm/development/setup-server.mjs"
-      },
-      "require": "./dist/cjs/production/setup-server.cjs",
-      "import": "./dist/esm/production/setup-server.mjs",
+      "require": "./dist/cjs/production/setup.cjs",
+      "import": "./dist/esm/production/setup.mjs",
       "types": "./dist/types/setup/index.d.ts"
     }
   }
