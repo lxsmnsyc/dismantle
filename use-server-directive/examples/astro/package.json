@@ -12,7 +12,7 @@
     "astro": "^4.3.5",
     "autoprefixer": "^10.4.17",
     "postcss": "^8.4.35",
-    "typescript": "^5.3.3",
+    "typescript": "^5.4.5",
     "vite-plugin-use-server-directive": "0.4.2"
   },
   "dependencies": {

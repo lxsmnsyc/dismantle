@@ -31,11 +31,17 @@ type HandlerRegistration = [
 
 const REGISTRATIONS = new Map<string, HandlerRegistration>();
 
-function createChunk(data: string): Uint8Array {
-  const bytes = data.length;
+function createChunk(data: string) {
+  const encodeData = new TextEncoder().encode(data);
+  const bytes = encodeData.length;
   const baseHex = bytes.toString(16);
-  const totalHex = '00000000'.substring(0, 8 - baseHex.length) + baseHex; // 32-bit
-  return new TextEncoder().encode(`;0x${totalHex};${data}`);
+  const totalHex = "00000000".substring(0, 8 - baseHex.length) + baseHex; // 32-bit
+  const head = new TextEncoder().encode(`;0x${totalHex};`);
+
+  const chunk = new Uint8Array(12 + bytes);
+  chunk.set(head);
+  chunk.set(encodeData, 12);
+  return chunk;
 }
 
 function serializeToStream<T>(instance: string, value: T): ReadableStream {
