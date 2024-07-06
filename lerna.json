@@ -1,5 +1,5 @@
 {
-  "npmClient": "pnpm",
+  "npmClient": "npm",
   "command": {
     "version": {
       "exact": true
