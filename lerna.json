@@ -1,13 +1,11 @@
 {
-  "npmClient": "pnpm",
+  "npmClient": "npm",
   "command": {
     "version": {
       "exact": true
     },
     "publish": {
-      "allowBranch": [
-        "main"
-      ],
+      "allowBranch": ["main"],
       "registry": "https://registry.npmjs.org/"
     }
   },
