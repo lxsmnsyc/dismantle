@@ -31,11 +31,11 @@ type HandlerRegistration = [
 
 const REGISTRATIONS = new Map<string, HandlerRegistration>();
 
-function createChunk(data: string) {
+function createChunk(data: string): Uint8Array {
   const encodeData = new TextEncoder().encode(data);
   const bytes = encodeData.length;
   const baseHex = bytes.toString(16);
-  const totalHex = "00000000".substring(0, 8 - baseHex.length) + baseHex; // 32-bit
+  const totalHex = '00000000'.substring(0, 8 - baseHex.length) + baseHex; // 32-bit
   const head = new TextEncoder().encode(`;0x${totalHex};`);
 
   const chunk = new Uint8Array(12 + bytes);
