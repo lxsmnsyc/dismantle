@@ -5,7 +5,7 @@
     "packages/*",
     "examples/*",
     "playground",
-    "use-server-directive/**/*"
+    "use-server-directive/*"
   ],
   "devDependencies": {
     "@biomejs/biome": "^1.7.0",
