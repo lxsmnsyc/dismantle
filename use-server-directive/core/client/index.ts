@@ -42,9 +42,8 @@ declare const $R: Record<string, unknown>;
 
 class SerovalChunkReader {
   private reader: ReadableStreamDefaultReader<Uint8Array>;
-  private buffer = '';
+  private buffer = new Uint8Array(0);
   private done = false;
-
   constructor(stream: ReadableStream<Uint8Array>) {
     this.reader = stream.getReader();
   }
@@ -56,13 +55,16 @@ class SerovalChunkReader {
       this.done = true;
     } else {
       // repopulate the buffer
-      this.buffer += new TextDecoder().decode(chunk.value);
+      const newBuffer = new Uint8Array(this.buffer.length + chunk.value.length);
+      newBuffer.set(this.buffer);
+      newBuffer.set(chunk.value, this.buffer.length);
+      this.buffer = newBuffer;
     }
   }
 
   async next(): Promise<IteratorResult<string>> {
     // Check if the buffer is empty
-    if (this.buffer === '') {
+    if (this.buffer.length === 0) {
       // if we are already done...
       if (this.done) {
         return {
@@ -78,7 +80,8 @@ class SerovalChunkReader {
     // The byte header tells us how big the expected data is
     // so we know how much data we should wait before we
     // deserialize the data
-    const bytes = Number.parseInt(this.buffer.substring(1, 11), 16); // ;0x00000000;
+    const head = new TextDecoder().decode(this.buffer.subarray(1, 11));
+    const bytes = Number.parseInt(head, 16); // ;0x00000000;
     // Check if the buffer has enough bytes to be parsed
     while (bytes > this.buffer.length - 12) {
       // If it's not enough, and the reader is done
@@ -90,9 +93,12 @@ class SerovalChunkReader {
       await this.readChunk();
     }
     // Extract the exact chunk as defined by the byte header
-    const partial = this.buffer.substring(12, 12 + bytes);
+    const partial = new TextDecoder().decode(
+      this.buffer.subarray(12, 12 + bytes),
+    );
     // The rest goes to the buffer
-    this.buffer = this.buffer.substring(12 + bytes);
+    this.buffer = this.buffer.subarray(12 + bytes);
+
     // Deserialize the chunk
     return {
       done: false,

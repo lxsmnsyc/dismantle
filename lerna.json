@@ -1,5 +1,5 @@
 {
-  "npmClient": "pnpm",
+  "npmClient": "npm",
   "command": {
     "version": {
       "exact": true
@@ -11,5 +11,5 @@
       "registry": "https://registry.npmjs.org/"
     }
   },
-  "version": "0.4.2"
+  "version": "0.4.3"
 }

@@ -9,8 +9,8 @@
     "use-worker-directive/*"
   ],
   "devDependencies": {
-    "@biomejs/biome": "^1.6.0",
-    "lerna": "^8.1.2",
-    "typescript": "^5.4.2"
+    "@biomejs/biome": "^1.8.3",
+    "lerna": "^8.1.7",
+    "typescript": "^5.5.4"
   }
 }

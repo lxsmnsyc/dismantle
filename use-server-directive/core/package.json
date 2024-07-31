@@ -1,24 +1,29 @@
 {
   "name": "use-server-directive",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "type": "module",
-  "files": ["dist", "src"],
+  "files": [
+    "dist",
+    "src"
+  ],
   "engines": {
     "node": ">=10"
   },
   "license": "MIT",
-  "keywords": ["pridepack"],
+  "keywords": [
+    "pridepack"
+  ],
   "devDependencies": {
-    "@types/node": "^20.11.24",
-    "pridepack": "2.6.0",
-    "tslib": "^2.6.2",
-    "typescript": "^5.4.2",
-    "vitest": "^1.3.1"
+    "@types/node": "^22.0.0",
+    "pridepack": "2.6.1",
+    "tslib": "^2.6.3",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
   },
   "dependencies": {
-    "dismantle": "0.4.1",
-    "seroval": "^1.0.5",
-    "seroval-plugins": "^1.0.5"
+    "dismantle": "0.4.3",
+    "seroval": "^1.1.1",
+    "seroval-plugins": "^1.1.1"
   },
   "scripts": {
     "prepublishOnly": "pridepack clean && pridepack build",
@@ -30,7 +35,7 @@
     "dev": "pridepack dev",
     "test": "vitest"
   },
-  "description": "Universal \"use server\" functions",
+  "description": "Universal \"use-server\" functions",
   "repository": {
     "url": "https://github.com/lxsmnsyc/dismantle.git",
     "type": "git"
@@ -46,11 +51,21 @@
   "private": false,
   "typesVersions": {
     "*": {
-      "compiler": ["./dist/types/compiler/index.d.ts"],
-      "client": ["./dist/types/client/index.d.ts"],
-      "server": ["./dist/types/server/index.d.ts"],
-      "runtime": ["./dist/types/runtime/index.d.ts"],
-      "preload": ["./dist/types/preload/index.d.ts"]
+      "compiler": [
+        "./dist/types/compiler/index.d.ts"
+      ],
+      "client": [
+        "./dist/types/client/index.d.ts"
+      ],
+      "server": [
+        "./dist/types/server/index.d.ts"
+      ],
+      "runtime": [
+        "./dist/types/runtime/index.d.ts"
+      ],
+      "preload": [
+        "./dist/types/preload/index.d.ts"
+      ]
     }
   },
   "exports": {

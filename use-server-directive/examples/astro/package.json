@@ -9,19 +9,15 @@
     "preview": "astro preview"
   },
   "devDependencies": {
-    "astro": "^4.3.5",
-    "autoprefixer": "^10.4.17",
-    "postcss": "^8.4.35",
-    "typescript": "^5.4.2",
+    "astro": "^4.12.3",
+    "typescript": "^5.5.4",
     "vite-plugin-use-server-directive": "0.4.2"
   },
   "dependencies": {
-    "@astrojs/node": "^8.2.0",
-    "@astrojs/solid-js": "^4.0.1",
-    "@astrojs/tailwind": "^5.1.0",
+    "@astrojs/node": "^8.3.2",
+    "@astrojs/solid-js": "^4.4.0",
     "solid-js": "^1.8.14",
-    "tailwindcss": "^3.4.1",
     "use-server-directive": "0.4.2",
-    "vite-plugin-inspect": "^0.8.3"
+    "vite-plugin-inspect": "^0.8.5"
   }
 }
