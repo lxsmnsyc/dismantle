@@ -138,7 +138,7 @@ async function deserializeResponse<T>(
         delete $R[instance];
       },
       () => {
-        // no-op
+        delete $R[instance];
       },
     );
   }
