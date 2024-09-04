@@ -20,7 +20,7 @@ pnpm add use-worker-directive
 
 ## Features
 
-### Server functions
+### Worker functions
 
 Like the original `"use worker"` directive, the compiler supports functions.
 
@@ -51,9 +51,9 @@ async function* doStuff(x, y) {
 ```
 
 > **NOTE**
-> Server functions are only valid for async functions.
+> Worker functions are only valid for async functions.
 
-### Server blocks
+### Worker blocks
 
 The original `"use worker"` is limited to functions, but what if you could mark block statements with the same directives?
 
@@ -76,7 +76,7 @@ if (someCond()) {
 - `do-while`
 - labeled statements
 
-Server blocks also supports `break`, `continue`, `return` and `throw` statements, as well as `yield` expressions and delegations.
+Worker blocks also supports `break`, `continue`, `return` and `throw` statements, as well as `yield` expressions and delegations.
 
 ```js
 for (const item of items) {
@@ -86,7 +86,7 @@ for (const item of items) {
 ```
 
 > **NOTE**
-> Server blocks are only supported within async functions and at top-level scope (since modules now support top-level `await`)
+> Worker blocks are only supported within async functions and at top-level scope (since modules now support top-level `await`)
 
 ### Closure extraction
 
