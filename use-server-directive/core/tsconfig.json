@@ -6,7 +6,9 @@
     "compiler",
     "client",
     "server",
-    "shared"
+    "shared",
+    "preload",
+    "runtime"
   ],
   "compilerOptions": {
     "module": "ESNext",
