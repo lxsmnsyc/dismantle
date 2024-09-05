@@ -2,32 +2,30 @@ import type * as babel from '@babel/core';
 import * as t from '@babel/types';
 import type { DirectiveDefinition, StateContext } from '../types';
 
-function getValidDirectiveFromString(
-  ctx: StateContext,
-  string: string,
-): DirectiveDefinition | undefined {
+function getValidDirectiveFromString<
+  T extends DirectiveDefinition['type'],
+  P extends Extract<DirectiveDefinition, { type: T }>,
+>(ctx: StateContext, type: T, string: string): P | undefined {
   for (let i = 0, len = ctx.options.definitions.length; i < len; i++) {
     const current = ctx.options.definitions[i];
-    switch (current.type) {
-      case 'block-directive':
-      case 'function-directive': {
-        if (current.directive === string) {
-          return current;
-        }
-        break;
-      }
+    if (current.type === type && current.directive === string) {
+      return current as P;
     }
   }
   return undefined;
 }
 
-function getDefinitionFromDirectives(
+export function getDefinitionFromDirectives<
+  T extends DirectiveDefinition['type'],
+  P extends Extract<DirectiveDefinition, { type: T }>,
+>(
   ctx: StateContext,
+  type: T,
   path: babel.NodePath<t.BlockStatement>,
-): DirectiveDefinition | undefined {
+): P | undefined {
   for (let i = 0, len = path.node.directives.length; i < len; i++) {
     const statement = path.node.directives[i].value.value;
-    const directive = getValidDirectiveFromString(ctx, statement);
+    const directive = getValidDirectiveFromString<T, P>(ctx, type, statement);
     if (directive) {
       return directive;
     }
@@ -35,18 +33,23 @@ function getDefinitionFromDirectives(
   return undefined;
 }
 
-function getDefinitionFromFauxDirectives(
+export function getDefinitionFromFauxDirectives<
+  T extends DirectiveDefinition['type'],
+  P extends Extract<DirectiveDefinition, { type: T }>,
+>(
   ctx: StateContext,
+  type: T,
   path: babel.NodePath<t.BlockStatement>,
-): DirectiveDefinition | undefined {
+): P | undefined {
   for (let i = 0, len = path.node.body.length; i < len; i++) {
     const statement = path.node.body[i];
     if (
       t.isExpressionStatement(statement) &&
       t.isStringLiteral(statement.expression)
     ) {
-      const directive = getValidDirectiveFromString(
+      const directive = getValidDirectiveFromString<T, P>(
         ctx,
+        type,
         statement.expression.value,
       );
       if (directive) {
@@ -57,20 +60,6 @@ function getDefinitionFromFauxDirectives(
     }
   }
   return undefined;
-}
-
-export function getDirectiveDefinitionFromBlock(
-  ctx: StateContext,
-  path: babel.NodePath<t.BlockStatement>,
-): DirectiveDefinition | undefined {
-  const parent = path.getFunctionParent();
-  if (parent && !parent.node.async) {
-    return undefined;
-  }
-  return (
-    getDefinitionFromDirectives(ctx, path) ||
-    getDefinitionFromFauxDirectives(ctx, path)
-  );
 }
 
 export function cleanBlockForDirectives(
