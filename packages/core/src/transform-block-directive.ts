@@ -3,8 +3,8 @@ import type * as t from '@babel/types';
 import { splitBlockDirective } from './split-block-directive';
 import type { BlockDirectiveDefinition, StateContext } from './types';
 import {
-  cleanBlockForDirectives,
-  cleanBlockForFauxDirectives,
+  cleanDirectives,
+  cleanFauxDirectives,
   getDefinitionFromDirectives,
   getDefinitionFromFauxDirectives,
 } from './utils/directive-check';
@@ -15,7 +15,7 @@ function getBlockDirectiveDefinition(
 ): BlockDirectiveDefinition | undefined {
   const definition = getDefinitionFromDirectives(ctx, 'block-directive', path);
   if (definition) {
-    cleanBlockForDirectives(path, definition);
+    cleanDirectives(path, definition);
     return definition;
   }
   const fauxDefinition = getDefinitionFromFauxDirectives(
@@ -24,7 +24,7 @@ function getBlockDirectiveDefinition(
     path,
   );
   if (fauxDefinition) {
-    cleanBlockForFauxDirectives(path, fauxDefinition);
+    cleanFauxDirectives(path, fauxDefinition);
     return fauxDefinition;
   }
   return undefined;

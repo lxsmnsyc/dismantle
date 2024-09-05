@@ -21,7 +21,7 @@ export function getDefinitionFromDirectives<
 >(
   ctx: StateContext,
   type: T,
-  path: babel.NodePath<t.BlockStatement>,
+  path: babel.NodePath<t.BlockStatement | t.Program>,
 ): P | undefined {
   for (let i = 0, len = path.node.directives.length; i < len; i++) {
     const statement = path.node.directives[i].value.value;
@@ -62,8 +62,8 @@ export function getDefinitionFromFauxDirectives<
   return undefined;
 }
 
-export function cleanBlockForDirectives(
-  path: babel.NodePath<t.BlockStatement>,
+export function cleanDirectives(
+  path: babel.NodePath<t.BlockStatement | t.Program>,
   definition: DirectiveDefinition,
 ): void {
   const newDirectives: t.Directive[] = [];
@@ -76,7 +76,7 @@ export function cleanBlockForDirectives(
   path.node.directives = newDirectives;
 }
 
-export function cleanBlockForFauxDirectives(
+export function cleanFauxDirectives(
   path: babel.NodePath<t.BlockStatement>,
   definition: DirectiveDefinition,
 ): void {

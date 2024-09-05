@@ -3,8 +3,8 @@ import * as t from '@babel/types';
 import { splitFunctionDirective } from './split-function-directive';
 import type { FunctionDirectiveDefinition, StateContext } from './types';
 import {
-  cleanBlockForDirectives,
-  cleanBlockForFauxDirectives,
+  cleanDirectives,
+  cleanFauxDirectives,
   getDefinitionFromDirectives,
   getDefinitionFromFauxDirectives,
 } from './utils/directive-check';
@@ -21,7 +21,7 @@ function getFunctionDirectiveDefinition(
     path,
   );
   if (definition) {
-    cleanBlockForDirectives(path, definition);
+    cleanDirectives(path, definition);
     return definition;
   }
   const fauxDefinition = getDefinitionFromFauxDirectives(
@@ -30,7 +30,7 @@ function getFunctionDirectiveDefinition(
     path,
   );
   if (fauxDefinition) {
-    cleanBlockForFauxDirectives(path, fauxDefinition);
+    cleanFauxDirectives(path, fauxDefinition);
     return fauxDefinition;
   }
   return undefined;
