@@ -1,7 +1,7 @@
 import type * as babel from '@babel/core';
 import * as t from '@babel/types';
 import type { StateContext } from '../types';
-import { getDirectiveDefinitionFromBlock } from './directive-check';
+import { getDefinitionFromDirectives } from './directive-check';
 import { isStatementTopLevel } from './is-statement-top-level';
 
 export function bubbleFunctionDeclaration(
@@ -13,8 +13,12 @@ export function bubbleFunctionDeclaration(
     const decl = path.node;
     // Check if declaration is FunctionDeclaration
     if (decl.id) {
-      const definition = getDirectiveDefinitionFromBlock(ctx, path.get('body'));
-      if (!definition || definition.type !== 'function-directive') {
+      const definition = getDefinitionFromDirectives(
+        ctx,
+        'function-directive',
+        path.get('body'),
+      );
+      if (!definition) {
         return;
       }
       const [tmp] = program.unshiftContainer(
