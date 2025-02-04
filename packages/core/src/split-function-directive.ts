@@ -305,7 +305,7 @@ function replaceFunctionDirective(
   const entryFile = createEntryFile(
     ctx,
     path,
-    ctx.options.mode === 'server' || directive.isomorphic
+    ctx.options.mode === 'server'
       ? createRootFile(
           ctx,
           bindings,
