@@ -23,6 +23,7 @@ const outer = () => {
       "code": "export const value = 'foo bar';",
       "map": {
         "file": undefined,
+        "ignoreList": [],
         "mappings": "aAEYA,KAAK,GAAG,SAAS",
         "names": [
           "value",
@@ -42,6 +43,7 @@ const outer = () => {
 export default entry_1("26ecc3a5-0-example");",
       "map": {
         "file": undefined,
+        "ignoreList": [],
         "mappings": "",
         "names": [],
         "sourceRoot": undefined,
@@ -53,6 +55,7 @@ export default entry_1("26ecc3a5-0-example");",
   },
   "map": {
     "file": undefined,
+    "ignoreList": [],
     "mappings": ";;AACM,SAASA,OAAO,QAAQ,YAAY;AAAC,SAAAC,KAAA;AAErC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,OAAO,GAAAC,UAAA;IAAA,MAAAC,QAAA,8DAAAC,OAAA;IAAA,0BAAAC,MAAA;MAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA,eAAAE,MAAA;MAAA,OAAAE,QAAA;IAAA;EAAA,EAEX;AACJ,CAAC",
     "names": [
       "server$",
@@ -109,6 +112,7 @@ const example = $$server_1( /*@dismantle skip*/async () => {
 export default entry_1("26ecc3a5-0-example");",
       "map": {
         "file": undefined,
+        "ignoreList": [],
         "mappings": "",
         "names": [],
         "sourceRoot": undefined,
@@ -120,6 +124,7 @@ export default entry_1("26ecc3a5-0-example");",
   },
   "map": {
     "file": undefined,
+    "ignoreList": [],
     "mappings": ";;AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,OAAO,GAAAC,UAAA;EAAA,MAAAC,QAAA,8DAAAC,OAAA;EAAA,0BAAAC,MAAA;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA,eAAAE,MAAA;IAAA,OAAAE,QAAA;EAAA;AAAA,EAEX",
     "names": [
       "server$",
@@ -174,6 +179,7 @@ const outer = () => {
 export default entry_1("26ecc3a5-0-example");",
       "map": {
         "file": undefined,
+        "ignoreList": [],
         "mappings": "",
         "names": [],
         "sourceRoot": undefined,
@@ -185,6 +191,7 @@ export default entry_1("26ecc3a5-0-example");",
   },
   "map": {
     "file": undefined,
+    "ignoreList": [],
     "mappings": ";;AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,MAAMC,OAAO,GAAAC,UAAA;IAAA,MAAAC,QAAA,8DAAAC,OAAA;IAAA,0BAAAC,MAAA;MAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA,SADPH,KAAK,MAAAK,MAAA;MAAA,OAAAE,QAAA;IAAA;EAAA,EAGT;AACJ,CAAC",
     "names": [
       "server$",
@@ -243,6 +250,7 @@ const outer = () => {
       "code": "export const value = 'foo bar';",
       "map": {
         "file": undefined,
+        "ignoreList": [],
         "mappings": "aAEYA,KAAK,GAAG,SAAS",
         "names": [
           "value",
@@ -269,6 +277,7 @@ export default (function ([]) {
 });",
       "map": {
         "file": undefined,
+        "ignoreList": [],
         "mappings": ";8BAI4C;EAAA;IAAA,WAC3BA,KAAK;EAAA,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AACd,CAAC",
         "names": [
           "value",
@@ -290,6 +299,7 @@ import root_1 from "./example.ts?mode=server&my-example=1.ts";
 export default entry_1("26ecc3a5-0-example", root_1);",
       "map": {
         "file": undefined,
+        "ignoreList": [],
         "mappings": "",
         "names": [],
         "sourceRoot": undefined,
@@ -301,6 +311,7 @@ export default entry_1("26ecc3a5-0-example", root_1);",
   },
   "map": {
     "file": undefined,
+    "ignoreList": [],
     "mappings": ";;AACM,SAASA,OAAO,QAAQ,YAAY;AAAC,SAAAC,KAAA;AAErC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,OAAO,GAAAC,UAAA;IAAA,MAAAC,QAAA,8DAAAC,OAAA;IAAA,0BAAAC,MAAA;MAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA,eAAAE,MAAA;MAAA,OAAAE,QAAA;IAAA;EAAA,EAEX;AACJ,CAAC",
     "names": [
       "server$",
@@ -365,6 +376,7 @@ const example = $$server_1( /*@dismantle skip*/async () => {
 });",
       "map": {
         "file": undefined,
+        "ignoreList": [],
         "mappings": "8BAE0C;EAAA;IAAA,WAC3B,SAAS;EAAA,SAAAA,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAClB,CAAC",
         "names": [
           "error_1",
@@ -385,6 +397,7 @@ import root_1 from "./example.ts?mode=server&my-example=0.ts";
 export default entry_1("26ecc3a5-0-example", root_1);",
       "map": {
         "file": undefined,
+        "ignoreList": [],
         "mappings": "",
         "names": [],
         "sourceRoot": undefined,
@@ -396,6 +409,7 @@ export default entry_1("26ecc3a5-0-example", root_1);",
   },
   "map": {
     "file": undefined,
+    "ignoreList": [],
     "mappings": ";;AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,OAAO,GAAAC,UAAA;EAAA,MAAAC,QAAA,8DAAAC,OAAA;EAAA,0BAAAC,MAAA;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA,eAAAE,MAAA;IAAA,OAAAE,QAAA;EAAA;AAAA,EAEX",
     "names": [
       "server$",
@@ -458,6 +472,7 @@ const outer = () => {
 });",
       "map": {
         "file": undefined,
+        "ignoreList": [],
         "mappings": "2BAGcA,KAAK,GACyB;EAAA;IAAA,WAC3BA,KAAK;EAAA,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AACd,CAAC",
         "names": [
           "value",
@@ -479,6 +494,7 @@ import root_1 from "./example.ts?mode=server&my-example=0.ts";
 export default entry_1("26ecc3a5-0-example", root_1);",
       "map": {
         "file": undefined,
+        "ignoreList": [],
         "mappings": "",
         "names": [],
         "sourceRoot": undefined,
@@ -490,6 +506,7 @@ export default entry_1("26ecc3a5-0-example", root_1);",
   },
   "map": {
     "file": undefined,
+    "ignoreList": [],
     "mappings": ";;AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,MAAMC,OAAO,GAAAC,UAAA;IAAA,MAAAC,QAAA,8DAAAC,OAAA;IAAA,0BAAAC,MAAA;MAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA,SADPH,KAAK,MAAAK,MAAA;MAAA,OAAAE,QAAA;IAAA;EAAA,EAGT;AACJ,CAAC",
     "names": [
       "server$",
