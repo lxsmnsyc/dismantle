@@ -1,27 +1,29 @@
 import type * as babel from '@babel/core';
+import type { Scope } from '@babel/traverse';
 import * as t from '@babel/types';
+import { unwrapPath } from './unwrap';
 
 function isForeignBinding(
-  source: babel.NodePath,
-  current: babel.NodePath,
+  source: Scope,
+  current: Scope,
   name: string,
   mode: 'block' | 'function',
 ): boolean {
-  if (current.scope.hasGlobal(name)) {
+  if (current.hasGlobal(name)) {
     return false;
   }
   if (source === current) {
     return true;
   }
-  if (current.scope.hasOwnBinding(name)) {
+  if (current.hasOwnBinding(name)) {
     if (mode === 'block') {
-      const binding = current.scope.getBinding(name);
+      const binding = current.getBinding(name);
       return !!binding && binding.kind === 'param';
     }
     return false;
   }
-  if (current.parentPath) {
-    return isForeignBinding(source, current.parentPath, name, mode);
+  if (current.parent) {
+    return isForeignBinding(source, current.parent, name, mode);
   }
   return true;
 }
@@ -42,6 +44,7 @@ export default function getForeignBindings(
   mode: 'block' | 'function' | 'expression',
 ): Set<string> {
   const identifiers = new Set<string>();
+  const rootScope = path.isFunction() ? path.scope.parent : path.scope;
   path.traverse({
     ReferencedIdentifier(p) {
       // Check identifiers that aren't in a TS expression
@@ -49,9 +52,21 @@ export default function getForeignBindings(
         !isInTypescript(p) &&
         (mode === 'expression'
           ? !path.scope.hasGlobal(p.node.name)
-          : isForeignBinding(path, p, p.node.name, mode))
+          : isForeignBinding(rootScope, p.scope, p.node.name, mode))
       ) {
         identifiers.add(p.node.name);
+      }
+    },
+    AssignmentExpression(p) {
+      const id = unwrapPath(p.get('left'), t.isIdentifier);
+      if (id) {
+        identifiers.add(id.node.name);
+      }
+    },
+    UnaryExpression(p) {
+      const id = unwrapPath(p.get('argument'), t.isIdentifier);
+      if (id) {
+        identifiers.add(id.node.name);
       }
     },
   });
