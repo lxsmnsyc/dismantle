@@ -1,16 +1,16 @@
 import type * as babel from '@babel/core';
 import * as t from '@babel/types';
-import type { ImportDefinition, StateContext } from '../types';
+import type { ImportDefinition } from '../types';
 import { generateUniqueName } from './generate-unique-name';
 
 export function getImportIdentifier(
-  state: StateContext,
+  imports: Map<string, t.Identifier>,
   path: babel.NodePath,
   registration: ImportDefinition,
 ): t.Identifier {
   const name = registration.kind === 'named' ? registration.name : 'default';
   const target = `${registration.source}[${name}]`;
-  const current = state.imports.get(target);
+  const current = imports.get(target);
   if (current) {
     return current;
   }
@@ -29,6 +29,6 @@ export function getImportIdentifier(
       ),
     )[0],
   );
-  state.imports.set(target, uid);
+  imports.set(target, uid);
   return uid;
 }
