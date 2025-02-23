@@ -144,9 +144,9 @@ function transformBlockContent(
   const haltResult: t.Expression[] = [NO_HALT_KEY];
 
   if (applyMutations) {
-    throwResult.push(t.callExpression(applyMutations, []));
+    throwResult.push(applyMutations);
     haltResult.push(t.nullLiteral());
-    haltResult.push(t.callExpression(applyMutations, []));
+    haltResult.push(applyMutations);
   }
 
   transformInnerReferences(path, context, dependencies);
