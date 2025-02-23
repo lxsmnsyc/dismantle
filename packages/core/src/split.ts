@@ -8,6 +8,7 @@ import {
   HIDDEN_FUNC,
   HIDDEN_GENERATOR,
 } from './hidden-imports';
+import { patchV8Identifier } from './patch-v8-identifier';
 import type { ImportDefinition, ModuleDefinition, StateContext } from './types';
 import assert from './utils/assert';
 import { generateUniqueName } from './utils/generate-unique-name';
@@ -17,7 +18,6 @@ import getForeignBindings from './utils/get-foreign-bindings';
 import { getImportIdentifier } from './utils/get-import-identifier';
 import { getModuleDefinition } from './utils/get-module-definition';
 import { isPathValid, unwrapNode, unwrapPath } from './utils/unwrap';
-import { patchV8Identifier } from './patch-v8-identifier';
 
 function moduleDefinitionToImportSpecifier(definition: ModuleDefinition) {
   switch (definition.kind) {
@@ -368,7 +368,7 @@ export function createRootFile(
   statements: t.Statement[],
 ): string {
   const rootFile = createVirtualFileName(ctx);
-  const node = t.program(statements);
+  const node = t.file(t.program(statements));
   patchV8Identifier(ctx, node);
   const rootContent = generateCode(ctx.id, node);
   ctx.onVirtualFile(
