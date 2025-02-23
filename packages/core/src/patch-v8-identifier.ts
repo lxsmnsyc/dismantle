@@ -73,7 +73,7 @@ const traverse: TraverseShim =
     ? (_traverse as unknown as { default: TraverseShim }).default
     : _traverse;
 
-export function patchV8Identifier(ctx: StateContext, node: t.Program) {
+export function patchV8Identifier(ctx: StateContext, node: t.File) {
   traverse(node, V8_PATCH, undefined, {
     map: new Map(),
     runtime: ctx.options.runtime,
