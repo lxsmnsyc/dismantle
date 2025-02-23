@@ -1,6 +1,6 @@
 import type * as babel from '@babel/core';
 import * as t from '@babel/types';
-import { splitExpressionFromCall, splitFunctionFromCall } from './split-call';
+import { splitFunctionFromCall } from './split-call';
 import type { FunctionCallDefinition, StateContext } from './types';
 import { getImportIdentifier } from './utils/get-import-identifier';
 import { isPathValid, unwrapNode } from './utils/unwrap';
@@ -84,15 +84,14 @@ export function transformCall(
   }
   const args = path.get('arguments');
   const expr = args[0];
-  if (isPathValid(expr, t.isExpression) && !isSkippableFunction(expr.node)) {
-    const replacement = isPathValid(expr, isValidFunction)
-      ? splitFunctionFromCall(ctx, expr, definition)
-      : splitExpressionFromCall(ctx, expr, definition);
+  if (isPathValid(expr, isValidFunction) && !isSkippableFunction(expr.node)) {
+    const replacement = splitFunctionFromCall(ctx, expr, definition);
 
     path.replaceWith(
-      t.callExpression(getImportIdentifier(ctx, path, definition.handle), [
-        t.addComment(replacement, 'leading', '@dismantle skip'),
-      ]),
+      t.callExpression(
+        getImportIdentifier(ctx.imports, path, definition.handle),
+        [t.addComment(replacement, 'leading', '@dismantle skip')],
+      ),
     );
   }
 }
