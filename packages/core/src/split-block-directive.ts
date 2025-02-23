@@ -5,7 +5,7 @@ import {
   DISMANTLE_PUSH,
   HIDDEN_FUNC,
   HIDDEN_GENERATOR,
-} from './hidden-imports';
+} from './constants';
 import {
   BREAK_KEY,
   CONTINUE_KEY,

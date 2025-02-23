@@ -1,5 +1,6 @@
 import type * as babel from '@babel/core';
 import * as t from '@babel/types';
+import { DISMANTLE_REF, DISMANTLE_SKIP } from './constants';
 import { splitFunctionFromCall } from './split-call';
 import type { FunctionCallDefinition, StateContext } from './types';
 import { getImportIdentifier } from './utils/get-import-identifier';
@@ -88,9 +89,13 @@ export function transformCall(
     const replacement = splitFunctionFromCall(ctx, expr, definition);
 
     path.replaceWith(
-      t.callExpression(
-        getImportIdentifier(ctx.imports, path, definition.handle),
-        [t.addComment(replacement, 'leading', '@dismantle skip')],
+      t.addComment(
+        t.callExpression(
+          getImportIdentifier(ctx.imports, path, definition.handle),
+          [t.addComment(replacement, 'leading', DISMANTLE_SKIP)],
+        ),
+        'leading',
+        DISMANTLE_REF,
       ),
     );
   }

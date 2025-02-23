@@ -39,3 +39,7 @@ export const DISMANTLE_POP = 'dismantle__pop';
 export const DISMANTLE_GEN = 'dismantle__gen';
 
 export const DISMANTLE_FUNC = 'dismantle__func';
+
+export const DISMANTLE_SKIP = '@dismantle skip';
+
+export const DISMANTLE_REF = '@dismantle ref';

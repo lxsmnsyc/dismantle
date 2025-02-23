@@ -12,7 +12,7 @@ import {
   HIDDEN_GENERATOR,
   HIDDEN_POP,
   HIDDEN_PUSH,
-} from './hidden-imports';
+} from './constants';
 import type { StateContext } from './types';
 import { getImportIdentifier } from './utils/get-import-identifier';
 

@@ -7,7 +7,7 @@ import {
   DISMANTLE_PUSH,
   HIDDEN_FUNC,
   HIDDEN_GENERATOR,
-} from './hidden-imports';
+} from './constants';
 import { patchV8Identifier } from './patch-v8-identifier';
 import type { ImportDefinition, ModuleDefinition, StateContext } from './types';
 import assert from './utils/assert';
@@ -391,7 +391,7 @@ export function createEntryFile(
   if (ctx.options.env !== 'production') {
     id += `-${getDescriptiveName(path, 'anonymous')}`;
   }
-  const entryID = generateUniqueName(path, 'entry');
+  const entryID = t.identifier('entry');
   const entryImports: ModuleDefinition[] = [
     {
       kind: imported.kind,
@@ -402,7 +402,7 @@ export function createEntryFile(
   ];
   const args: t.Expression[] = [t.stringLiteral(id)];
   if (rootFile) {
-    const rootID = generateUniqueName(path, 'root');
+    const rootID = t.identifier('root');
     entryImports.push({
       kind: 'default',
       source: rootFile,

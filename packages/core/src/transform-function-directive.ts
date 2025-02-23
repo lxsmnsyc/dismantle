@@ -1,5 +1,6 @@
 import type * as babel from '@babel/core';
 import * as t from '@babel/types';
+import { DISMANTLE_REF, DISMANTLE_SKIP } from './constants';
 import { splitFunctionDirective } from './split-function-directive';
 import type { FunctionDirectiveDefinition, StateContext } from './types';
 import {
@@ -46,9 +47,13 @@ export function transformFunctionDirective(
     if (definition) {
       const replacement = splitFunctionDirective(ctx, path, definition);
       path.replaceWith(
-        t.callExpression(
-          getImportIdentifier(ctx.imports, path, definition.handle),
-          [replacement],
+        t.addComment(
+          t.callExpression(
+            getImportIdentifier(ctx.imports, path, definition.handle),
+            [t.addComment(replacement, 'leading', DISMANTLE_SKIP)],
+          ),
+          'leading',
+          DISMANTLE_REF,
         ),
       );
     }
