@@ -62,24 +62,22 @@ export function $$gen<T extends any[], R>(
   };
 }
 
+type Closure = unknown[];
+
 let CURRENT_CONTEXT: DismantleContext | undefined;
 
 export class DismantleContext {
-  state: unknown[] = [];
-
-  get(index: number): unknown {
-    return this.state[index];
-  }
-
-  set(index: number, value: unknown): unknown {
-    this.state[index] = value;
-    return value;
+  public __m: Closure;
+  public __l: Closure;
+  constructor(closure: [Closure, Closure]) {
+    this.__l = closure[0];
+    this.__m = closure[1];
   }
 
   run<T extends any[], R>(
     source: unknown,
     callback: (...args: T) => R,
-    args: T,
+    ...args: T
   ): R {
     const parent = CURRENT_CONTEXT;
     CURRENT_CONTEXT = this;
@@ -99,30 +97,14 @@ export function $$context(): DismantleContext {
   return current;
 }
 
-export type Result<T> = [code: 2, value: T] | [code: 4, value: unknown];
-
-export function $$sync<T extends any[], R>(
-  callback: (...args: T) => R,
-): (...args: T) => Result<R> {
-  return (...args: T): Result<R> => {
-    const context = new DismantleContext();
-    try {
-      return [2, context.run(null, callback, args)];
-    } catch (error) {
-      return [4, error];
-    }
-  };
+export function $$push(
+  closure: [Closure, Closure],
+): DismantleContext | undefined {
+  const parent = CURRENT_CONTEXT;
+  CURRENT_CONTEXT = new DismantleContext(closure);
+  return parent;
 }
 
-export function $$async<T extends any[], R>(
-  callback: (...args: T) => Promise<R>,
-): (...args: T) => Promise<Result<R>> {
-  return async (...args: T): Promise<Result<R>> => {
-    const context = new DismantleContext();
-    try {
-      return [2, await context.run(null, callback, args)];
-    } catch (error) {
-      return [4, error];
-    }
-  };
+export function $$pop(parent: DismantleContext | undefined): void {
+  CURRENT_CONTEXT = parent;
 }
