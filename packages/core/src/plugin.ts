@@ -1,5 +1,4 @@
 import type * as babel from '@babel/core';
-import type * as t from '@babel/types';
 import { transformBlockDirective } from './transform-block-directive';
 import { transformCall } from './transform-call';
 import { transformFunctionDirective } from './transform-function-directive';
@@ -11,12 +10,9 @@ interface State extends babel.PluginPass {
   opts: StateContext;
 }
 
-const FUNCTION_BUBBLE: babel.Visitor<{
-  ctx: State;
-  program: babel.NodePath<t.Program>;
-}> = {
-  FunctionDeclaration(path, { ctx, program }) {
-    bubbleFunctionDeclaration(ctx.opts, program, path);
+const FUNCTION_BUBBLE: babel.Visitor<State> = {
+  FunctionDeclaration(path, ctx) {
+    bubbleFunctionDeclaration(ctx.opts, path);
   },
 };
 
@@ -25,19 +21,30 @@ const PLUGIN: babel.PluginObj<State> = {
   visitor: {
     Program(program, ctx) {
       registerImportSpecifiers(ctx.opts, program);
-      program.traverse(FUNCTION_BUBBLE, { ctx, program });
+      program.traverse(FUNCTION_BUBBLE, ctx);
+
+      program.scope.crawl();
     },
-    ArrowFunctionExpression(path, ctx) {
-      transformFunctionDirective(ctx.opts, path);
+    ArrowFunctionExpression: {
+      exit(path, ctx) {
+        transformFunctionDirective(ctx.opts, path);
+        path.scope.crawl();
+      },
     },
-    FunctionExpression(path, ctx) {
-      transformFunctionDirective(ctx.opts, path);
+    FunctionExpression: {
+      exit(path, ctx) {
+        transformFunctionDirective(ctx.opts, path);
+      },
     },
-    BlockStatement(path, ctx) {
-      transformBlockDirective(ctx.opts, path);
+    BlockStatement: {
+      exit(path, ctx) {
+        transformBlockDirective(ctx.opts, path);
+      },
     },
-    CallExpression(path, ctx) {
-      transformCall(ctx.opts, path);
+    CallExpression: {
+      exit(path, ctx) {
+        transformCall(ctx.opts, path);
+      },
     },
   },
 };
