@@ -1,18 +1,28 @@
 import type * as babel from '@babel/core';
 import * as t from '@babel/types';
-import { HIDDEN_FUNC, HIDDEN_GENERATOR } from './hidden-imports';
-import type { ExtractedBindings } from './split';
+import {
+  DISMANTLE_POP,
+  DISMANTLE_PUSH,
+  HIDDEN_FUNC,
+  HIDDEN_GENERATOR,
+} from './hidden-imports';
 import {
   BREAK_KEY,
   CONTINUE_KEY,
+  type Dependencies,
   NO_HALT_KEY,
   RETURN_KEY,
+  type RootBindings,
   THROW_KEY,
   YIELD_KEY,
   createEntryFile,
   createRootFile,
-  extractBindings,
+  getBindingMap,
   getGeneratorReplacementForBlock,
+  getMergedDependencies,
+  getModuleImports,
+  transformFunctionForSplit,
+  transformInnerReferences,
 } from './split';
 import type { BlockDirectiveDefinition, StateContext } from './types';
 import { generateUniqueName } from './utils/generate-unique-name';
@@ -26,11 +36,12 @@ interface HaltingBlockResult {
   continueCount: number;
   hasReturn: boolean;
   hasYield: boolean;
+  closure: t.Identifier;
 }
 
 function transformBlockContent(
   path: babel.NodePath<t.BlockStatement>,
-  mutations: t.Identifier[],
+  dependencies: Dependencies,
 ): HaltingBlockResult {
   const target =
     path.scope.getFunctionParent() || path.scope.getProgramParent();
@@ -42,8 +53,11 @@ function transformBlockContent(
   let hasReturn = false;
   let hasYield = false;
 
-  const applyMutations = mutations.length
-    ? generateUniqueName(path, 'mutate')
+  const closure = generateUniqueName(path, 'closure');
+  const context = generateUniqueName(path, 'context');
+
+  const applyMutations = dependencies.mutations.length
+    ? t.memberExpression(context, t.identifier('__m'))
     : undefined;
 
   // Transform the control flow statements
@@ -62,7 +76,7 @@ function transformBlockContent(
           replacement.push(t.nullLiteral());
         }
         if (applyMutations) {
-          replacement.push(t.callExpression(applyMutations, []));
+          replacement.push(applyMutations);
         }
         child.replaceWith(t.returnStatement(t.arrayExpression(replacement)));
         child.skip();
@@ -82,7 +96,7 @@ function transformBlockContent(
           replacement.push(t.nullLiteral());
         }
         if (applyMutations) {
-          replacement.push(t.callExpression(applyMutations, []));
+          replacement.push(applyMutations);
         }
         child.replaceWith(t.returnStatement(t.arrayExpression(replacement)));
         child.skip();
@@ -98,9 +112,7 @@ function transformBlockContent(
           t.arrayExpression([
             RETURN_KEY,
             arg.node ? arg.node : t.nullLiteral(),
-            applyMutations
-              ? t.callExpression(applyMutations, [])
-              : t.nullLiteral(),
+            applyMutations ? applyMutations : t.nullLiteral(),
           ]),
         );
       }
@@ -118,9 +130,7 @@ function transformBlockContent(
             t.arrayExpression([
               YIELD_KEY,
               arg.node ? arg.node : t.nullLiteral(),
-              applyMutations
-                ? t.callExpression(applyMutations, [])
-                : t.nullLiteral(),
+              applyMutations ? applyMutations : t.nullLiteral(),
             ]),
           );
         }
@@ -139,35 +149,38 @@ function transformBlockContent(
     haltResult.push(t.callExpression(applyMutations, []));
   }
 
-  const statements: t.Statement[] = [
+  transformInnerReferences(path, context, dependencies);
+
+  path.node.body = [
+    t.variableDeclaration('const', [
+      t.variableDeclarator(
+        context,
+        t.callExpression(t.v8IntrinsicIdentifier(DISMANTLE_PUSH), [closure]),
+      ),
+    ]),
     t.tryStatement(
       t.blockStatement(path.node.body),
       t.catchClause(
         error,
         t.blockStatement([t.returnStatement(t.arrayExpression(throwResult))]),
       ),
+      t.blockStatement([
+        t.expressionStatement(
+          t.callExpression(t.v8IntrinsicIdentifier(DISMANTLE_POP), [context]),
+        ),
+      ]),
     ),
     t.returnStatement(t.arrayExpression(haltResult)),
   ];
-
-  if (applyMutations) {
-    statements.unshift(
-      t.variableDeclaration('const', [
-        t.variableDeclarator(
-          applyMutations,
-          t.arrowFunctionExpression(
-            [],
-            t.objectExpression(
-              mutations.map(item => t.objectProperty(item, item, false, true)),
-            ),
-          ),
-        ),
-      ]),
-    );
-  }
-
-  path.node.body = statements;
-  return { breaks, continues, hasReturn, hasYield, breakCount, continueCount };
+  return {
+    closure,
+    breaks,
+    continues,
+    hasReturn,
+    hasYield,
+    breakCount,
+    continueCount,
+  };
 }
 
 /**
@@ -252,7 +265,7 @@ function getBlockDirectiveReplacement(
   ctx: StateContext,
   path: babel.NodePath<t.BlockStatement>,
   entryFile: string,
-  bindings: ExtractedBindings,
+  dependencies: Dependencies,
   halting: HaltingBlockResult,
 ) {
   // Move to the replacement for the server block,
@@ -298,7 +311,7 @@ function getBlockDirectiveReplacement(
         t.variableDeclarator(
           blockID,
           t.callExpression(
-            getImportIdentifier(ctx, path, {
+            getImportIdentifier(ctx.imports, path, {
               ...HIDDEN_GENERATOR,
               source: ctx.options.runtime,
             }),
@@ -309,15 +322,13 @@ function getBlockDirectiveReplacement(
                 ),
                 t.identifier('default'),
               ),
-              bindings.mutations.length
+              dependencies.mutations.length
                 ? t.arrowFunctionExpression(
                     [returnMutations],
                     t.assignmentExpression(
                       '=',
-                      t.objectPattern(
-                        bindings.mutations.map(item =>
-                          t.objectProperty(item, item, false, true),
-                        ),
+                      t.arrayPattern(
+                        dependencies.mutations.map(id => id.identifier),
                       ),
                       returnMutations,
                     ),
@@ -328,11 +339,12 @@ function getBlockDirectiveReplacement(
         ),
       ]),
     );
-    const [reps, step] = getGeneratorReplacementForBlock(
-      path,
-      blockID,
-      bindings.locals,
-    );
+    const [reps, step] = getGeneratorReplacementForBlock(path, blockID, [
+      t.arrayExpression([
+        t.arrayExpression(dependencies.locals.map(id => id.identifier)),
+        t.arrayExpression(dependencies.mutations.map(id => id.identifier)),
+      ]),
+    ]);
     for (let i = 0, len = reps.length; i < len; i++) {
       replacement.push(reps[i]);
     }
@@ -352,7 +364,7 @@ function getBlockDirectiveReplacement(
           t.awaitExpression(
             t.callExpression(
               t.callExpression(
-                getImportIdentifier(ctx, path, {
+                getImportIdentifier(ctx.imports, path, {
                   ...HIDDEN_FUNC,
                   source: ctx.options.runtime,
                 }),
@@ -363,15 +375,13 @@ function getBlockDirectiveReplacement(
                     ),
                     t.identifier('default'),
                   ),
-                  bindings.mutations.length
+                  dependencies.mutations.length
                     ? t.arrowFunctionExpression(
                         [returnMutations],
                         t.assignmentExpression(
                           '=',
-                          t.objectPattern(
-                            bindings.mutations.map(item =>
-                              t.objectProperty(item, item, false, true),
-                            ),
+                          t.arrayPattern(
+                            dependencies.mutations.map(id => id.identifier),
                           ),
                           returnMutations,
                         ),
@@ -379,7 +389,16 @@ function getBlockDirectiveReplacement(
                     : t.nullLiteral(),
                 ],
               ),
-              bindings.locals,
+              [
+                t.arrayExpression([
+                  t.arrayExpression(
+                    dependencies.locals.map(id => id.identifier),
+                  ),
+                  t.arrayExpression(
+                    dependencies.mutations.map(id => id.identifier),
+                  ),
+                ]),
+              ],
             ),
           ),
         ),
@@ -393,35 +412,64 @@ function getBlockDirectiveReplacement(
   return t.blockStatement(replacement);
 }
 
+function compileBindingMapForBlock(
+  bindings: RootBindings,
+  dependencies: Dependencies,
+): t.Statement[] {
+  const statements: t.Statement[] = [];
+
+  for (const [path, binding] of bindings.map) {
+    statements.push(
+      transformFunctionForSplit(path, binding.variable, dependencies),
+    );
+  }
+
+  return statements;
+}
+
 function replaceBlockDirective(
   ctx: StateContext,
   path: babel.NodePath<t.BlockStatement>,
   directive: BlockDirectiveDefinition,
-  bindings: ExtractedBindings,
-): void {
+  bindings: RootBindings,
+) {
+  const dependencies = getMergedDependencies(bindings);
   // Transform all control statements
-  const halting = transformBlockContent(path, bindings.mutations);
+  const halting = transformBlockContent(path, dependencies);
+
+  const statements = getModuleImports(dependencies.modules);
+
+  statements.push(
+    t.exportDefaultDeclaration(
+      t.functionExpression(
+        undefined,
+        [halting.closure],
+        t.blockStatement(path.node.body),
+        halting.hasYield,
+        true,
+      ),
+    ),
+  );
+
   const entryFile = createEntryFile(
     ctx,
     path,
-    ctx.options.mode === 'server' || directive.isomorphic
+    ctx.options.mode === 'server'
       ? createRootFile(
           ctx,
-          bindings,
-          t.functionExpression(
-            undefined,
-            bindings.locals,
-            t.blockStatement(path.node.body),
-            halting.hasYield,
-            true,
-          ),
+          statements.concat(compileBindingMapForBlock(bindings, dependencies)),
         )
       : undefined,
     directive.target,
     directive.idPrefix,
   );
-  path.replaceWith(
-    getBlockDirectiveReplacement(ctx, path, entryFile, bindings, halting),
+
+  return getBlockDirectiveReplacement(
+    ctx,
+    path,
+    entryFile,
+    dependencies,
+    halting,
   );
 }
 
@@ -429,16 +477,11 @@ export function splitBlockDirective(
   ctx: StateContext,
   path: babel.NodePath<t.BlockStatement>,
   directive: BlockDirectiveDefinition,
-): void {
-  replaceBlockDirective(
+) {
+  return replaceBlockDirective(
     ctx,
     path,
     directive,
-    extractBindings(
-      ctx,
-      path,
-      getForeignBindings(path, 'block'),
-      directive.pure,
-    ),
+    getBindingMap(path, getForeignBindings(path, 'block')),
   );
 }
