@@ -46,9 +46,10 @@ export function transformFunctionDirective(
     if (definition) {
       const replacement = splitFunctionDirective(ctx, path, definition);
       path.replaceWith(
-        t.callExpression(getImportIdentifier(ctx, path, definition.handle), [
-          replacement,
-        ]),
+        t.callExpression(
+          getImportIdentifier(ctx.imports, path, definition.handle),
+          [replacement],
+        ),
       );
     }
   }
