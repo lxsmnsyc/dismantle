@@ -36,6 +36,6 @@ export function transformBlockDirective(
 ): void {
   const definition = getBlockDirectiveDefinition(ctx, path);
   if (definition) {
-    splitBlockDirective(ctx, path, definition);
+    path.replaceWith(splitBlockDirective(ctx, path, definition));
   }
 }
