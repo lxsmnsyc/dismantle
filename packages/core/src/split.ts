@@ -245,6 +245,62 @@ function patchIdentifier(
   }
 }
 
+function patchArrayPattern(
+  dependencies: Dependencies,
+  context: t.Identifier,
+  path: babel.NodePath<t.ArrayPattern>,
+): void {
+  for (const element of path.get('elements')) {
+    if (isPathValid(element, t.isLVal)) {
+      patchLVal(dependencies, context, element);
+    }
+  }
+}
+
+function patchObjectPattern(
+  dependencies: Dependencies,
+  context: t.Identifier,
+  path: babel.NodePath<t.ObjectPattern>,
+): void {
+  for (const property of path.get('properties')) {
+    if (isPathValid(property, t.isRestElement)) {
+      // {...rest} = foo;
+      patchLVal(dependencies, context, property.get('argument'));
+    } else if (isPathValid(property, t.isObjectProperty)) {
+      const key = property.get('key');
+      if (isPathValid(key, t.isIdentifier) && property.node.shorthand) {
+        // { foo } = bar;
+        patchLVal(dependencies, context, key);
+        return;
+      }
+      const value = property.get('value');
+      if (isPathValid(value, t.isPatternLike)) {
+        patchLVal(dependencies, context, value);
+      }
+    }
+  }
+}
+
+function patchLVal(
+  dependencies: Dependencies,
+  context: t.Identifier,
+  path: babel.NodePath<t.LVal>,
+): void {
+  if (isPathValid(path, t.isArrayPattern)) {
+    patchArrayPattern(dependencies, context, path);
+  } else if (isPathValid(path, t.isAssignmentPattern)) {
+    // [foo = bar] = baz;
+    patchLVal(dependencies, context, path.get('left'));
+  } else if (isPathValid(path, t.isIdentifier)) {
+    patchIdentifier(dependencies, context, path);
+  } else if (isPathValid(path, t.isObjectPattern)) {
+    patchObjectPattern(dependencies, context, path);
+  } else if (isPathValid(path, t.isRestElement)) {
+    // {...rest} = foo;
+    patchLVal(dependencies, context, path.get('argument'));
+  } // TODO TS type casts
+}
+
 export function transformInnerReferences(
   body: babel.NodePath,
   context: t.Identifier,
@@ -255,10 +311,15 @@ export function transformInnerReferences(
       patchIdentifier(dependencies, context, path);
     },
     AssignmentExpression(path) {
-      const id = unwrapPath(path.get('left'), t.isIdentifier);
-      // TODO recursively check LVal
-      if (id) {
-        patchIdentifier(dependencies, context, id);
+      const left = path.get('left');
+      if (isPathValid(left, t.isLVal)) {
+        patchLVal(dependencies, context, left);
+      }
+    },
+    ForXStatement(path) {
+      const left = path.get('left');
+      if (isPathValid(left, t.isLVal)) {
+        patchLVal(dependencies, context, left);
       }
     },
     UpdateExpression(path) {
