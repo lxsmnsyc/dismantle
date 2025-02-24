@@ -30,6 +30,12 @@ export const HIDDEN_POP: ImportDefinition = {
   name: '$$pop',
 };
 
+export const HIDDEN_RUN: ImportDefinition = {
+  kind: 'named',
+  source: 'dismantle/runtime',
+  name: '$$run',
+};
+
 export const DISMANTLE_CONTEXT = 'dismantle__context';
 
 export const DISMANTLE_PUSH = 'dismantle__push';
@@ -39,6 +45,8 @@ export const DISMANTLE_POP = 'dismantle__pop';
 export const DISMANTLE_GEN = 'dismantle__gen';
 
 export const DISMANTLE_FUNC = 'dismantle__func';
+
+export const DISMANTLE_RUN = 'dismantle__run';
 
 export const DISMANTLE_SKIP = '@dismantle skip';
 

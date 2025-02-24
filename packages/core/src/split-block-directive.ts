@@ -57,7 +57,7 @@ function transformBlockContent(
   const context = generateUniqueName(path, 'context');
 
   const applyMutations = dependencies.mutations.length
-    ? t.memberExpression(context, t.identifier('__m'))
+    ? t.memberExpression(context, t.identifier('m'))
     : undefined;
 
   // Transform the control flow statements

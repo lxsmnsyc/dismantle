@@ -5,6 +5,7 @@ import {
   DISMANTLE_CONTEXT,
   DISMANTLE_POP,
   DISMANTLE_PUSH,
+  DISMANTLE_RUN,
   HIDDEN_FUNC,
   HIDDEN_GENERATOR,
 } from './constants';
@@ -225,7 +226,7 @@ function patchIdentifier(
     if (localsIndex > -1) {
       path.replaceWith(
         t.memberExpression(
-          t.memberExpression(context, t.identifier('__l')),
+          t.memberExpression(context, t.identifier('l')),
           t.numericLiteral(localsIndex),
           true,
         ),
@@ -235,7 +236,7 @@ function patchIdentifier(
     if (mutationsIndex > -1) {
       path.replaceWith(
         t.memberExpression(
-          t.memberExpression(context, t.identifier('__m')),
+          t.memberExpression(context, t.identifier('m')),
           t.numericLiteral(mutationsIndex),
           true,
         ),
@@ -255,6 +256,7 @@ export function transformInnerReferences(
     },
     AssignmentExpression(path) {
       const id = unwrapPath(path.get('left'), t.isIdentifier);
+      // TODO recursively check LVal
       if (id) {
         patchIdentifier(dependencies, context, id);
       }
@@ -268,17 +270,17 @@ export function transformInnerReferences(
     CallExpression: {
       exit(child) {
         if (t.isExpression(child.node.callee)) {
-          // check if it is a member expression
-          const member = unwrapNode(child.node.callee, t.isMemberExpression);
-          const object = member ? member.object : t.nullLiteral();
-          child.replaceWith(
-            t.callExpression(t.memberExpression(context, t.identifier('run')), [
-              child.node.callee,
-              object,
-              ...child.node.arguments,
-            ]),
-          );
-          child.skip();
+          const id = unwrapNode(child.node.callee, t.isIdentifier);
+          if (id) {
+            child.replaceWith(
+              t.callExpression(t.v8IntrinsicIdentifier(DISMANTLE_RUN), [
+                context,
+                child.node.callee,
+                ...child.node.arguments,
+              ]),
+            );
+            child.skip();
+          }
         }
       },
     },
@@ -516,7 +518,7 @@ export function transformRootFunction(
   const context = generateUniqueName(root, 'context');
 
   const applyMutations = dependencies.mutations.length
-    ? t.memberExpression(context, t.identifier('__m'))
+    ? t.memberExpression(context, t.identifier('m'))
     : undefined;
 
   // Transform the control flow statements

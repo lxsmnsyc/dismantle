@@ -66,26 +66,22 @@ type Closure = unknown[];
 
 let CURRENT_CONTEXT: DismantleContext | undefined;
 
-export class DismantleContext {
-  public __m: Closure;
-  public __l: Closure;
-  constructor(closure: [Closure, Closure]) {
-    this.__l = closure[0];
-    this.__m = closure[1];
-  }
+interface DismantleContext {
+  l: Closure;
+  m: Closure;
+}
 
-  run<T extends any[], R>(
-    source: unknown,
-    callback: (...args: T) => R,
-    ...args: T
-  ): R {
-    const parent = CURRENT_CONTEXT;
-    CURRENT_CONTEXT = this;
-    try {
-      return callback.apply(source, args);
-    } finally {
-      CURRENT_CONTEXT = parent;
-    }
+export function $$run<T extends any[], R>(
+  context: DismantleContext,
+  callback: (...args: T) => R,
+  ...args: T
+): R {
+  const parent = CURRENT_CONTEXT;
+  CURRENT_CONTEXT = context;
+  try {
+    return callback.apply(null, args);
+  } finally {
+    CURRENT_CONTEXT = parent;
   }
 }
 
@@ -97,11 +93,11 @@ export function $$context(): DismantleContext {
   return current;
 }
 
-export function $$push(
-  closure: [Closure, Closure],
-): DismantleContext | undefined {
+export function $$push([l, m]: [Closure, Closure]):
+  | DismantleContext
+  | undefined {
   const parent = CURRENT_CONTEXT;
-  CURRENT_CONTEXT = new DismantleContext(closure);
+  CURRENT_CONTEXT = { l, m };
   return parent;
 }
 
