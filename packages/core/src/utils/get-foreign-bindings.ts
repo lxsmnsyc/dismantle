@@ -164,7 +164,7 @@ export default function getForeignBindings(
         checkLVal(checker, p.scope, p.node.left);
       }
     },
-    UnaryExpression(p) {
+    UpdateExpression(p) {
       const id = unwrapPath(p.get('argument'), t.isIdentifier);
       if (id) {
         checkIdentifier(checker, p.scope, id.node);
