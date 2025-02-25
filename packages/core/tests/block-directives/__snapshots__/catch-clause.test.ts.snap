@@ -268,25 +268,26 @@ const example = () => {
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
       "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
+import { $$run as $$run_1 } from "my-example/runtime";
 import { $$push as $$push_1 } from "my-example/runtime";
 export default (async function (closure_1) {
-  const context_1 = $$push_1(closure_1);
+  const ctx_1 = $$push_1(closure_1);
   try {
-    context_1.run(report, null, err);
+    $$run_1(ctx_1, report, err);
   } catch (error_1) {
     return [4, error_1];
   } finally {
-    $$pop_1(context_1);
+    $$pop_1(ctx_1);
   }
   return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;;;IAMUA,SAAA,CAAAC,GAAA,CAAAC,MAAM,QAACC,GAAG;EAAE,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAL,SAAA;EAAA;EAAA;AAAA",
+        "mappings": ";;;;;;IAMUA,OAAA,CAAAC,KAAA,EAAAC,MAAM,EAACC,GAAG;EAAE,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAJ,KAAA;EAAA;EAAA;AAAA",
         "names": [
-          "context_1",
-          "run",
+          "$$run_1",
+          "ctx_1",
           "report",
           "err",
           "error_1",
@@ -370,25 +371,26 @@ try {
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
       "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
+import { $$run as $$run_1 } from "my-example/runtime";
 import { $$push as $$push_1 } from "my-example/runtime";
 export default (async function (closure_1) {
-  const context_1 = $$push_1(closure_1);
+  const ctx_1 = $$push_1(closure_1);
   try {
-    await context_1.run(report, null, err);
+    await $$run_1(ctx_1, report, err);
   } catch (error_1) {
     return [4, error_1];
   } finally {
-    $$pop_1(context_1);
+    $$pop_1(ctx_1);
   }
   return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;;;IAMQ,MAAAA,SAAA,CAAAC,GAAA,CAAMC,MAAM,QAACC,GAAG,CAAC;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAL,SAAA;EAAA;EAAA;AAAA",
+        "mappings": ";;;;;;IAMQ,MAAAA,OAAA,CAAAC,KAAA,EAAMC,MAAM,EAACC,GAAG,CAAC;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAJ,KAAA;EAAA;EAAA;AAAA",
         "names": [
-          "context_1",
-          "run",
+          "$$run_1",
+          "ctx_1",
           "report",
           "err",
           "error_1",
@@ -473,25 +475,26 @@ async function foo() {
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
       "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
+import { $$run as $$run_1 } from "my-example/runtime";
 import { $$push as $$push_1 } from "my-example/runtime";
 export default (async function (closure_1) {
-  const context_1 = $$push_1(closure_1);
+  const ctx_1 = $$push_1(closure_1);
   try {
-    await context_1.run(report, null, err);
+    await $$run_1(ctx_1, report, err);
   } catch (error_1) {
     return [4, error_1];
   } finally {
-    $$pop_1(context_1);
+    $$pop_1(ctx_1);
   }
   return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;;;IAOU,MAAAA,SAAA,CAAAC,GAAA,CAAMC,MAAM,QAACC,GAAG,CAAC;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAL,SAAA;EAAA;EAAA;AAAA",
+        "mappings": ";;;;;;IAOU,MAAAA,OAAA,CAAAC,KAAA,EAAMC,MAAM,EAACC,GAAG,CAAC;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAJ,KAAA;EAAA;EAAA;AAAA",
         "names": [
-          "context_1",
-          "run",
+          "$$run_1",
+          "ctx_1",
           "report",
           "err",
           "error_1",
@@ -576,25 +579,26 @@ try {
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
       "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
+import { $$run as $$run_1 } from "my-example/runtime";
 import { $$push as $$push_1 } from "my-example/runtime";
 export default (async function (closure_1) {
-  const context_1 = $$push_1(closure_1);
+  const ctx_1 = $$push_1(closure_1);
   try {
-    await context_1.run(report, null, err);
+    await $$run_1(ctx_1, report, err);
   } catch (error_1) {
     return [4, error_1];
   } finally {
-    $$pop_1(context_1);
+    $$pop_1(ctx_1);
   }
   return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;;;IAKQ,MAAAA,SAAA,CAAAC,GAAA,CAAMC,MAAM,QAACC,GAAG,CAAC;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAL,SAAA;EAAA;EAAA;AAAA",
+        "mappings": ";;;;;;IAKQ,MAAAA,OAAA,CAAAC,KAAA,EAAMC,MAAM,EAACC,GAAG,CAAC;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAJ,KAAA;EAAA;EAAA;AAAA",
         "names": [
-          "context_1",
-          "run",
+          "$$run_1",
+          "ctx_1",
           "report",
           "err",
           "error_1",

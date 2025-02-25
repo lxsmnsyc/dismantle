@@ -54,7 +54,7 @@ function transformBlockContent(
   let hasYield = false;
 
   const closure = generateUniqueName(path, 'closure');
-  const context = generateUniqueName(path, 'context');
+  const context = generateUniqueName(path, 'ctx');
 
   const applyMutations = dependencies.mutations.length
     ? t.memberExpression(context, t.identifier('m'))

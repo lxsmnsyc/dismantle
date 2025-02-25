@@ -283,24 +283,24 @@ const example = /*@dismantle ref*/$$server_1( /*@dismantle skip*/async () => {
       "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
 import { $$push as $$push_1 } from "my-example/runtime";
 export default (function example(closure_1) {
-  const context_1 = $$push_1(closure_1);
+  const ctx_1 = $$push_1(closure_1);
   try {
     return [2, 'foo bar', null];
   } catch (error_1) {
     return [4, error_1];
   } finally {
-    $$pop_1(context_1);
+    $$pop_1(ctx_1);
   }
   return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;yBACeA,OAAOA,CAAAC,SAAA,EAAG;EAAA,MAAAC,SAAA,GAAAC,QAAA,CAAAF,SAAA;EAAA;IAEjB,WAAO,SAAS;EAAC,SAAAG,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAH,SAAA;EAAA;EAAA;AACnB,CAAC",
+        "mappings": ";;yBACeA,OAAOA,CAAAC,SAAA,EAAG;EAAA,MAAAC,KAAA,GAAAC,QAAA,CAAAF,SAAA;EAAA;IAEjB,WAAO,SAAS;EAAC,SAAAG,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAH,KAAA;EAAA;EAAA;AACnB,CAAC",
         "names": [
           "example",
           "closure_1",
-          "context_1",
+          "ctx_1",
           "$$push_1",
           "error_1",
           "$$pop_1",
@@ -387,26 +387,26 @@ const outer = () => {
       "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
 import { $$push as $$push_1 } from "my-example/runtime";
 export default (async function example(closure_1) {
-  const context_1 = $$push_1(closure_1);
+  const ctx_1 = $$push_1(closure_1);
   try {
-    return [2, context_1.__l[0], null];
+    return [2, ctx_1.l[0], null];
   } catch (error_1) {
     return [4, error_1];
   } finally {
-    $$pop_1(context_1);
+    $$pop_1(ctx_1);
   }
   return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;+BAGuBA,OAAOA,CAAAC,SAAA,EAAG;EAAA,MAAAC,SAAA,GAAAC,QAAA,CAAAF,SAAA;EAAA;IAEvB,WAAAC,SAAA,CAAAE,GAAA;EAAa,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAJ,SAAA;EAAA;EAAA;AACf,CAAC",
+        "mappings": ";;+BAGuBA,OAAOA,CAAAC,SAAA,EAAG;EAAA,MAAAC,KAAA,GAAAC,QAAA,CAAAF,SAAA;EAAA;IAEvB,WAAAC,KAAA,CAAAE,CAAA;EAAa,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAJ,KAAA;EAAA;EAAA;AACf,CAAC",
         "names": [
           "example",
           "closure_1",
-          "context_1",
+          "ctx_1",
           "$$push_1",
-          "__l",
+          "l",
           "error_1",
           "$$pop_1",
         ],
@@ -494,24 +494,24 @@ const example = /*@dismantle ref*/$$server_1( /*@dismantle skip*/async () => {
       "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
 import { $$push as $$push_1 } from "my-example/runtime";
 export default (async function example(closure_1) {
-  const context_1 = $$push_1(closure_1);
+  const ctx_1 = $$push_1(closure_1);
   try {
     return [2, 'foo bar', null];
   } catch (error_1) {
     return [4, error_1];
   } finally {
-    $$pop_1(context_1);
+    $$pop_1(ctx_1);
   }
   return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;+BACqBA,OAAOA,CAAAC,SAAA,EAAG;EAAA,MAAAC,SAAA,GAAAC,QAAA,CAAAF,SAAA;EAAA;IAEvB,WAAO,SAAS;EAAC,SAAAG,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAH,SAAA;EAAA;EAAA;AACnB,CAAC",
+        "mappings": ";;+BACqBA,OAAOA,CAAAC,SAAA,EAAG;EAAA,MAAAC,KAAA,GAAAC,QAAA,CAAAF,SAAA;EAAA;IAEvB,WAAO,SAAS;EAAC,SAAAG,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAH,KAAA;EAAA;EAAA;AACnB,CAAC",
         "names": [
           "example",
           "closure_1",
-          "context_1",
+          "ctx_1",
           "$$push_1",
           "error_1",
           "$$pop_1",
@@ -598,26 +598,26 @@ const outer = () => {
       "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
 import { $$push as $$push_1 } from "my-example/runtime";
 export default (async function example(closure_1) {
-  const context_1 = $$push_1(closure_1);
+  const ctx_1 = $$push_1(closure_1);
   try {
-    return [2, context_1.__l[0], null];
+    return [2, ctx_1.l[0], null];
   } catch (error_1) {
     return [4, error_1];
   } finally {
-    $$pop_1(context_1);
+    $$pop_1(ctx_1);
   }
   return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;+BAGuBA,OAAOA,CAAAC,SAAA,EAAG;EAAA,MAAAC,SAAA,GAAAC,QAAA,CAAAF,SAAA;EAAA;IAEvB,WAAAC,SAAA,CAAAE,GAAA;EAAa,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAJ,SAAA;EAAA;EAAA;AACf,CAAC",
+        "mappings": ";;+BAGuBA,OAAOA,CAAAC,SAAA,EAAG;EAAA,MAAAC,KAAA,GAAAC,QAAA,CAAAF,SAAA;EAAA;IAEvB,WAAAC,KAAA,CAAAE,CAAA;EAAa,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAJ,KAAA;EAAA;EAAA;AACf,CAAC",
         "names": [
           "example",
           "closure_1",
-          "context_1",
+          "ctx_1",
           "$$push_1",
-          "__l",
+          "l",
           "error_1",
           "$$pop_1",
         ],

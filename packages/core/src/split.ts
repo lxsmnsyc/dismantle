@@ -361,7 +361,7 @@ export function transformFunctionForSplit(
   }
   assert(isPathValid(body, t.isBlockStatement), 'invariant');
   // First, insert a context hook
-  const context = generateUniqueName(path, 'context');
+  const context = generateUniqueName(path, 'ctx');
   const contextCall = t.v8IntrinsicIdentifier(DISMANTLE_CONTEXT);
   const header: t.Statement[] = [
     t.variableDeclaration('const', [
@@ -576,7 +576,7 @@ export function transformRootFunction(
     path.scope.getFunctionParent() || path.scope.getProgramParent();
 
   const closure = generateUniqueName(root, 'closure');
-  const context = generateUniqueName(root, 'context');
+  const context = generateUniqueName(root, 'ctx');
 
   const applyMutations = dependencies.mutations.length
     ? t.memberExpression(context, t.identifier('m'))

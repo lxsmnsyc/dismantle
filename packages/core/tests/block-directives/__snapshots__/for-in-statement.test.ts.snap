@@ -508,25 +508,26 @@ const example = () => {
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
       "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
+import { $$run as $$run_1 } from "my-example/runtime";
 import { $$push as $$push_1 } from "my-example/runtime";
 export default (async function (closure_1) {
-  const context_1 = $$push_1(closure_1);
+  const ctx_1 = $$push_1(closure_1);
   try {
-    context_1.run(doStuff, null);
+    $$run_1(ctx_1, doStuff);
   } catch (error_1) {
     return [4, error_1];
   } finally {
-    $$pop_1(context_1);
+    $$pop_1(ctx_1);
   }
   return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;;;IAIUA,SAAA,CAAAC,GAAA,CAAAC,OAAO;EAAG,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAJ,SAAA;EAAA;EAAA;AAAA",
+        "mappings": ";;;;;;IAIUA,OAAA,CAAAC,KAAA,EAAAC,OAAO;EAAG,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAH,KAAA;EAAA;EAAA;AAAA",
         "names": [
-          "context_1",
-          "run",
+          "$$run_1",
+          "ctx_1",
           "doStuff",
           "error_1",
           "$$pop_1",
@@ -605,27 +606,28 @@ for (const key in items) {
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
       "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
+import { $$run as $$run_1 } from "my-example/runtime";
 import { $$push as $$push_1 } from "my-example/runtime";
 export default (async function (closure_1) {
-  const context_1 = $$push_1(closure_1);
+  const ctx_1 = $$push_1(closure_1);
   try {
-    await context_1.run(doStuff, null, context_1.__l[0]);
+    await $$run_1(ctx_1, doStuff, ctx_1.l[0]);
   } catch (error_1) {
     return [4, error_1];
   } finally {
-    $$pop_1(context_1);
+    $$pop_1(ctx_1);
   }
   return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;;;IAIQ,MAAAA,SAAA,CAAAC,GAAA,CAAMC,OAAO,QAAAF,SAAA,CAAAG,GAAA,IAAO;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAL,SAAA;EAAA;EAAA;AAAA",
+        "mappings": ";;;;;;IAIQ,MAAAA,OAAA,CAAAC,KAAA,EAAMC,OAAO,EAAAD,KAAA,CAAAE,CAAA,IAAO;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAJ,KAAA;EAAA;EAAA;AAAA",
         "names": [
-          "context_1",
-          "run",
+          "$$run_1",
+          "ctx_1",
           "doStuff",
-          "__l",
+          "l",
           "error_1",
           "$$pop_1",
         ],
@@ -704,30 +706,31 @@ for (const key in items) {
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
       "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
+import { $$run as $$run_1 } from "my-example/runtime";
 import { $$push as $$push_1 } from "my-example/runtime";
 export default (async function (closure_1) {
-  const context_1 = $$push_1(closure_1);
+  const ctx_1 = $$push_1(closure_1);
   try {
-    if (context_1.run(cond, null)) {
-      await context_1.run(doStuff, null, value);
+    if ($$run_1(ctx_1, cond)) {
+      await $$run_1(ctx_1, doStuff, value);
     } else {
       return [0, null];
     }
-    await context_1.run(doMoreStuff, null);
+    await $$run_1(ctx_1, doMoreStuff);
   } catch (error_1) {
     return [4, error_1];
   } finally {
-    $$pop_1(context_1);
+    $$pop_1(ctx_1);
   }
   return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;;;IAGQ,IAAAA,SAAA,CAAAC,GAAA,CAAIC,IAAI,SAAI;MACV,MAAAF,SAAA,CAAAC,GAAA,CAAME,OAAO,QAACC,KAAK,CAAC;IACtB,CAAC,MAAM;MAAA;IAEP;IACA,MAAAJ,SAAA,CAAAC,GAAA,CAAMI,WAAW,OAAE;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAP,SAAA;EAAA;EAAA;AAAA",
+        "mappings": ";;;;;;IAGQ,IAAAA,OAAA,CAAAC,KAAA,EAAIC,IAAI,GAAI;MACV,MAAAF,OAAA,CAAAC,KAAA,EAAME,OAAO,EAACC,KAAK,CAAC;IACtB,CAAC,MAAM;MAAA;IAEP;IACA,MAAAJ,OAAA,CAAAC,KAAA,EAAMI,WAAW,CAAE;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAN,KAAA;EAAA;EAAA;AAAA",
         "names": [
-          "context_1",
-          "run",
+          "$$run_1",
+          "ctx_1",
           "cond",
           "doStuff",
           "value",
@@ -813,30 +816,31 @@ for (const key in items) {
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
       "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
+import { $$run as $$run_1 } from "my-example/runtime";
 import { $$push as $$push_1 } from "my-example/runtime";
 export default (async function (closure_1) {
-  const context_1 = $$push_1(closure_1);
+  const ctx_1 = $$push_1(closure_1);
   try {
-    if (context_1.run(cond, null)) {
-      await context_1.run(doStuff, null, value);
+    if ($$run_1(ctx_1, cond)) {
+      await $$run_1(ctx_1, doStuff, value);
     } else {
       return [1, null];
     }
-    await context_1.run(doMoreStuff, null);
+    await $$run_1(ctx_1, doMoreStuff);
   } catch (error_1) {
     return [4, error_1];
   } finally {
-    $$pop_1(context_1);
+    $$pop_1(ctx_1);
   }
   return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;;;IAGQ,IAAAA,SAAA,CAAAC,GAAA,CAAIC,IAAI,SAAI;MACV,MAAAF,SAAA,CAAAC,GAAA,CAAME,OAAO,QAACC,KAAK,CAAC;IACtB,CAAC,MAAM;MAAA;IAEP;IACA,MAAAJ,SAAA,CAAAC,GAAA,CAAMI,WAAW,OAAE;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAP,SAAA;EAAA;EAAA;AAAA",
+        "mappings": ";;;;;;IAGQ,IAAAA,OAAA,CAAAC,KAAA,EAAIC,IAAI,GAAI;MACV,MAAAF,OAAA,CAAAC,KAAA,EAAME,OAAO,EAACC,KAAK,CAAC;IACtB,CAAC,MAAM;MAAA;IAEP;IACA,MAAAJ,OAAA,CAAAC,KAAA,EAAMI,WAAW,CAAE;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAN,KAAA;EAAA;EAAA;AAAA",
         "names": [
-          "context_1",
-          "run",
+          "$$run_1",
+          "ctx_1",
           "cond",
           "doStuff",
           "value",
@@ -924,30 +928,31 @@ foo: for (const key in items) {
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
       "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
+import { $$run as $$run_1 } from "my-example/runtime";
 import { $$push as $$push_1 } from "my-example/runtime";
 export default (async function (closure_1) {
-  const context_1 = $$push_1(closure_1);
+  const ctx_1 = $$push_1(closure_1);
   try {
-    if (context_1.run(cond, null)) {
-      await context_1.run(doStuff, null, value);
+    if ($$run_1(ctx_1, cond)) {
+      await $$run_1(ctx_1, doStuff, value);
     } else {
       return [0, "foo"];
     }
-    await context_1.run(doMoreStuff, null);
+    await $$run_1(ctx_1, doMoreStuff);
   } catch (error_1) {
     return [4, error_1];
   } finally {
-    $$pop_1(context_1);
+    $$pop_1(ctx_1);
   }
   return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;;;IAGQ,IAAAA,SAAA,CAAAC,GAAA,CAAIC,IAAI,SAAI;MACV,MAAAF,SAAA,CAAAC,GAAA,CAAME,OAAO,QAACC,KAAK,CAAC;IACtB,CAAC,MAAM;MAAA;IAEP;IACA,MAAAJ,SAAA,CAAAC,GAAA,CAAMI,WAAW,OAAE;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAP,SAAA;EAAA;EAAA;AAAA",
+        "mappings": ";;;;;;IAGQ,IAAAA,OAAA,CAAAC,KAAA,EAAIC,IAAI,GAAI;MACV,MAAAF,OAAA,CAAAC,KAAA,EAAME,OAAO,EAACC,KAAK,CAAC;IACtB,CAAC,MAAM;MAAA;IAEP;IACA,MAAAJ,OAAA,CAAAC,KAAA,EAAMI,WAAW,CAAE;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAN,KAAA;EAAA;EAAA;AAAA",
         "names": [
-          "context_1",
-          "run",
+          "$$run_1",
+          "ctx_1",
           "cond",
           "doStuff",
           "value",
@@ -1036,30 +1041,31 @@ foo: for (const key in items) {
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
       "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
+import { $$run as $$run_1 } from "my-example/runtime";
 import { $$push as $$push_1 } from "my-example/runtime";
 export default (async function (closure_1) {
-  const context_1 = $$push_1(closure_1);
+  const ctx_1 = $$push_1(closure_1);
   try {
-    if (context_1.run(cond, null)) {
-      await context_1.run(doStuff, null, value);
+    if ($$run_1(ctx_1, cond)) {
+      await $$run_1(ctx_1, doStuff, value);
     } else {
       return [1, "foo"];
     }
-    await context_1.run(doMoreStuff, null);
+    await $$run_1(ctx_1, doMoreStuff);
   } catch (error_1) {
     return [4, error_1];
   } finally {
-    $$pop_1(context_1);
+    $$pop_1(ctx_1);
   }
   return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;;;IAGQ,IAAAA,SAAA,CAAAC,GAAA,CAAIC,IAAI,SAAI;MACV,MAAAF,SAAA,CAAAC,GAAA,CAAME,OAAO,QAACC,KAAK,CAAC;IACtB,CAAC,MAAM;MAAA;IAEP;IACA,MAAAJ,SAAA,CAAAC,GAAA,CAAMI,WAAW,OAAE;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAP,SAAA;EAAA;EAAA;AAAA",
+        "mappings": ";;;;;;IAGQ,IAAAA,OAAA,CAAAC,KAAA,EAAIC,IAAI,GAAI;MACV,MAAAF,OAAA,CAAAC,KAAA,EAAME,OAAO,EAACC,KAAK,CAAC;IACtB,CAAC,MAAM;MAAA;IAEP;IACA,MAAAJ,OAAA,CAAAC,KAAA,EAAMI,WAAW,CAAE;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAN,KAAA;EAAA;EAAA;AAAA",
         "names": [
-          "context_1",
-          "run",
+          "$$run_1",
+          "ctx_1",
           "cond",
           "doStuff",
           "value",
@@ -1143,25 +1149,26 @@ for (const key in items) {
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
       "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
+import { $$run as $$run_1 } from "my-example/runtime";
 import { $$push as $$push_1 } from "my-example/runtime";
 export default (async function (closure_1) {
-  const context_1 = $$push_1(closure_1);
+  const ctx_1 = $$push_1(closure_1);
   try {
-    await context_1.run(doStuff, null);
+    await $$run_1(ctx_1, doStuff);
   } catch (error_1) {
     return [4, error_1];
   } finally {
-    $$pop_1(context_1);
+    $$pop_1(ctx_1);
   }
   return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;;;IAGQ,MAAAA,SAAA,CAAAC,GAAA,CAAMC,OAAO,OAAE;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAJ,SAAA;EAAA;EAAA;AAAA",
+        "mappings": ";;;;;;IAGQ,MAAAA,OAAA,CAAAC,KAAA,EAAMC,OAAO,CAAE;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAH,KAAA;EAAA;EAAA;AAAA",
         "names": [
-          "context_1",
-          "run",
+          "$$run_1",
+          "ctx_1",
           "doStuff",
           "error_1",
           "$$pop_1",
@@ -1239,27 +1246,28 @@ async function foo() {
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
       "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
+import { $$run as $$run_1 } from "my-example/runtime";
 import { $$push as $$push_1 } from "my-example/runtime";
 export default (async function (closure_1) {
-  const context_1 = $$push_1(closure_1);
+  const ctx_1 = $$push_1(closure_1);
   try {
-    await context_1.run(doStuff, null, context_1.__l[0]);
+    await $$run_1(ctx_1, doStuff, ctx_1.l[0]);
   } catch (error_1) {
     return [4, error_1];
   } finally {
-    $$pop_1(context_1);
+    $$pop_1(ctx_1);
   }
   return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;;;IAKU,MAAAA,SAAA,CAAAC,GAAA,CAAMC,OAAO,QAAAF,SAAA,CAAAG,GAAA,IAAO;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAL,SAAA;EAAA;EAAA;AAAA",
+        "mappings": ";;;;;;IAKU,MAAAA,OAAA,CAAAC,KAAA,EAAMC,OAAO,EAAAD,KAAA,CAAAE,CAAA,IAAO;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAJ,KAAA;EAAA;EAAA;AAAA",
         "names": [
-          "context_1",
-          "run",
+          "$$run_1",
+          "ctx_1",
           "doStuff",
-          "__l",
+          "l",
           "error_1",
           "$$pop_1",
         ],

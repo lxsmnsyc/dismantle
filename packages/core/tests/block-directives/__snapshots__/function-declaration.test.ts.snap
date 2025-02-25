@@ -261,24 +261,24 @@ function example() {
       "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
 import { $$push as $$push_1 } from "my-example/runtime";
 export default (async function (closure_1) {
-  const context_1 = $$push_1(closure_1);
+  const ctx_1 = $$push_1(closure_1);
   try {
     return [2, 'foo bar', null];
   } catch (error_1) {
     return [4, error_1];
   } finally {
-    $$pop_1(context_1);
+    $$pop_1(ctx_1);
   }
   return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;;;IAGQ,WAAO,SAAS;EAAC,SAAAA,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAC,SAAA;EAAA;EAAA;AAAA",
+        "mappings": ";;;;;IAGQ,WAAO,SAAS;EAAC,SAAAA,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAC,KAAA;EAAA;EAAA;AAAA",
         "names": [
           "error_1",
           "$$pop_1",
-          "context_1",
+          "ctx_1",
         ],
         "sourceRoot": undefined,
         "sources": [
@@ -357,23 +357,23 @@ const outer = () => {
       "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
 import { $$push as $$push_1 } from "my-example/runtime";
 export default (async function (closure_1) {
-  const context_1 = $$push_1(closure_1);
+  const ctx_1 = $$push_1(closure_1);
   try {
-    return [2, context_1.__l[0], null];
+    return [2, ctx_1.l[0], null];
   } catch (error_1) {
     return [4, error_1];
   } finally {
-    $$pop_1(context_1);
+    $$pop_1(ctx_1);
   }
   return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;;;IAKU,WAAAA,SAAA,CAAAC,GAAA;EAAa,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAH,SAAA;EAAA;EAAA;AAAA",
+        "mappings": ";;;;;IAKU,WAAAA,KAAA,CAAAC,CAAA;EAAa,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAH,KAAA;EAAA;EAAA;AAAA",
         "names": [
-          "context_1",
-          "__l",
+          "ctx_1",
+          "l",
           "error_1",
           "$$pop_1",
         ],
@@ -456,24 +456,24 @@ async function example() {
       "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
 import { $$push as $$push_1 } from "my-example/runtime";
 export default (async function (closure_1) {
-  const context_1 = $$push_1(closure_1);
+  const ctx_1 = $$push_1(closure_1);
   try {
     return [2, 'foo bar', null];
   } catch (error_1) {
     return [4, error_1];
   } finally {
-    $$pop_1(context_1);
+    $$pop_1(ctx_1);
   }
   return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;;;IAGQ,WAAO,SAAS;EAAC,SAAAA,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAC,SAAA;EAAA;EAAA;AAAA",
+        "mappings": ";;;;;IAGQ,WAAO,SAAS;EAAC,SAAAA,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAC,KAAA;EAAA;EAAA;AAAA",
         "names": [
           "error_1",
           "$$pop_1",
-          "context_1",
+          "ctx_1",
         ],
         "sourceRoot": undefined,
         "sources": [
@@ -552,23 +552,23 @@ const outer = () => {
       "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
 import { $$push as $$push_1 } from "my-example/runtime";
 export default (async function (closure_1) {
-  const context_1 = $$push_1(closure_1);
+  const ctx_1 = $$push_1(closure_1);
   try {
-    return [2, context_1.__l[0], null];
+    return [2, ctx_1.l[0], null];
   } catch (error_1) {
     return [4, error_1];
   } finally {
-    $$pop_1(context_1);
+    $$pop_1(ctx_1);
   }
   return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;;;IAKU,WAAAA,SAAA,CAAAC,GAAA;EAAa,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAH,SAAA;EAAA;EAAA;AAAA",
+        "mappings": ";;;;;IAKU,WAAAA,KAAA,CAAAC,CAAA;EAAa,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAH,KAAA;EAAA;EAAA;AAAA",
         "names": [
-          "context_1",
-          "__l",
+          "ctx_1",
+          "l",
           "error_1",
           "$$pop_1",
         ],
