@@ -11,13 +11,21 @@ import {
   getModuleImports,
   transformRootFunction,
 } from './split';
-import type { FunctionDirectiveDefinition, StateContext } from './types';
+import type {
+  FunctionCallDefinition,
+  FunctionDirectiveDefinition,
+  ModuleDirectiveDefinition,
+  StateContext,
+} from './types';
 import getForeignBindings from './utils/get-foreign-bindings';
 
-function replaceFunctionDirective(
+function replaceFunction(
   ctx: StateContext,
   path: babel.NodePath<t.ArrowFunctionExpression | t.FunctionExpression>,
-  directive: FunctionDirectiveDefinition,
+  definition:
+    | FunctionDirectiveDefinition
+    | FunctionCallDefinition
+    | ModuleDirectiveDefinition,
   bindings: RootBindings,
 ): t.Expression {
   const dependencies = getMergedDependencies(bindings);
@@ -35,22 +43,25 @@ function replaceFunctionDirective(
           statements.concat(compileBindingMap(bindings, dependencies)),
         )
       : undefined,
-    directive.target,
-    directive.idPrefix,
+    definition.target,
+    definition.idPrefix,
   );
 
   return getFunctionReplacement(ctx, path, entryFile, dependencies);
 }
 
-export function splitFunctionDirective(
+export function splitFunction(
   ctx: StateContext,
   path: babel.NodePath<t.ArrowFunctionExpression | t.FunctionExpression>,
-  directive: FunctionDirectiveDefinition,
+  definition:
+    | FunctionDirectiveDefinition
+    | FunctionCallDefinition
+    | ModuleDirectiveDefinition,
 ): t.Expression {
-  return replaceFunctionDirective(
+  return replaceFunction(
     ctx,
     path,
-    directive,
+    definition,
     getBindingMap(path, getForeignBindings(path, 'function')),
   );
 }

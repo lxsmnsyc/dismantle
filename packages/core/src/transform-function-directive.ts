@@ -1,7 +1,7 @@
 import type * as babel from '@babel/core';
 import * as t from '@babel/types';
-import { DISMANTLE_REF, DISMANTLE_SKIP } from './constants';
-import { splitFunctionDirective } from './split-function-directive';
+import { DISMANTLE_REF } from './constants';
+import { splitFunction } from './split-function';
 import type { FunctionDirectiveDefinition, StateContext } from './types';
 import {
   cleanDirectives,
@@ -45,12 +45,12 @@ export function transformFunctionDirective(
   if (isPathValid(body, t.isBlockStatement)) {
     const definition = getFunctionDirectiveDefinition(ctx, body);
     if (definition) {
-      const replacement = splitFunctionDirective(ctx, path, definition);
+      const replacement = splitFunction(ctx, path, definition);
       path.replaceWith(
         t.addComment(
           t.callExpression(
             getImportIdentifier(ctx.imports, path, definition.handle),
-            [t.addComment(replacement, 'leading', DISMANTLE_SKIP)],
+            [replacement],
           ),
           'leading',
           DISMANTLE_REF,
