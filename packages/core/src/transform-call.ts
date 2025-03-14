@@ -4,6 +4,7 @@ import { DISMANTLE_REF } from './constants';
 import { splitFunction } from './split-function';
 import type { FunctionCallDefinition, StateContext } from './types';
 import { getImportIdentifier } from './utils/get-import-identifier';
+import { isValidFunction } from './utils/is-valid-function';
 import { isPathValid, unwrapNode } from './utils/unwrap';
 
 function getFunctionDefinitionFromPropName(
@@ -58,23 +59,6 @@ function getFunctionDefinitionFromCallee(
   return undefined;
 }
 
-function isValidFunction(
-  node: t.Node,
-): node is t.ArrowFunctionExpression | t.FunctionExpression {
-  return t.isArrowFunctionExpression(node) || t.isFunctionExpression(node);
-}
-
-function isSkippableFunction(node: t.Expression): boolean {
-  if (node.leadingComments) {
-    for (let i = 0, len = node.leadingComments.length; i < len; i++) {
-      if (/^@dismantle skip$/.test(node.leadingComments[i].value)) {
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
 export function transformCall(
   ctx: StateContext,
   path: babel.NodePath<t.CallExpression>,
@@ -85,7 +69,7 @@ export function transformCall(
   }
   const args = path.get('arguments');
   const expr = args[0];
-  if (isPathValid(expr, isValidFunction) && !isSkippableFunction(expr.node)) {
+  if (isPathValid(expr, isValidFunction)) {
     const replacement = splitFunction(ctx, expr, definition);
 
     path.replaceWith(
