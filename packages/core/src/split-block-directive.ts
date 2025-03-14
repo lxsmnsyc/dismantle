@@ -482,6 +482,6 @@ export function splitBlockDirective(
     ctx,
     path,
     directive,
-    getBindingMap(path, getForeignBindings(path, 'block')),
+    getBindingMap(path, getForeignBindings(path, 'block'), !!directive.pure),
   );
 }

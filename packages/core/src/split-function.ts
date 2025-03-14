@@ -62,6 +62,10 @@ export function splitFunction(
     ctx,
     path,
     definition,
-    getBindingMap(path, getForeignBindings(path, 'function')),
+    getBindingMap(
+      path,
+      getForeignBindings(path, 'function'),
+      definition.type === 'module-directive' ? true : !!definition.pure,
+    ),
   );
 }
