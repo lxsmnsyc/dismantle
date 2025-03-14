@@ -1,67 +1,61 @@
 {
-  "name": "vite-plugin-use-worker-directive",
-  "version": "0.4.3",
-  "type": "module",
-  "types": "./dist/types/index.d.ts",
-  "main": "./dist/cjs/production/index.cjs",
-  "module": "./dist/esm/production/index.mjs",
-  "exports": {
-    ".": {
-      "development": {
-        "require": "./dist/cjs/development/index.cjs",
-        "import": "./dist/esm/development/index.mjs"
-      },
-      "require": "./dist/cjs/production/index.cjs",
-      "import": "./dist/esm/production/index.mjs",
-      "types": "./dist/types/index.d.ts"
-    }
-  },
-  "files": [
-    "dist",
-    "src"
-  ],
-  "engines": {
-    "node": ">=10"
-  },
-  "license": "MIT",
-  "keywords": [
-    "pridepack",
-    "babel"
-  ],
-  "devDependencies": {
-    "@types/node": "^22.0.0",
-    "pridepack": "2.6.1",
-    "tslib": "^2.6.3",
-    "typescript": "^5.5.4",
-    "use-worker-directive": "0.4.3",
-    "vite": "^5.3.5"
-  },
-  "peerDependencies": {
-    "use-worker-directive": "0.4.3",
-    "vite": "^4 || ^5"
-  },
-  "scripts": {
-    "prepublish": "pridepack clean && pridepack build",
-    "build": "pridepack build",
-    "type-check": "pridepack check",
-    "clean": "pridepack clean",
-    "watch": "pridepack watch"
-  },
-  "description": "Universal \"use worker\" functions",
-  "repository": {
-    "url": "https://github.com/lxsmnsyc/dismantle.git",
-    "type": "git"
-  },
-  "homepage": "https://github.com/lxsmnsyc/dismantle/tree/main/use-worker-directive/core",
-  "bugs": {
-    "url": "https://github.com/lxsmnsyc/dismantle/issues"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "author": "Alexis Munsayac",
-  "private": false,
-  "typesVersions": {
-    "*": {}
-  }
+	"name": "vite-plugin-use-worker-directive",
+	"version": "0.4.3",
+	"type": "module",
+	"types": "./dist/types/index.d.ts",
+	"main": "./dist/cjs/production/index.cjs",
+	"module": "./dist/esm/production/index.mjs",
+	"exports": {
+		".": {
+			"development": {
+				"require": "./dist/cjs/development/index.cjs",
+				"import": "./dist/esm/development/index.mjs"
+			},
+			"require": "./dist/cjs/production/index.cjs",
+			"import": "./dist/esm/production/index.mjs",
+			"types": "./dist/types/index.d.ts"
+		}
+	},
+	"files": ["dist", "src"],
+	"engines": {
+		"node": ">=10"
+	},
+	"license": "MIT",
+	"keywords": ["pridepack", "babel"],
+	"devDependencies": {
+		"@types/node": "^22.13.10",
+		"pridepack": "2.6.4",
+		"tslib": "^2.8.1",
+		"typescript": "^5.8.2",
+		"use-worker-directive": "0.4.3",
+		"vite": "^6.2.1"
+	},
+	"peerDependencies": {
+		"use-worker-directive": "0.4.3",
+		"vite": "^4 || ^5"
+	},
+	"scripts": {
+		"prepublish": "pridepack clean && pridepack build",
+		"build": "pridepack build",
+		"type-check": "pridepack check",
+		"clean": "pridepack clean",
+		"watch": "pridepack watch"
+	},
+	"description": "Universal \"use worker\" functions",
+	"repository": {
+		"url": "https://github.com/lxsmnsyc/dismantle.git",
+		"type": "git"
+	},
+	"homepage": "https://github.com/lxsmnsyc/dismantle/tree/main/use-worker-directive/core",
+	"bugs": {
+		"url": "https://github.com/lxsmnsyc/dismantle/issues"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"author": "Alexis Munsayac",
+	"private": false,
+	"typesVersions": {
+		"*": {}
+	}
 }

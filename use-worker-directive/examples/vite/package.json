@@ -1,24 +1,24 @@
 {
-  "name": "use-worker-directive-vite-demo",
-  "private": true,
-  "publishConfig": {
-    "access": "restricted"
-  },
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "start": "vite preview"
-  },
-  "devDependencies": {
-    "typescript": "^5.5.4",
-    "vite": "^5.3.5",
-    "vite-plugin-inspect": "^0.8.5",
-    "vite-plugin-solid": "^2.10.2",
-    "vite-plugin-use-worker-directive": "0.4.3"
-  },
-  "dependencies": {
-    "solid-js": "^1.8.15",
-    "use-worker-directive": "0.4.3"
-  }
+	"name": "use-worker-directive-vite-demo",
+	"private": true,
+	"publishConfig": {
+		"access": "restricted"
+	},
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"start": "vite preview"
+	},
+	"devDependencies": {
+		"typescript": "^5.8.2",
+		"vite": "^6.2.1",
+		"vite-plugin-inspect": "^0.8.5",
+		"vite-plugin-solid": "^2.10.2",
+		"vite-plugin-use-worker-directive": "0.4.3"
+	},
+	"dependencies": {
+		"solid-js": "^1.8.15",
+		"use-worker-directive": "0.4.3"
+	}
 }
