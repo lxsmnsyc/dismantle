@@ -91,7 +91,12 @@ function extractDependenciesFromFunction(
   if (!state.map.has(path)) {
     state.map.set(
       path,
-      getBindingDependencies(state, path, getForeignBindings(path, 'function')),
+      getBindingDependencies(
+        state,
+        path,
+        getForeignBindings(path, 'function'),
+        false,
+      ),
     );
   }
 }
@@ -137,6 +142,7 @@ function extractDependency(
   state: ExtractDependenciesState,
   dependencies: LocalDependencies,
   target: Binding,
+  isPure: boolean,
 ): void {
   switch (target.kind) {
     // For module imports, we just push to them
@@ -147,17 +153,21 @@ function extractDependency(
     }
     // For params, we push them as mutable locals
     case 'param': {
-      addLocalDependency(dependencies, target);
+      if (!isPure) {
+        addLocalDependency(dependencies, target);
+      }
       break;
     }
     case 'const':
     case 'let':
     case 'var': {
-      extractDependenciesFromVariableDeclarator(state, dependencies, target);
+      if (!isPure) {
+        extractDependenciesFromVariableDeclarator(state, dependencies, target);
+      }
       break;
     }
     case 'hoisted': {
-      if (isPathValid(target.path, t.isFunctionDeclaration)) {
+      if (!isPure && isPathValid(target.path, t.isFunctionDeclaration)) {
         extractDependenciesFromFunction(state, target, target.path);
       }
       break;
@@ -172,6 +182,7 @@ function getBindingDependencies(
   state: ExtractDependenciesState,
   path: babel.NodePath,
   identifiers: Set<string>,
+  isPure: boolean,
 ): LocalDependencies {
   const bindings: LocalDependencies = {
     variable: t.identifier(getDescriptiveName(path, 'func')),
@@ -183,7 +194,7 @@ function getBindingDependencies(
     const target = path.scope.getBinding(identifier);
     if (target) {
       // Recursively extract
-      extractDependency(state, bindings, target);
+      extractDependency(state, bindings, target, isPure);
     } else {
       // TODO globals
     }
@@ -195,13 +206,14 @@ function getBindingDependencies(
 export function getBindingMap(
   path: babel.NodePath<ValidBlock>,
   identifiers: Set<string>,
+  isPure: boolean,
 ): RootBindings {
   const state: ExtractDependenciesState = {
     map: new Map(),
     visited: new Set(),
   };
   state.visited.add(path);
-  const dependencies = getBindingDependencies(state, path, identifiers);
+  const dependencies = getBindingDependencies(state, path, identifiers, isPure);
   return {
     map: state.map,
     root: dependencies,
