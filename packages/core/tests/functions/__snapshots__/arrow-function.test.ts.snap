@@ -243,21 +243,24 @@ const outer = () => {
       "code": "import { $$context as $$context_1 } from "my-example/runtime";
 export default () => {
   const ctx_1 = $$context_1();
-  try {
-    return [2, ctx_1.l[0], null];
-  } catch (error_1) {
-    return [4, error_1];
+  {
+    return value;
   }
-  return [3];
 };",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": "",
-        "names": [],
+        "mappings": ";;;;WAIsCA,KAAK;EAAA;AAAA",
+        "names": [
+          "value",
+        ],
         "sourceRoot": undefined,
-        "sources": [],
-        "sourcesContent": [],
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
         "version": 3,
       },
     },
@@ -340,20 +343,15 @@ const example = /*@dismantle ref*/$$server_1(async () => {
       "code": "import { $$context as $$context_1 } from "my-example/runtime";
 export default () => {
   const ctx_1 = $$context_1();
-  try {
-    return [2, 'foo bar', null];
-  } catch (error_1) {
-    return [4, error_1];
+  {
+    return 'foo bar';
   }
-  return [3];
 };",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;;eAEoC,SAAS;EAAA,SAAAA,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAAA",
-        "names": [
-          "error_1",
-        ],
+        "mappings": ";;;;WAEoC,SAAS;EAAA;AAAA",
+        "names": [],
         "sourceRoot": undefined,
         "sources": [
           "/path/to/example.ts",
@@ -441,21 +439,24 @@ const outer = () => {
       "code": "import { $$context as $$context_1 } from "my-example/runtime";
 export default () => {
   const ctx_1 = $$context_1();
-  try {
-    return [2, ctx_1.l[0], null];
-  } catch (error_1) {
-    return [4, error_1];
+  {
+    return value;
   }
-  return [3];
 };",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": "",
-        "names": [],
+        "mappings": ";;;;WAIsCA,KAAK;EAAA;AAAA",
+        "names": [
+          "value",
+        ],
         "sourceRoot": undefined,
-        "sources": [],
-        "sourcesContent": [],
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
         "version": 3,
       },
     },

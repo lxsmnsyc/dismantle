@@ -306,22 +306,18 @@ const example = /*@dismantle ref*/$$server_1(async () => {
       "code": "import { $$context as $$context_1 } from "my-example/runtime";
 export default (function example() {
   const ctx_1 = $$context_1();
-  try {
-    return [2, 'foo bar', null];
-  } catch (error_1) {
-    return [4, error_1];
+  {
+    return 'foo bar';
   }
-  return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";yBACeA,OAAOA,CAAA,EAAG;EAAA,MAAAC,KAAA,GAAAC,WAAA;EAAA;IAEjB,WAAO,SAAS;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AACnB,CAAC",
+        "mappings": ";yBACeA,OAAOA,CAAA;EAAA,MAAAC,KAAA,GAAAC,WAAA;EAAG;IAEjB,OAAO,SAAS;EAClB;AAAC",
         "names": [
           "example",
           "ctx_1",
           "$$context_1",
-          "error_1",
         ],
         "sourceRoot": undefined,
         "sources": [
@@ -410,23 +406,19 @@ const outer = () => {
       "code": "import { $$context as $$context_1 } from "my-example/runtime";
 export default (async function example() {
   const ctx_1 = $$context_1();
-  try {
-    return [2, ctx_1.l[0], null];
-  } catch (error_1) {
-    return [4, error_1];
+  {
+    return ctx_1.l[0];
   }
-  return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";+BAGuBA,OAAOA,CAAA,EAAG;EAAA,MAAAC,KAAA,GAAAC,WAAA;EAAA;IAEvB,WAAAD,KAAA,CAAAE,CAAA;EAAa,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AACf,CAAC",
+        "mappings": ";+BAGuBA,OAAOA,CAAA;EAAA,MAAAC,KAAA,GAAAC,WAAA;EAAG;IAEvB,OAAAD,KAAA,CAAAE,CAAA;EACF;AAAC",
         "names": [
           "example",
           "ctx_1",
           "$$context_1",
           "l",
-          "error_1",
         ],
         "sourceRoot": undefined,
         "sources": [
@@ -517,22 +509,18 @@ const example = /*@dismantle ref*/$$server_1(async () => {
       "code": "import { $$context as $$context_1 } from "my-example/runtime";
 export default (async function example() {
   const ctx_1 = $$context_1();
-  try {
-    return [2, 'foo bar', null];
-  } catch (error_1) {
-    return [4, error_1];
+  {
+    return 'foo bar';
   }
-  return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";+BACqBA,OAAOA,CAAA,EAAG;EAAA,MAAAC,KAAA,GAAAC,WAAA;EAAA;IAEvB,WAAO,SAAS;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AACnB,CAAC",
+        "mappings": ";+BACqBA,OAAOA,CAAA;EAAA,MAAAC,KAAA,GAAAC,WAAA;EAAG;IAEvB,OAAO,SAAS;EAClB;AAAC",
         "names": [
           "example",
           "ctx_1",
           "$$context_1",
-          "error_1",
         ],
         "sourceRoot": undefined,
         "sources": [
@@ -621,23 +609,19 @@ const outer = () => {
       "code": "import { $$context as $$context_1 } from "my-example/runtime";
 export default (async function example() {
   const ctx_1 = $$context_1();
-  try {
-    return [2, ctx_1.l[0], null];
-  } catch (error_1) {
-    return [4, error_1];
+  {
+    return ctx_1.l[0];
   }
-  return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";+BAGuBA,OAAOA,CAAA,EAAG;EAAA,MAAAC,KAAA,GAAAC,WAAA;EAAA;IAEvB,WAAAD,KAAA,CAAAE,CAAA;EAAa,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AACf,CAAC",
+        "mappings": ";+BAGuBA,OAAOA,CAAA;EAAA,MAAAC,KAAA,GAAAC,WAAA;EAAG;IAEvB,OAAAD,KAAA,CAAAE,CAAA;EACF;AAAC",
         "names": [
           "example",
           "ctx_1",
           "$$context_1",
           "l",
-          "error_1",
         ],
         "sourceRoot": undefined,
         "sources": [

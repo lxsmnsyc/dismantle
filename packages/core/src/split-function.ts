@@ -21,9 +21,7 @@ import getForeignBindings from './utils/get-foreign-bindings';
 function replaceFunction(
   ctx: StateContext,
   path: babel.NodePath<t.ArrowFunctionExpression | t.FunctionExpression>,
-  definition:
-    | FunctionDirectiveDefinition
-    | FunctionCallDefinition,
+  definition: FunctionDirectiveDefinition | FunctionCallDefinition,
   bindings: RootBindings,
 ): t.Expression {
   const dependencies = getMergedDependencies(bindings);
@@ -51,9 +49,7 @@ function replaceFunction(
 export function splitFunction(
   ctx: StateContext,
   path: babel.NodePath<t.ArrowFunctionExpression | t.FunctionExpression>,
-  definition:
-    | FunctionDirectiveDefinition
-    | FunctionCallDefinition,
+  definition: FunctionDirectiveDefinition | FunctionCallDefinition,
 ): t.Expression {
   return replaceFunction(
     ctx,

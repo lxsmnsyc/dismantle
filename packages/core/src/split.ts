@@ -3,9 +3,9 @@ import type { Binding } from '@babel/traverse';
 import * as t from '@babel/types';
 import {
   DISMANTLE_CONTEXT,
-  DISMANTLE_GEN,
   DISMANTLE_RUN,
   HIDDEN_FUNC,
+  HIDDEN_GENERATOR,
 } from './constants';
 import { patchV8Identifier } from './patch-v8-identifier';
 import type { ImportDefinition, ModuleDefinition, StateContext } from './types';
@@ -578,97 +578,37 @@ export function transformRootFunction(
   dependencies: Dependencies,
 ): t.Statement {
   const path = root.get('body');
-  if (isPathValid(path, t.isExpression)) {
-    path.replaceWith(t.blockStatement([t.returnStatement(path.node)]));
-  }
-  assert(isPathValid(path, t.isBlockStatement), 'invariant');
-  const target =
-    path.scope.getFunctionParent() || path.scope.getProgramParent();
 
   const context = generateUniqueName(root, 'ctx');
 
-  const applyMutations = dependencies.mutations.length
-    ? t.memberExpression(context, t.identifier('m'))
-    : undefined;
-
-  // Transform the control flow statements
-  path.traverse({
-    ReturnStatement(child) {
-      const parent =
-        child.scope.getFunctionParent() || child.scope.getProgramParent();
-      if (parent === target) {
-        const arg = child.get('argument');
-        arg.replaceWith(
-          t.arrayExpression([
-            RETURN_KEY,
-            arg.node ? arg.node : t.nullLiteral(),
-            applyMutations ? applyMutations : t.nullLiteral(),
-          ]),
-        );
-      }
-    },
-    YieldExpression(child) {
-      const parent =
-        child.scope.getFunctionParent() || child.scope.getProgramParent();
-      if (parent === target) {
-        if (child.node.delegate) {
-          // TODO
-        } else {
-          const arg = child.get('argument');
-          arg.replaceWith(
-            t.arrayExpression([
-              YIELD_KEY,
-              arg.node ? arg.node : t.nullLiteral(),
-              applyMutations ? applyMutations : t.nullLiteral(),
-            ]),
-          );
-        }
-      }
-    },
-  });
-
-  const error = generateUniqueName(path, 'error');
-
-  const throwResult: t.Expression[] = [THROW_KEY, error];
-  const haltResult: t.Expression[] = [NO_HALT_KEY];
-
-  if (applyMutations) {
-    throwResult.push(applyMutations);
-    haltResult.push(t.nullLiteral());
-    haltResult.push(applyMutations);
-  }
-
   transformInnerReferences(path, context, dependencies);
 
-  path.node.body = [
+  const newStatement = isPathValid(path, t.isExpression)
+    ? t.blockStatement([t.returnStatement(path.node)])
+    : (path.node as t.Statement);
+
+  const statements = t.blockStatement([
     t.variableDeclaration('const', [
       t.variableDeclarator(
         context,
         t.callExpression(t.v8IntrinsicIdentifier(DISMANTLE_CONTEXT), []),
       ),
     ]),
-    t.tryStatement(
-      t.blockStatement(path.node.body),
-      t.catchClause(
-        error,
-        t.blockStatement([t.returnStatement(t.arrayExpression(throwResult))]),
-      ),
-    ),
-    t.returnStatement(t.arrayExpression(haltResult)),
-  ];
+    newStatement,
+  ]);
 
   return t.exportDefaultDeclaration(
     t.isFunctionExpression(root.node)
       ? t.functionExpression(
           root.node.id,
           root.node.params,
-          root.node.body,
+          statements,
           root.node.generator,
           root.node.async,
         )
       : t.arrowFunctionExpression(
           root.node.params,
-          root.node.body,
+          statements,
           root.node.async,
         ),
   );
@@ -710,21 +650,27 @@ export function getFunctionReplacement(
       t.variableDeclaration('const', [
         t.variableDeclarator(
           funcID,
-          t.callExpression(t.v8IntrinsicIdentifier(DISMANTLE_GEN), [
-            source,
-            dependencies.mutations.length
-              ? t.arrowFunctionExpression(
-                  [returnMutations],
-                  t.assignmentExpression(
-                    '=',
-                    t.arrayPattern(
-                      dependencies.mutations.map(id => id.identifier),
+          t.callExpression(
+            getImportIdentifier(ctx.imports, path, {
+              ...HIDDEN_GENERATOR,
+              source: ctx.options.runtime,
+            }),
+            [
+              source,
+              dependencies.mutations.length
+                ? t.arrowFunctionExpression(
+                    [returnMutations],
+                    t.assignmentExpression(
+                      '=',
+                      t.arrayPattern(
+                        dependencies.mutations.map(id => id.identifier),
+                      ),
+                      returnMutations,
                     ),
-                    returnMutations,
-                  ),
-                )
-              : t.nullLiteral(),
-          ]),
+                  )
+                : t.nullLiteral(),
+            ],
+          ),
         ),
       ]),
     );
