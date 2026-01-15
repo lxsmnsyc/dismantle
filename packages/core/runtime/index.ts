@@ -93,3 +93,42 @@ export function $$context(): DismantleContext {
   return current;
 }
 
+export function $$wrapFunction<T extends any[], R>(
+  callback: (...args: T) => R,
+) {
+  return async (
+    context: DismantleContext,
+    ...args: T
+  ): Promise<[type: BasicFunctionCode, result: R, mutations: unknown]> => {
+    try {
+      const result = await $$run(context, callback, ...args);
+      return [2, result, context.m];
+    } catch (error) {
+      return [4, error as R, context.m];
+    }
+  };
+}
+
+export function $$wrapGenerator<T extends any[], R>(
+  callback: (...args: T) => AsyncGenerator<R>,
+) {
+  return async function* (
+    context: DismantleContext,
+    ...args: T
+  ): AsyncGenerator<[type: BasicGeneratorCode, result: R, mutations: unknown]> {
+    try {
+      let step: IteratorResult<R>;
+      const iterator = $$run(context, callback, ...args);
+      while (true) {
+        step = await iterator.next();
+        if (step.done) {
+          break;
+        }
+        yield [5, step.value, context.m];
+      }
+      return [2, step.value, context.m];
+    } catch (error) {
+      return [4, error as R, context.m];
+    }
+  };
+}

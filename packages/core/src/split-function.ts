@@ -32,6 +32,7 @@ function replaceFunction(
 
   const entryFile = createEntryFile(
     ctx,
+    path.node.generator ? 'generator' : 'function',
     path,
     ctx.options.mode === 'server'
       ? createRootFile(

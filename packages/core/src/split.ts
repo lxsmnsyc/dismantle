@@ -454,6 +454,7 @@ export function createRootFile(
 
 export function createEntryFile(
   ctx: StateContext,
+  type: 'block' | 'function' | 'generator',
   path: babel.NodePath,
   rootFile: string | undefined,
   imported: ImportDefinition,
@@ -481,7 +482,18 @@ export function createEntryFile(
       source: rootFile,
       local: rootID.name,
     });
-    args.push(rootID);
+    if (type === 'block') {
+      args.push(rootID);
+    } else {
+      const wrapper = t.identifier('wrapper');
+      entryImports.push({
+        kind: 'named',
+        source: ctx.options.runtime,
+        local: wrapper.name,
+        imported: type === 'function' ? '$$wrapFunction' : '$$wrapGenerator',
+      });
+      args.push(t.callExpression(wrapper, [rootID]));
+    }
   }
 
   // Create the registration call

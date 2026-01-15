@@ -449,6 +449,7 @@ function replaceBlockDirective(
 
   const entryFile = createEntryFile(
     ctx,
+    'block',
     path,
     ctx.options.mode === 'server'
       ? createRootFile(
