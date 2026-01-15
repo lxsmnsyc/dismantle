@@ -11,8 +11,8 @@ interface State extends babel.PluginPass {
 }
 
 const FUNCTION_BUBBLE: babel.Visitor<State> = {
-  FunctionDeclaration(path) {
-    bubbleFunctionDeclaration(path);
+  FunctionDeclaration(path, ctx) {
+    bubbleFunctionDeclaration(ctx.opts, path);
   },
 };
 

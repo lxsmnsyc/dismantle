@@ -258,27 +258,22 @@ const example = function () {
   ],
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
-      "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
-import { $$push as $$push_1 } from "my-example/runtime";
+      "code": "import { $$context as $$context_1 } from "my-example/runtime";
 export default (async function (closure_1) {
-  const ctx_1 = $$push_1(closure_1);
+  const ctx_1 = $$context_1();
   try {
     return [2, 'foo bar', null];
   } catch (error_1) {
     return [4, error_1];
-  } finally {
-    $$pop_1(ctx_1);
   }
   return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;;;IAGQ,WAAO,SAAS;EAAC,SAAAA,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAC,KAAA;EAAA;EAAA;AAAA",
+        "mappings": ";;;;IAGQ,WAAO,SAAS;EAAC,SAAAA,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAAA",
         "names": [
           "error_1",
-          "$$pop_1",
-          "ctx_1",
         ],
         "sourceRoot": undefined,
         "sources": [
@@ -354,28 +349,24 @@ const outer = () => {
   ],
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
-      "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
-import { $$push as $$push_1 } from "my-example/runtime";
+      "code": "import { $$context as $$context_1 } from "my-example/runtime";
 export default (async function (closure_1) {
-  const ctx_1 = $$push_1(closure_1);
+  const ctx_1 = $$context_1();
   try {
     return [2, ctx_1.l[0], null];
   } catch (error_1) {
     return [4, error_1];
-  } finally {
-    $$pop_1(ctx_1);
   }
   return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;;;IAKU,WAAAA,KAAA,CAAAC,CAAA;EAAa,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAH,KAAA;EAAA;EAAA;AAAA",
+        "mappings": ";;;;IAKU,WAAAA,KAAA,CAAAC,CAAA;EAAa,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAAA",
         "names": [
           "ctx_1",
           "l",
           "error_1",
-          "$$pop_1",
         ],
         "sourceRoot": undefined,
         "sources": [
@@ -453,27 +444,22 @@ const example = async function () {
   ],
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
-      "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
-import { $$push as $$push_1 } from "my-example/runtime";
+      "code": "import { $$context as $$context_1 } from "my-example/runtime";
 export default (async function (closure_1) {
-  const ctx_1 = $$push_1(closure_1);
+  const ctx_1 = $$context_1();
   try {
     return [2, 'foo bar', null];
   } catch (error_1) {
     return [4, error_1];
-  } finally {
-    $$pop_1(ctx_1);
   }
   return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;;;IAGQ,WAAO,SAAS;EAAC,SAAAA,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAC,KAAA;EAAA;EAAA;AAAA",
+        "mappings": ";;;;IAGQ,WAAO,SAAS;EAAC,SAAAA,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAAA",
         "names": [
           "error_1",
-          "$$pop_1",
-          "ctx_1",
         ],
         "sourceRoot": undefined,
         "sources": [
@@ -549,28 +535,24 @@ const outer = () => {
   ],
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
-      "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
-import { $$push as $$push_1 } from "my-example/runtime";
+      "code": "import { $$context as $$context_1 } from "my-example/runtime";
 export default (async function (closure_1) {
-  const ctx_1 = $$push_1(closure_1);
+  const ctx_1 = $$context_1();
   try {
     return [2, ctx_1.l[0], null];
   } catch (error_1) {
     return [4, error_1];
-  } finally {
-    $$pop_1(ctx_1);
   }
   return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;;;IAKU,WAAAA,KAAA,CAAAC,CAAA;EAAa,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAH,KAAA;EAAA;EAAA;AAAA",
+        "mappings": ";;;;IAKU,WAAAA,KAAA,CAAAC,CAAA;EAAa,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAAA",
         "names": [
           "ctx_1",
           "l",
           "error_1",
-          "$$pop_1",
         ],
         "sourceRoot": undefined,
         "sources": [

@@ -7,7 +7,7 @@ import { $$func as $$func_1 } from "my-example/runtime";
 import { server$ } from 'my-example';
 const value = 'foo bar';
 const outer = () => {
-  const example = /*@dismantle ref*/$$server_1( /*@dismantle skip*/async () => {
+  const example = /*@dismantle ref*/$$server_1(async () => {
     const source_1 = (await import("./example.ts?mode=client&my-example=0.ts")).default;
     return async (...rest_1) => {
       const [type_1, result_1] = await $$func_1(source_1, null)([[value], []], ...rest_1);
@@ -75,7 +75,7 @@ exports[`ArrowFunctionExpression > client > should transform valid server functi
   "code": "import { $$server as $$server_1 } from "my-example/server";
 import { $$func as $$func_1 } from "my-example/runtime";
 import { server$ } from 'my-example';
-const example = /*@dismantle ref*/$$server_1( /*@dismantle skip*/async () => {
+const example = /*@dismantle ref*/$$server_1(async () => {
   const source_1 = (await import("./example.ts?mode=client&my-example=0.ts")).default;
   return async (...rest_1) => {
     const [type_1, result_1] = await $$func_1(source_1, null)([[], []], ...rest_1);
@@ -139,7 +139,7 @@ import { $$func as $$func_1 } from "my-example/runtime";
 import { server$ } from 'my-example';
 const outer = () => {
   const value = 'foo bar';
-  const example = /*@dismantle ref*/$$server_1( /*@dismantle skip*/async () => {
+  const example = /*@dismantle ref*/$$server_1(async () => {
     const source_1 = (await import("./example.ts?mode=client&my-example=0.ts")).default;
     return async (...rest_1) => {
       const [type_1, result_1] = await $$func_1(source_1, null)([[value], []], ...rest_1);
@@ -209,7 +209,7 @@ import { $$func as $$func_1 } from "my-example/runtime";
 import { server$ } from 'my-example';
 const value = 'foo bar';
 const outer = () => {
-  const example = /*@dismantle ref*/$$server_1( /*@dismantle skip*/async () => {
+  const example = /*@dismantle ref*/$$server_1(async () => {
     const source_1 = (await import("./example.ts?mode=server&my-example=1.ts")).default;
     return async (...rest_1) => {
       const [type_1, result_1] = await $$func_1(source_1, null)([[value], []], ...rest_1);
@@ -222,19 +222,16 @@ const outer = () => {
   ],
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
-      "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
-import { $$push as $$push_1 } from "my-example/runtime";
-export default (closure_1 => {
-  const ctx_1 = $$push_1(closure_1);
+      "code": "import { $$context as $$context_1 } from "my-example/runtime";
+export default () => {
+  const ctx_1 = $$context_1();
   try {
     return [2, ctx_1.l[0], null];
   } catch (error_1) {
     return [4, error_1];
-  } finally {
-    $$pop_1(ctx_1);
   }
   return [3];
-});",
+};",
       "map": {
         "file": undefined,
         "ignoreList": [],
@@ -305,7 +302,7 @@ exports[`ArrowFunctionExpression > server > should transform valid server functi
   "code": "import { $$server as $$server_1 } from "my-example/server";
 import { $$func as $$func_1 } from "my-example/runtime";
 import { server$ } from 'my-example';
-const example = /*@dismantle ref*/$$server_1( /*@dismantle skip*/async () => {
+const example = /*@dismantle ref*/$$server_1(async () => {
   const source_1 = (await import("./example.ts?mode=server&my-example=1.ts")).default;
   return async (...rest_1) => {
     const [type_1, result_1] = await $$func_1(source_1, null)([[], []], ...rest_1);
@@ -317,27 +314,22 @@ const example = /*@dismantle ref*/$$server_1( /*@dismantle skip*/async () => {
   ],
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
-      "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
-import { $$push as $$push_1 } from "my-example/runtime";
-export default (closure_1 => {
-  const ctx_1 = $$push_1(closure_1);
+      "code": "import { $$context as $$context_1 } from "my-example/runtime";
+export default () => {
+  const ctx_1 = $$context_1();
   try {
     return [2, 'foo bar', null];
   } catch (error_1) {
     return [4, error_1];
-  } finally {
-    $$pop_1(ctx_1);
   }
   return [3];
-});",
+};",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;;;eAEoC,SAAS;EAAA,SAAAA,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAC,KAAA;EAAA;EAAA;AAAA",
+        "mappings": ";;;;eAEoC,SAAS;EAAA,SAAAA,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAAA",
         "names": [
           "error_1",
-          "$$pop_1",
-          "ctx_1",
         ],
         "sourceRoot": undefined,
         "sources": [
@@ -405,7 +397,7 @@ import { $$func as $$func_1 } from "my-example/runtime";
 import { server$ } from 'my-example';
 const outer = () => {
   const value = 'foo bar';
-  const example = /*@dismantle ref*/$$server_1( /*@dismantle skip*/async () => {
+  const example = /*@dismantle ref*/$$server_1(async () => {
     const source_1 = (await import("./example.ts?mode=server&my-example=1.ts")).default;
     return async (...rest_1) => {
       const [type_1, result_1] = await $$func_1(source_1, null)([[value], []], ...rest_1);
@@ -418,19 +410,16 @@ const outer = () => {
   ],
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
-      "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
-import { $$push as $$push_1 } from "my-example/runtime";
-export default (closure_1 => {
-  const ctx_1 = $$push_1(closure_1);
+      "code": "import { $$context as $$context_1 } from "my-example/runtime";
+export default () => {
+  const ctx_1 = $$context_1();
   try {
     return [2, ctx_1.l[0], null];
   } catch (error_1) {
     return [4, error_1];
-  } finally {
-    $$pop_1(ctx_1);
   }
   return [3];
-});",
+};",
       "map": {
         "file": undefined,
         "ignoreList": [],

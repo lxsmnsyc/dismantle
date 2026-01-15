@@ -4,7 +4,7 @@ exports[`FunctionDeclaration > client > should skip non-async server functions 1
 {
   "code": "import { $$server as $$server_1 } from "my-example/server";
 import { $$func as $$func_1 } from "my-example/runtime";
-const example = /*@dismantle ref*/$$server_1( /*@dismantle skip*/async () => {
+const example = /*@dismantle ref*/$$server_1(async () => {
   const source_1 = (await import("./example.ts?mode=client&my-example=0.ts")).default;
   return async function example(...rest_1) {
     const [type_1, result_1] = await $$func_1(source_1, null)([[], []], ...rest_1);
@@ -68,7 +68,7 @@ exports[`FunctionDeclaration > client > should skip top-level values for scope 1
 import { $$func as $$func_1 } from "my-example/runtime";
 const value = 'foo bar';
 const outer = () => {
-  const example = /*@dismantle ref*/$$server_1( /*@dismantle skip*/async () => {
+  const example = /*@dismantle ref*/$$server_1(async () => {
     const source_1 = (await import("./example.ts?mode=client&my-example=0.ts")).default;
     return async function example(...rest_1) {
       const [type_1, result_1] = await $$func_1(source_1, null)([[value], []], ...rest_1);
@@ -136,7 +136,7 @@ exports[`FunctionDeclaration > client > should transform valid server functions 
 {
   "code": "import { $$server as $$server_1 } from "my-example/server";
 import { $$func as $$func_1 } from "my-example/runtime";
-const example = /*@dismantle ref*/$$server_1( /*@dismantle skip*/async () => {
+const example = /*@dismantle ref*/$$server_1(async () => {
   const source_1 = (await import("./example.ts?mode=client&my-example=0.ts")).default;
   return async function example(...rest_1) {
     const [type_1, result_1] = await $$func_1(source_1, null)([[], []], ...rest_1);
@@ -199,7 +199,7 @@ exports[`FunctionDeclaration > client > should transform valid server functions 
   "code": "import { $$server as $$server_1 } from "my-example/server";
 import { $$func as $$func_1 } from "my-example/runtime";
 const outer = () => {
-  const example = /*@dismantle ref*/$$server_1( /*@dismantle skip*/async () => {
+  const example = /*@dismantle ref*/$$server_1(async () => {
     const source_1 = (await import("./example.ts?mode=client&my-example=0.ts")).default;
     return async function example(...rest_1) {
       const [type_1, result_1] = await $$func_1(source_1, null)([[value], []], ...rest_1);
@@ -268,7 +268,7 @@ exports[`FunctionDeclaration > server > should skip non-async server functions 1
 {
   "code": "import { $$server as $$server_1 } from "my-example/server";
 import { $$func as $$func_1 } from "my-example/runtime";
-const example = /*@dismantle ref*/$$server_1( /*@dismantle skip*/async () => {
+const example = /*@dismantle ref*/$$server_1(async () => {
   const source_1 = (await import("./example.ts?mode=server&my-example=1.ts")).default;
   return async function example(...rest_1) {
     const [type_1, result_1] = await $$func_1(source_1, null)([[], []], ...rest_1);
@@ -280,30 +280,25 @@ const example = /*@dismantle ref*/$$server_1( /*@dismantle skip*/async () => {
   ],
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
-      "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
-import { $$push as $$push_1 } from "my-example/runtime";
-export default (function example(closure_1) {
-  const ctx_1 = $$push_1(closure_1);
+      "code": "import { $$context as $$context_1 } from "my-example/runtime";
+export default (function example() {
+  const ctx_1 = $$context_1();
   try {
     return [2, 'foo bar', null];
   } catch (error_1) {
     return [4, error_1];
-  } finally {
-    $$pop_1(ctx_1);
   }
   return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;yBACeA,OAAOA,CAAAC,SAAA,EAAG;EAAA,MAAAC,KAAA,GAAAC,QAAA,CAAAF,SAAA;EAAA;IAEjB,WAAO,SAAS;EAAC,SAAAG,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAH,KAAA;EAAA;EAAA;AACnB,CAAC",
+        "mappings": ";yBACeA,OAAOA,CAAA,EAAG;EAAA,MAAAC,KAAA,GAAAC,WAAA;EAAA;IAEjB,WAAO,SAAS;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AACnB,CAAC",
         "names": [
           "example",
-          "closure_1",
           "ctx_1",
-          "$$push_1",
+          "$$context_1",
           "error_1",
-          "$$pop_1",
         ],
         "sourceRoot": undefined,
         "sources": [
@@ -371,7 +366,7 @@ exports[`FunctionDeclaration > server > should skip top-level values for scope 1
 import { $$func as $$func_1 } from "my-example/runtime";
 const value = 'foo bar';
 const outer = () => {
-  const example = /*@dismantle ref*/$$server_1( /*@dismantle skip*/async () => {
+  const example = /*@dismantle ref*/$$server_1(async () => {
     const source_1 = (await import("./example.ts?mode=server&my-example=1.ts")).default;
     return async function example(...rest_1) {
       const [type_1, result_1] = await $$func_1(source_1, null)([[value], []], ...rest_1);
@@ -384,31 +379,26 @@ const outer = () => {
   ],
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
-      "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
-import { $$push as $$push_1 } from "my-example/runtime";
-export default (async function example(closure_1) {
-  const ctx_1 = $$push_1(closure_1);
+      "code": "import { $$context as $$context_1 } from "my-example/runtime";
+export default (async function example() {
+  const ctx_1 = $$context_1();
   try {
     return [2, ctx_1.l[0], null];
   } catch (error_1) {
     return [4, error_1];
-  } finally {
-    $$pop_1(ctx_1);
   }
   return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;+BAGuBA,OAAOA,CAAAC,SAAA,EAAG;EAAA,MAAAC,KAAA,GAAAC,QAAA,CAAAF,SAAA;EAAA;IAEvB,WAAAC,KAAA,CAAAE,CAAA;EAAa,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAJ,KAAA;EAAA;EAAA;AACf,CAAC",
+        "mappings": ";+BAGuBA,OAAOA,CAAA,EAAG;EAAA,MAAAC,KAAA,GAAAC,WAAA;EAAA;IAEvB,WAAAD,KAAA,CAAAE,CAAA;EAAa,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AACf,CAAC",
         "names": [
           "example",
-          "closure_1",
           "ctx_1",
-          "$$push_1",
+          "$$context_1",
           "l",
           "error_1",
-          "$$pop_1",
         ],
         "sourceRoot": undefined,
         "sources": [
@@ -479,7 +469,7 @@ exports[`FunctionDeclaration > server > should transform valid server functions 
 {
   "code": "import { $$server as $$server_1 } from "my-example/server";
 import { $$func as $$func_1 } from "my-example/runtime";
-const example = /*@dismantle ref*/$$server_1( /*@dismantle skip*/async () => {
+const example = /*@dismantle ref*/$$server_1(async () => {
   const source_1 = (await import("./example.ts?mode=server&my-example=1.ts")).default;
   return async function example(...rest_1) {
     const [type_1, result_1] = await $$func_1(source_1, null)([[], []], ...rest_1);
@@ -491,30 +481,25 @@ const example = /*@dismantle ref*/$$server_1( /*@dismantle skip*/async () => {
   ],
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
-      "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
-import { $$push as $$push_1 } from "my-example/runtime";
-export default (async function example(closure_1) {
-  const ctx_1 = $$push_1(closure_1);
+      "code": "import { $$context as $$context_1 } from "my-example/runtime";
+export default (async function example() {
+  const ctx_1 = $$context_1();
   try {
     return [2, 'foo bar', null];
   } catch (error_1) {
     return [4, error_1];
-  } finally {
-    $$pop_1(ctx_1);
   }
   return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;+BACqBA,OAAOA,CAAAC,SAAA,EAAG;EAAA,MAAAC,KAAA,GAAAC,QAAA,CAAAF,SAAA;EAAA;IAEvB,WAAO,SAAS;EAAC,SAAAG,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAH,KAAA;EAAA;EAAA;AACnB,CAAC",
+        "mappings": ";+BACqBA,OAAOA,CAAA,EAAG;EAAA,MAAAC,KAAA,GAAAC,WAAA;EAAA;IAEvB,WAAO,SAAS;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AACnB,CAAC",
         "names": [
           "example",
-          "closure_1",
           "ctx_1",
-          "$$push_1",
+          "$$context_1",
           "error_1",
-          "$$pop_1",
         ],
         "sourceRoot": undefined,
         "sources": [
@@ -581,7 +566,7 @@ exports[`FunctionDeclaration > server > should transform valid server functions 
   "code": "import { $$server as $$server_1 } from "my-example/server";
 import { $$func as $$func_1 } from "my-example/runtime";
 const outer = () => {
-  const example = /*@dismantle ref*/$$server_1( /*@dismantle skip*/async () => {
+  const example = /*@dismantle ref*/$$server_1(async () => {
     const source_1 = (await import("./example.ts?mode=server&my-example=1.ts")).default;
     return async function example(...rest_1) {
       const [type_1, result_1] = await $$func_1(source_1, null)([[value], []], ...rest_1);
@@ -595,31 +580,26 @@ const outer = () => {
   ],
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
-      "code": "import { $$pop as $$pop_1 } from "my-example/runtime";
-import { $$push as $$push_1 } from "my-example/runtime";
-export default (async function example(closure_1) {
-  const ctx_1 = $$push_1(closure_1);
+      "code": "import { $$context as $$context_1 } from "my-example/runtime";
+export default (async function example() {
+  const ctx_1 = $$context_1();
   try {
     return [2, ctx_1.l[0], null];
   } catch (error_1) {
     return [4, error_1];
-  } finally {
-    $$pop_1(ctx_1);
   }
   return [3];
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;+BAGuBA,OAAOA,CAAAC,SAAA,EAAG;EAAA,MAAAC,KAAA,GAAAC,QAAA,CAAAF,SAAA;EAAA;IAEvB,WAAAC,KAAA,CAAAE,CAAA;EAAa,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;IAAAC,OAAA,CAAAJ,KAAA;EAAA;EAAA;AACf,CAAC",
+        "mappings": ";+BAGuBA,OAAOA,CAAA,EAAG;EAAA,MAAAC,KAAA,GAAAC,WAAA;EAAA;IAEvB,WAAAD,KAAA,CAAAE,CAAA;EAAa,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AACf,CAAC",
         "names": [
           "example",
-          "closure_1",
           "ctx_1",
-          "$$push_1",
+          "$$context_1",
           "l",
           "error_1",
-          "$$pop_1",
         ],
         "sourceRoot": undefined,
         "sources": [
