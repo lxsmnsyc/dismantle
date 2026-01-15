@@ -270,7 +270,7 @@ const example = () => {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
       "code": "import { $$run as $$run_1 } from "my-example/runtime";
 import { $$context as $$context_1 } from "my-example/runtime";
-export default (async function (closure_1) {
+export default (async function () {
   const ctx_1 = $$context_1();
   try {
     $$run_1(ctx_1, doStuff);
@@ -368,7 +368,7 @@ if (cond()) {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
       "code": "import { $$run as $$run_1 } from "my-example/runtime";
 import { $$context as $$context_1 } from "my-example/runtime";
-export default (async function (closure_1) {
+export default (async function () {
   const ctx_1 = $$context_1();
   try {
     await $$run_1(ctx_1, doStuff, ctx_1.l[0]);
@@ -468,7 +468,7 @@ async function foo() {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
       "code": "import { $$run as $$run_1 } from "my-example/runtime";
 import { $$context as $$context_1 } from "my-example/runtime";
-export default (async function (closure_1) {
+export default (async function () {
   const ctx_1 = $$context_1();
   try {
     await $$run_1(ctx_1, doStuff, ctx_1.l[0]);
@@ -568,7 +568,7 @@ if (cond()) {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
       "code": "import { $$run as $$run_1 } from "my-example/runtime";
 import { $$context as $$context_1 } from "my-example/runtime";
-export default (async function (closure_1) {
+export default (async function () {
   const ctx_1 = $$context_1();
   try {
     await $$run_1(ctx_1, doStuff);

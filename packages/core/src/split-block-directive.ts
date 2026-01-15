@@ -31,7 +31,6 @@ interface HaltingBlockResult {
   continueCount: number;
   hasReturn: boolean;
   hasYield: boolean;
-  closure: t.Identifier;
 }
 
 function transformBlockContent(
@@ -48,7 +47,6 @@ function transformBlockContent(
   let hasReturn = false;
   let hasYield = false;
 
-  const closure = generateUniqueName(path, 'closure');
   const context = generateUniqueName(path, 'ctx');
 
   const applyMutations = dependencies.mutations.length
@@ -163,7 +161,6 @@ function transformBlockContent(
     t.returnStatement(t.arrayExpression(haltResult)),
   ];
   return {
-    closure,
     breaks,
     continues,
     hasReturn,
@@ -429,23 +426,21 @@ function replaceBlockDirective(
   directive: BlockDirectiveDefinition,
   bindings: RootBindings,
 ) {
+  const backup = t.cloneNode(path.node, true, false);
   const dependencies = getMergedDependencies(bindings);
   // Transform all control statements
   const halting = transformBlockContent(path, dependencies);
 
   const statements = getModuleImports(dependencies.modules);
+  const block = t.blockStatement(path.node.body);
 
   statements.push(
     t.exportDefaultDeclaration(
-      t.functionExpression(
-        undefined,
-        [halting.closure],
-        t.blockStatement(path.node.body),
-        halting.hasYield,
-        true,
-      ),
+      t.functionExpression(undefined, [], block, halting.hasYield, true),
     ),
   );
+
+  path.node.body = backup.body;
 
   const entryFile = createEntryFile(
     ctx,
@@ -461,13 +456,15 @@ function replaceBlockDirective(
     directive.idPrefix,
   );
 
-  return getBlockDirectiveReplacement(
+  const result = getBlockDirectiveReplacement(
     ctx,
     path,
     entryFile,
     dependencies,
     halting,
   );
+
+  return result;
 }
 
 export function splitBlockDirective(

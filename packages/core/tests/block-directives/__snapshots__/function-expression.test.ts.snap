@@ -282,7 +282,7 @@ const example = function () {
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
       "code": "import { $$context as $$context_1 } from "my-example/runtime";
-export default (async function (closure_1) {
+export default (async function () {
   const ctx_1 = $$context_1();
   try {
     return [2, 'foo bar', null];
@@ -378,7 +378,7 @@ const outer = () => {
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
       "code": "import { $$context as $$context_1 } from "my-example/runtime";
-export default (async function (closure_1) {
+export default (async function () {
   const ctx_1 = $$context_1();
   try {
     return [2, ctx_1.l[0], null];
@@ -478,7 +478,7 @@ const example = async function () {
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
       "code": "import { $$context as $$context_1 } from "my-example/runtime";
-export default (async function (closure_1) {
+export default (async function () {
   const ctx_1 = $$context_1();
   try {
     return [2, 'foo bar', null];
@@ -574,7 +574,7 @@ const outer = () => {
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
       "code": "import { $$context as $$context_1 } from "my-example/runtime";
-export default (async function (closure_1) {
+export default (async function () {
   const ctx_1 = $$context_1();
   try {
     return [2, ctx_1.l[0], null];

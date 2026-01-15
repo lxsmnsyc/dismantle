@@ -21,7 +21,7 @@ export function $$func<T extends any[], R>(
     if (type === 4) {
       throw result;
     }
-    return [type, result];
+    return result;
   };
 }
 
@@ -58,7 +58,7 @@ export function $$gen<T extends any[], R>(
     if (type === 4) {
       throw result;
     }
-    return [type, result];
+    return result;
   };
 }
 
@@ -130,5 +130,11 @@ export function $$wrapGenerator<T extends any[], R>(
     } catch (error) {
       return [4, error as R, context.m];
     }
+  };
+}
+
+export function $$wrapBlock<R>(callback: () => R) {
+  return (context: DismantleContext) => {
+    return $$run(context, callback);
   };
 }
