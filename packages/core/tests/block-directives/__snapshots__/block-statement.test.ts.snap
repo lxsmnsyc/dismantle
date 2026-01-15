@@ -5,7 +5,10 @@ exports[`BlockStatement > client > should skip server block statements in non-as
   "code": "import { $$func as $$func_1 } from "my-example/runtime";
 const example = () => {
   {
-    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)([[], []]);
+    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)({
+      l: [],
+      m: []
+    });
   }
 };",
   "entries": [
@@ -30,13 +33,15 @@ export default entry("26ecc3a5-0-example");",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,MAAMA,OAAO,GAAGA,CAAA,KAAM;EAAA;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;EAAA;AAKtB,CAAC",
+    "mappings": ";AACM,MAAMA,OAAO,GAAGA,CAAA,KAAM;EAAA;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;MAAAC,CAAA;MAAAC,CAAA;IAAA;EAAA;AAKtB,CAAC",
     "names": [
       "example",
       "type_1",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -63,7 +68,10 @@ exports[`BlockStatement > client > should skip top-level values for scope 1`] = 
   "code": "import { $$func as $$func_1 } from "my-example/runtime";
 const value = 'foo bar';
 {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)([[value], []]);
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)({
+    l: [value],
+    m: []
+  });
 }",
   "entries": [
     "/path/to/example.ts?mode=client&my-example=0.ts",
@@ -87,13 +95,15 @@ export default entry("26ecc3a5-0-anonymous");",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,MAAMA,KAAK,GAAG,SAAS;AAAC;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA,UAAlBJ,KAAK;AAAA",
+    "mappings": ";AACM,MAAMA,KAAK,GAAG,SAAS;AAAC;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;IAAAC,CAAA,GAAlBL,KAAK;IAAAM,CAAA;EAAA;AAAA",
     "names": [
       "value",
       "type_1",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -118,7 +128,10 @@ exports[`BlockStatement > client > should transform valid server block statement
 {
   "code": "import { $$func as $$func_1 } from "my-example/runtime";
 {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)([[], []]);
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)({
+    l: [],
+    m: []
+  });
 }",
   "entries": [
     "/path/to/example.ts?mode=client&my-example=0.ts",
@@ -168,7 +181,10 @@ exports[`BlockStatement > client > should transform valid server functions with 
 async function foo() {
   const value = 'foo bar';
   {
-    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)([[value], []]);
+    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)({
+      l: [value],
+      m: []
+    });
   }
 }",
   "entries": [
@@ -193,7 +209,7 @@ export default entry("26ecc3a5-0-foo");",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EAAC;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA,UAAlBJ,KAAK;EAAA;AAKb",
+    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EAAC;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;MAAAC,CAAA,GAAlBL,KAAK;MAAAM,CAAA;IAAA;EAAA;AAKb",
     "names": [
       "foo",
       "value",
@@ -201,6 +217,8 @@ export default entry("26ecc3a5-0-foo");",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -228,7 +246,10 @@ exports[`BlockStatement > server > should skip server block statements in non-as
   "code": "import { $$func as $$func_1 } from "my-example/runtime";
 const example = () => {
   {
-    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)([[], []]);
+    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)({
+      l: [],
+      m: []
+    });
   }
 };",
   "entries": [
@@ -286,13 +307,15 @@ export default entry("26ecc3a5-0-example", root);",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,MAAMA,OAAO,GAAGA,CAAA,KAAM;EAAA;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;EAAA;AAKtB,CAAC",
+    "mappings": ";AACM,MAAMA,OAAO,GAAGA,CAAA,KAAM;EAAA;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;MAAAC,CAAA;MAAAC,CAAA;IAAA;EAAA;AAKtB,CAAC",
     "names": [
       "example",
       "type_1",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -321,7 +344,10 @@ exports[`BlockStatement > server > should skip top-level values for scope 1`] = 
   "code": "import { $$func as $$func_1 } from "my-example/runtime";
 const value = 'foo bar';
 {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)([[value], []]);
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)({
+    l: [value],
+    m: []
+  });
 }",
   "entries": [
     "/path/to/example.ts?mode=server&my-example=1.ts",
@@ -379,13 +405,15 @@ export default entry("26ecc3a5-0-anonymous", root);",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,MAAMA,KAAK,GAAG,SAAS;AAAC;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA,UAAlBJ,KAAK;AAAA",
+    "mappings": ";AACM,MAAMA,KAAK,GAAG,SAAS;AAAC;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;IAAAC,CAAA,GAAlBL,KAAK;IAAAM,CAAA;EAAA;AAAA",
     "names": [
       "value",
       "type_1",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -412,7 +440,10 @@ exports[`BlockStatement > server > should transform valid server block statement
 {
   "code": "import { $$func as $$func_1 } from "my-example/runtime";
 {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)([[], []]);
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)({
+    l: [],
+    m: []
+  });
 }",
   "entries": [
     "/path/to/example.ts?mode=server&my-example=1.ts",
@@ -497,7 +528,10 @@ exports[`BlockStatement > server > should transform valid server functions with 
 async function foo() {
   const value = 'foo bar';
   {
-    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)([[value], []]);
+    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)({
+      l: [value],
+      m: []
+    });
   }
 }",
   "entries": [
@@ -556,7 +590,7 @@ export default entry("26ecc3a5-0-foo", root);",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EAAC;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA,UAAlBJ,KAAK;EAAA;AAKb",
+    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EAAC;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;MAAAC,CAAA,GAAlBL,KAAK;MAAAM,CAAA;IAAA;EAAA;AAKb",
     "names": [
       "foo",
       "value",
@@ -564,6 +598,8 @@ export default entry("26ecc3a5-0-foo", root);",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [

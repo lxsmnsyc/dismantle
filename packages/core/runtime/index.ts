@@ -93,6 +93,3 @@ export function $$context(): DismantleContext {
   return current;
 }
 
-export function $$create([l, m]: [Closure, Closure]): DismantleContext {
-  return { l, m };
-}

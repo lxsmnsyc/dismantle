@@ -7,7 +7,10 @@ const example = () => {
   try {
     doStuff();
   } catch (err) {
-    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)([[], []]);
+    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)({
+      l: [],
+      m: []
+    });
   }
 };",
   "entries": [
@@ -32,7 +35,7 @@ export default entry("26ecc3a5-0-example");",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,MAAMA,OAAO,GAAGA,CAAA,KAAM;EACpB,IAAI;IACFC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;EAAA;AAId,CAAC",
+    "mappings": ";AACM,MAAMA,OAAO,GAAGA,CAAA,KAAM;EACpB,IAAI;IACFC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;MAAAC,CAAA;MAAAC,CAAA;IAAA;EAAA;AAId,CAAC",
     "names": [
       "example",
       "doStuff",
@@ -41,6 +44,8 @@ export default entry("26ecc3a5-0-example");",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -71,7 +76,10 @@ const value = 'foo bar';
 try {
   doStuff();
 } catch (err) {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)([[value], []]);
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)({
+    l: [value],
+    m: []
+  });
 }",
   "entries": [
     "/path/to/example.ts?mode=client&my-example=0.ts",
@@ -95,7 +103,7 @@ export default entry("26ecc3a5-0-anonymous");",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,MAAMA,KAAK,GAAG,SAAS;AACvB,IAAI;EACFC,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA,UAHNN,KAAK;AAAA",
+    "mappings": ";AACM,MAAMA,KAAK,GAAG,SAAS;AACvB,IAAI;EACFC,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;IAAAC,CAAA,GAHNP,KAAK;IAAAQ,CAAA;EAAA;AAAA",
     "names": [
       "value",
       "doStuff",
@@ -104,6 +112,8 @@ export default entry("26ecc3a5-0-anonymous");",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -134,7 +144,10 @@ async function foo() {
   try {
     doStuff();
   } catch (err) {
-    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)([[value], []]);
+    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)({
+      l: [value],
+      m: []
+    });
   }
 }",
   "entries": [
@@ -159,7 +172,7 @@ export default entry("26ecc3a5-0-foo");",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB,IAAI;IACFC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA,UAHNN,KAAK;EAAA;AAOb",
+    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB,IAAI;IACFC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;MAAAC,CAAA,GAHNP,KAAK;MAAAQ,CAAA;IAAA;EAAA;AAOb",
     "names": [
       "foo",
       "value",
@@ -169,6 +182,8 @@ export default entry("26ecc3a5-0-foo");",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -199,7 +214,10 @@ exports[`CatchClause > client > should transform valid server try statements 1`]
 try {
   doStuff();
 } catch (err) {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)([[], []]);
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)({
+    l: [],
+    m: []
+  });
 }",
   "entries": [
     "/path/to/example.ts?mode=client&my-example=0.ts",
@@ -223,7 +241,7 @@ export default entry("26ecc3a5-0-anonymous");",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,IAAI;EACFA,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;AAAA",
+    "mappings": ";AACM,IAAI;EACFA,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;IAAAC,CAAA;IAAAC,CAAA;EAAA;AAAA",
     "names": [
       "doStuff",
       "err",
@@ -231,6 +249,8 @@ export default entry("26ecc3a5-0-anonymous");",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -259,7 +279,10 @@ const example = () => {
   try {
     doStuff();
   } catch (err) {
-    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)([[], []]);
+    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)({
+      l: [],
+      m: []
+    });
   }
 };",
   "entries": [
@@ -318,7 +341,7 @@ export default entry("26ecc3a5-0-example", root);",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,MAAMA,OAAO,GAAGA,CAAA,KAAM;EACpB,IAAI;IACFC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;EAAA;AAId,CAAC",
+    "mappings": ";AACM,MAAMA,OAAO,GAAGA,CAAA,KAAM;EACpB,IAAI;IACFC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;MAAAC,CAAA;MAAAC,CAAA;IAAA;EAAA;AAId,CAAC",
     "names": [
       "example",
       "doStuff",
@@ -327,6 +350,8 @@ export default entry("26ecc3a5-0-example", root);",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -359,7 +384,10 @@ const value = 'foo bar';
 try {
   doStuff();
 } catch (err) {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)([[], []]);
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)({
+    l: [],
+    m: []
+  });
 }",
   "entries": [
     "/path/to/example.ts?mode=server&my-example=1.ts",
@@ -417,7 +445,7 @@ export default entry("26ecc3a5-0-anonymous", root);",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,MAAMA,KAAK,GAAG,SAAS;AACvB,IAAI;EACFC,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;AAAA",
+    "mappings": ";AACM,MAAMA,KAAK,GAAG,SAAS;AACvB,IAAI;EACFC,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;IAAAC,CAAA;IAAAC,CAAA;EAAA;AAAA",
     "names": [
       "value",
       "doStuff",
@@ -426,6 +454,8 @@ export default entry("26ecc3a5-0-anonymous", root);",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -458,7 +488,10 @@ async function foo() {
   try {
     doStuff();
   } catch (err) {
-    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)([[], []]);
+    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)({
+      l: [],
+      m: []
+    });
   }
 }",
   "entries": [
@@ -517,7 +550,7 @@ export default entry("26ecc3a5-0-foo", root);",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB,IAAI;IACFC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;EAAA;AAId",
+    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB,IAAI;IACFC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;MAAAC,CAAA;MAAAC,CAAA;IAAA;EAAA;AAId",
     "names": [
       "foo",
       "value",
@@ -527,6 +560,8 @@ export default entry("26ecc3a5-0-foo", root);",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -559,7 +594,10 @@ exports[`CatchClause > server > should transform valid server try statements 1`]
 try {
   doStuff();
 } catch (err) {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)([[], []]);
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)({
+    l: [],
+    m: []
+  });
 }",
   "entries": [
     "/path/to/example.ts?mode=server&my-example=1.ts",
@@ -617,7 +655,7 @@ export default entry("26ecc3a5-0-anonymous", root);",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,IAAI;EACFA,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;AAAA",
+    "mappings": ";AACM,IAAI;EACFA,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;IAAAC,CAAA;IAAAC,CAAA;EAAA;AAAA",
     "names": [
       "doStuff",
       "err",
@@ -625,6 +663,8 @@ export default entry("26ecc3a5-0-anonymous", root);",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [

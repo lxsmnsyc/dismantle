@@ -5,7 +5,10 @@ exports[`IfStatement > client > should skip server if statements in non-async fu
   "code": "import { $$func as $$func_1 } from "my-example/runtime";
 const example = () => {
   if (cond()) {
-    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)([[], []]);
+    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)({
+      l: [],
+      m: []
+    });
   }
 };",
   "entries": [
@@ -30,7 +33,7 @@ export default entry("26ecc3a5-0-example");",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,MAAMA,OAAO,GAAGA,CAAA,KAAM;EACpB,IAAIC,IAAI,CAAC,CAAC;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;EAAA;AAIZ,CAAC",
+    "mappings": ";AACM,MAAMA,OAAO,GAAGA,CAAA,KAAM;EACpB,IAAIC,IAAI,CAAC,CAAC;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;MAAAC,CAAA;MAAAC,CAAA;IAAA;EAAA;AAIZ,CAAC",
     "names": [
       "example",
       "cond",
@@ -38,6 +41,8 @@ export default entry("26ecc3a5-0-example");",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -64,7 +69,10 @@ exports[`IfStatement > client > should skip top-level values for scope 1`] = `
   "code": "import { $$func as $$func_1 } from "my-example/runtime";
 const value = 'foo bar';
 if (cond()) {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)([[value], []]);
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)({
+    l: [value],
+    m: []
+  });
 }",
   "entries": [
     "/path/to/example.ts?mode=client&my-example=0.ts",
@@ -88,7 +96,7 @@ export default entry("26ecc3a5-0-anonymous");",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,MAAMA,KAAK,GAAG,SAAS;AACvB,IAAIC,IAAI,CAAC,CAAC;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA,UADJL,KAAK;AAAA",
+    "mappings": ";AACM,MAAMA,KAAK,GAAG,SAAS;AACvB,IAAIC,IAAI,CAAC,CAAC;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;IAAAC,CAAA,GADJN,KAAK;IAAAO,CAAA;EAAA;AAAA",
     "names": [
       "value",
       "cond",
@@ -96,6 +104,8 @@ export default entry("26ecc3a5-0-anonymous");",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -122,7 +132,10 @@ exports[`IfStatement > client > should transform valid server functions with sco
 async function foo() {
   const value = 'foo bar';
   if (cond()) {
-    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)([[value], []]);
+    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)({
+      l: [value],
+      m: []
+    });
   }
 }",
   "entries": [
@@ -147,7 +160,7 @@ export default entry("26ecc3a5-0-foo");",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB,IAAIC,IAAI,CAAC,CAAC;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA,UADJL,KAAK;EAAA;AAKb",
+    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB,IAAIC,IAAI,CAAC,CAAC;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;MAAAC,CAAA,GADJN,KAAK;MAAAO,CAAA;IAAA;EAAA;AAKb",
     "names": [
       "foo",
       "value",
@@ -156,6 +169,8 @@ export default entry("26ecc3a5-0-foo");",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -182,7 +197,10 @@ exports[`IfStatement > client > should transform valid server if statements 1`] 
 {
   "code": "import { $$func as $$func_1 } from "my-example/runtime";
 if (cond()) {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)([[], []]);
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)({
+    l: [],
+    m: []
+  });
 }",
   "entries": [
     "/path/to/example.ts?mode=client&my-example=0.ts",
@@ -206,13 +224,15 @@ export default entry("26ecc3a5-0-anonymous");",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,IAAIA,IAAI,CAAC,CAAC;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;AAAA",
+    "mappings": ";AACM,IAAIA,IAAI,CAAC,CAAC;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;IAAAC,CAAA;IAAAC,CAAA;EAAA;AAAA",
     "names": [
       "cond",
       "type_1",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -237,7 +257,10 @@ exports[`IfStatement > server > should skip server if statements in non-async fu
   "code": "import { $$func as $$func_1 } from "my-example/runtime";
 const example = () => {
   if (cond()) {
-    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)([[], []]);
+    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)({
+      l: [],
+      m: []
+    });
   }
 };",
   "entries": [
@@ -295,7 +318,7 @@ export default entry("26ecc3a5-0-example", root);",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,MAAMA,OAAO,GAAGA,CAAA,KAAM;EACpB,IAAIC,IAAI,CAAC,CAAC;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;EAAA;AAIZ,CAAC",
+    "mappings": ";AACM,MAAMA,OAAO,GAAGA,CAAA,KAAM;EACpB,IAAIC,IAAI,CAAC,CAAC;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;MAAAC,CAAA;MAAAC,CAAA;IAAA;EAAA;AAIZ,CAAC",
     "names": [
       "example",
       "cond",
@@ -303,6 +326,8 @@ export default entry("26ecc3a5-0-example", root);",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -331,7 +356,10 @@ exports[`IfStatement > server > should skip top-level values for scope 1`] = `
   "code": "import { $$func as $$func_1 } from "my-example/runtime";
 const value = 'foo bar';
 if (cond()) {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)([[value], []]);
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)({
+    l: [value],
+    m: []
+  });
 }",
   "entries": [
     "/path/to/example.ts?mode=server&my-example=1.ts",
@@ -389,7 +417,7 @@ export default entry("26ecc3a5-0-anonymous", root);",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,MAAMA,KAAK,GAAG,SAAS;AACvB,IAAIC,IAAI,CAAC,CAAC;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA,UADJL,KAAK;AAAA",
+    "mappings": ";AACM,MAAMA,KAAK,GAAG,SAAS;AACvB,IAAIC,IAAI,CAAC,CAAC;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;IAAAC,CAAA,GADJN,KAAK;IAAAO,CAAA;EAAA;AAAA",
     "names": [
       "value",
       "cond",
@@ -397,6 +425,8 @@ export default entry("26ecc3a5-0-anonymous", root);",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -425,7 +455,10 @@ exports[`IfStatement > server > should transform valid server functions with sco
 async function foo() {
   const value = 'foo bar';
   if (cond()) {
-    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)([[value], []]);
+    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)({
+      l: [value],
+      m: []
+    });
   }
 }",
   "entries": [
@@ -484,7 +517,7 @@ export default entry("26ecc3a5-0-foo", root);",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB,IAAIC,IAAI,CAAC,CAAC;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA,UADJL,KAAK;EAAA;AAKb",
+    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB,IAAIC,IAAI,CAAC,CAAC;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;MAAAC,CAAA,GADJN,KAAK;MAAAO,CAAA;IAAA;EAAA;AAKb",
     "names": [
       "foo",
       "value",
@@ -493,6 +526,8 @@ export default entry("26ecc3a5-0-foo", root);",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -521,7 +556,10 @@ exports[`IfStatement > server > should transform valid server if statements 1`] 
 {
   "code": "import { $$func as $$func_1 } from "my-example/runtime";
 if (cond()) {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)([[], []]);
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)({
+    l: [],
+    m: []
+  });
 }",
   "entries": [
     "/path/to/example.ts?mode=server&my-example=1.ts",
@@ -578,13 +616,15 @@ export default entry("26ecc3a5-0-anonymous", root);",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,IAAIA,IAAI,CAAC,CAAC;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;AAAA",
+    "mappings": ";AACM,IAAIA,IAAI,CAAC,CAAC;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;IAAAC,CAAA;IAAAC,CAAA;EAAA;AAAA",
     "names": [
       "cond",
       "type_1",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [

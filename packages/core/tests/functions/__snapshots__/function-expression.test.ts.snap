@@ -10,7 +10,10 @@ const outer = () => {
   const example = /*@dismantle ref*/$$server_1(async () => {
     const source_1 = (await import("./example.ts?mode=client&my-example=0.ts")).default;
     return async function (...rest_1) {
-      const [type_1, result_1] = await $$func_1(source_1, null)([[value], []], ...rest_1);
+      const [type_1, result_1] = await $$func_1(source_1, null)({
+        l: [value],
+        m: []
+      }, ...rest_1);
       return result_1;
     };
   });
@@ -37,7 +40,7 @@ export default entry("26ecc3a5-0-example");",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";;AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,KAAK,GAAG,SAAS;AACvB,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,OAAO,qBAAAC,UAAA;IAAA,MAAAC,QAAA,8DAAAC,OAAA;IAAA,0BAAAC,MAAA;MAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA,UAFTJ,KAAK,WAAAM,MAAA;MAAA,OAAAE,QAAA;IAAA;EAAA,EAIP;AACJ,CAAC",
+    "mappings": ";;AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,KAAK,GAAG,SAAS;AACvB,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,OAAO,qBAAAC,UAAA;IAAA,MAAAC,QAAA,8DAAAC,OAAA;IAAA,0BAAAC,MAAA;MAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA;QAAAM,CAAA,GAFTV,KAAK;QAAAW,CAAA;MAAA,MAAAL,MAAA;MAAA,OAAAE,QAAA;IAAA;EAAA,EAIP;AACJ,CAAC",
     "names": [
       "server$",
       "value",
@@ -50,6 +53,8 @@ export default entry("26ecc3a5-0-example");",
       "type_1",
       "result_1",
       "$$func_1",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -80,7 +85,10 @@ import { server$ } from 'my-example';
 const example = /*@dismantle ref*/$$server_1(async () => {
   const source_1 = (await import("./example.ts?mode=client&my-example=0.ts")).default;
   return async function (...rest_1) {
-    const [type_1, result_1] = await $$func_1(source_1, null)([[], []], ...rest_1);
+    const [type_1, result_1] = await $$func_1(source_1, null)({
+      l: [],
+      m: []
+    }, ...rest_1);
     return result_1;
   };
 });",
@@ -106,7 +114,7 @@ export default entry("26ecc3a5-0-example");",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";;AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,OAAO,qBAAAC,UAAA;EAAA,MAAAC,QAAA,8DAAAC,OAAA;EAAA,0BAAAC,MAAA;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA,qBAAAE,MAAA;IAAA,OAAAE,QAAA;EAAA;AAAA,EAEX",
+    "mappings": ";;AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,OAAO,qBAAAC,UAAA;EAAA,MAAAC,QAAA,8DAAAC,OAAA;EAAA,0BAAAC,MAAA;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA;MAAAM,CAAA;MAAAC,CAAA;IAAA,MAAAL,MAAA;IAAA,OAAAE,QAAA;EAAA;AAAA,EAEX",
     "names": [
       "server$",
       "example",
@@ -117,6 +125,8 @@ export default entry("26ecc3a5-0-example");",
       "type_1",
       "result_1",
       "$$func_1",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -146,7 +156,10 @@ const outer = () => {
   const example = /*@dismantle ref*/$$server_1(async () => {
     const source_1 = (await import("./example.ts?mode=client&my-example=0.ts")).default;
     return async function (...rest_1) {
-      const [type_1, result_1] = await $$func_1(source_1, null)([[value], []], ...rest_1);
+      const [type_1, result_1] = await $$func_1(source_1, null)({
+        l: [value],
+        m: []
+      }, ...rest_1);
       return result_1;
     };
   });
@@ -173,7 +186,7 @@ export default entry("26ecc3a5-0-example");",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";;AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,MAAMC,OAAO,qBAAAC,UAAA;IAAA,MAAAC,QAAA,8DAAAC,OAAA;IAAA,0BAAAC,MAAA;MAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA,UADPH,KAAK,WAAAK,MAAA;MAAA,OAAAE,QAAA;IAAA;EAAA,EAGT;AACJ,CAAC",
+    "mappings": ";;AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,MAAMC,OAAO,qBAAAC,UAAA;IAAA,MAAAC,QAAA,8DAAAC,OAAA;IAAA,0BAAAC,MAAA;MAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA;QAAAM,CAAA,GADPT,KAAK;QAAAU,CAAA;MAAA,MAAAL,MAAA;MAAA,OAAAE,QAAA;IAAA;EAAA,EAGT;AACJ,CAAC",
     "names": [
       "server$",
       "outer",
@@ -186,6 +199,8 @@ export default entry("26ecc3a5-0-example");",
       "type_1",
       "result_1",
       "$$func_1",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -218,7 +233,10 @@ const outer = () => {
   const example = /*@dismantle ref*/$$server_1(async () => {
     const source_1 = (await import("./example.ts?mode=server&my-example=1.ts")).default;
     return async function (...rest_1) {
-      const [type_1, result_1] = await $$func_1(source_1, null)([[value], []], ...rest_1);
+      const [type_1, result_1] = await $$func_1(source_1, null)({
+        l: [value],
+        m: []
+      }, ...rest_1);
       return result_1;
     };
   });
@@ -277,7 +295,7 @@ export default entry("26ecc3a5-0-example", root);",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";;AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,KAAK,GAAG,SAAS;AACvB,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,OAAO,qBAAAC,UAAA;IAAA,MAAAC,QAAA,8DAAAC,OAAA;IAAA,0BAAAC,MAAA;MAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA,UAFTJ,KAAK,WAAAM,MAAA;MAAA,OAAAE,QAAA;IAAA;EAAA,EAIP;AACJ,CAAC",
+    "mappings": ";;AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,KAAK,GAAG,SAAS;AACvB,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,OAAO,qBAAAC,UAAA;IAAA,MAAAC,QAAA,8DAAAC,OAAA;IAAA,0BAAAC,MAAA;MAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA;QAAAM,CAAA,GAFTV,KAAK;QAAAW,CAAA;MAAA,MAAAL,MAAA;MAAA,OAAAE,QAAA;IAAA;EAAA,EAIP;AACJ,CAAC",
     "names": [
       "server$",
       "value",
@@ -290,6 +308,8 @@ export default entry("26ecc3a5-0-example", root);",
       "type_1",
       "result_1",
       "$$func_1",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -322,7 +342,10 @@ import { server$ } from 'my-example';
 const example = /*@dismantle ref*/$$server_1(async () => {
   const source_1 = (await import("./example.ts?mode=server&my-example=1.ts")).default;
   return async function (...rest_1) {
-    const [type_1, result_1] = await $$func_1(source_1, null)([[], []], ...rest_1);
+    const [type_1, result_1] = await $$func_1(source_1, null)({
+      l: [],
+      m: []
+    }, ...rest_1);
     return result_1;
   };
 });",
@@ -379,7 +402,7 @@ export default entry("26ecc3a5-0-example", root);",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";;AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,OAAO,qBAAAC,UAAA;EAAA,MAAAC,QAAA,8DAAAC,OAAA;EAAA,0BAAAC,MAAA;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA,qBAAAE,MAAA;IAAA,OAAAE,QAAA;EAAA;AAAA,EAEX",
+    "mappings": ";;AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,OAAO,qBAAAC,UAAA;EAAA,MAAAC,QAAA,8DAAAC,OAAA;EAAA,0BAAAC,MAAA;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA;MAAAM,CAAA;MAAAC,CAAA;IAAA,MAAAL,MAAA;IAAA,OAAAE,QAAA;EAAA;AAAA,EAEX",
     "names": [
       "server$",
       "example",
@@ -390,6 +413,8 @@ export default entry("26ecc3a5-0-example", root);",
       "type_1",
       "result_1",
       "$$func_1",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -421,7 +446,10 @@ const outer = () => {
   const example = /*@dismantle ref*/$$server_1(async () => {
     const source_1 = (await import("./example.ts?mode=server&my-example=1.ts")).default;
     return async function (...rest_1) {
-      const [type_1, result_1] = await $$func_1(source_1, null)([[value], []], ...rest_1);
+      const [type_1, result_1] = await $$func_1(source_1, null)({
+        l: [value],
+        m: []
+      }, ...rest_1);
       return result_1;
     };
   });
@@ -480,7 +508,7 @@ export default entry("26ecc3a5-0-example", root);",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";;AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,MAAMC,OAAO,qBAAAC,UAAA;IAAA,MAAAC,QAAA,8DAAAC,OAAA;IAAA,0BAAAC,MAAA;MAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA,UADPH,KAAK,WAAAK,MAAA;MAAA,OAAAE,QAAA;IAAA;EAAA,EAGT;AACJ,CAAC",
+    "mappings": ";;AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,MAAMC,OAAO,qBAAAC,UAAA;IAAA,MAAAC,QAAA,8DAAAC,OAAA;IAAA,0BAAAC,MAAA;MAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA;QAAAM,CAAA,GADPT,KAAK;QAAAU,CAAA;MAAA,MAAAL,MAAA;MAAA,OAAAE,QAAA;IAAA;EAAA,EAGT;AACJ,CAAC",
     "names": [
       "server$",
       "outer",
@@ -493,6 +521,8 @@ export default entry("26ecc3a5-0-example", root);",
       "type_1",
       "result_1",
       "$$func_1",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [

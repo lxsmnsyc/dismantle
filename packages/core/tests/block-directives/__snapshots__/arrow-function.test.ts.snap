@@ -4,7 +4,10 @@ exports[`ArrowFunctionExpression > client > should skip non-async server functio
 {
   "code": "import { $$func as $$func_1 } from "my-example/runtime";
 const example = () => {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)([[], []]);
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)({
+    l: [],
+    m: []
+  });
   if (type_1 === 2) {
     return result_1;
   }
@@ -31,13 +34,15 @@ export default entry("26ecc3a5-0-example");",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,MAAMA,OAAO,GAAGA,CAAA;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;EAAA,IAAAH,MAAA;IAAA,OAAAC,QAAA;EAAA;AAAA,CAGf",
+    "mappings": ";AACM,MAAMA,OAAO,GAAGA,CAAA;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;IAAAC,CAAA;IAAAC,CAAA;EAAA;EAAA,IAAAL,MAAA;IAAA,OAAAC,QAAA;EAAA;AAAA,CAGf",
     "names": [
       "example",
       "type_1",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -63,7 +68,10 @@ exports[`ArrowFunctionExpression > client > should skip top-level values for sco
 const value = 'foo bar';
 const outer = () => {
   const example = async () => {
-    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)([[value], []]);
+    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)({
+      l: [value],
+      m: []
+    });
     if (type_1 === 2) {
       return result_1;
     }
@@ -91,7 +99,7 @@ export default entry("26ecc3a5-0-example");",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,MAAMA,KAAK,GAAG,SAAS;AACvB,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,OAAO,GAAG,MAAAA,CAAA;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA,UAFZN,KAAK;IAAA,IAAAG,MAAA;MAAA,OAAAC,QAAA;IAAA;EAAA,CAKR;AACH,CAAC",
+    "mappings": ";AACM,MAAMA,KAAK,GAAG,SAAS;AACvB,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,OAAO,GAAG,MAAAA,CAAA;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;MAAAC,CAAA,GAFZP,KAAK;MAAAQ,CAAA;IAAA;IAAA,IAAAL,MAAA;MAAA,OAAAC,QAAA;IAAA;EAAA,CAKR;AACH,CAAC",
     "names": [
       "value",
       "outer",
@@ -100,6 +108,8 @@ export default entry("26ecc3a5-0-example");",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -126,7 +136,10 @@ exports[`ArrowFunctionExpression > client > should transform valid server functi
 {
   "code": "import { $$func as $$func_1 } from "my-example/runtime";
 const example = async () => {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)([[], []]);
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)({
+    l: [],
+    m: []
+  });
   if (type_1 === 2) {
     return result_1;
   }
@@ -153,13 +166,15 @@ export default entry("26ecc3a5-0-example");",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,MAAMA,OAAO,GAAG,MAAAA,CAAA;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;EAAA,IAAAH,MAAA;IAAA,OAAAC,QAAA;EAAA;AAAA,CAGf",
+    "mappings": ";AACM,MAAMA,OAAO,GAAG,MAAAA,CAAA;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;IAAAC,CAAA;IAAAC,CAAA;EAAA;EAAA,IAAAL,MAAA;IAAA,OAAAC,QAAA;EAAA;AAAA,CAGf",
     "names": [
       "example",
       "type_1",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -185,7 +200,10 @@ exports[`ArrowFunctionExpression > client > should transform valid server functi
 const outer = () => {
   const value = 'foo bar';
   const example = async () => {
-    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)([[value], []]);
+    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)({
+      l: [value],
+      m: []
+    });
     if (type_1 === 2) {
       return result_1;
     }
@@ -213,7 +231,7 @@ export default entry("26ecc3a5-0-example");",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,MAAMA,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,MAAMC,OAAO,GAAG,MAAAA,CAAA;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA,UADVL,KAAK;IAAA,IAAAE,MAAA;MAAA,OAAAC,QAAA;IAAA;EAAA,CAIV;AACH,CAAC",
+    "mappings": ";AACM,MAAMA,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,MAAMC,OAAO,GAAG,MAAAA,CAAA;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;MAAAC,CAAA,GADVN,KAAK;MAAAO,CAAA;IAAA;IAAA,IAAAL,MAAA;MAAA,OAAAC,QAAA;IAAA;EAAA,CAIV;AACH,CAAC",
     "names": [
       "outer",
       "value",
@@ -222,6 +240,8 @@ export default entry("26ecc3a5-0-example");",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -248,7 +268,10 @@ exports[`ArrowFunctionExpression > server > should skip non-async server functio
 {
   "code": "import { $$func as $$func_1 } from "my-example/runtime";
 const example = () => {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)([[], []]);
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)({
+    l: [],
+    m: []
+  });
   if (type_1 === 2) {
     return result_1;
   }
@@ -304,13 +327,15 @@ export default entry("26ecc3a5-0-example", root);",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,MAAMA,OAAO,GAAGA,CAAA;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;EAAA,IAAAH,MAAA;IAAA,OAAAC,QAAA;EAAA;AAAA,CAGf",
+    "mappings": ";AACM,MAAMA,OAAO,GAAGA,CAAA;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;IAAAC,CAAA;IAAAC,CAAA;EAAA;EAAA,IAAAL,MAAA;IAAA,OAAAC,QAAA;EAAA;AAAA,CAGf",
     "names": [
       "example",
       "type_1",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -338,7 +363,10 @@ exports[`ArrowFunctionExpression > server > should skip top-level values for sco
 const value = 'foo bar';
 const outer = () => {
   const example = async () => {
-    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)([[value], []]);
+    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)({
+      l: [value],
+      m: []
+    });
     if (type_1 === 2) {
       return result_1;
     }
@@ -397,7 +425,7 @@ export default entry("26ecc3a5-0-example", root);",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,MAAMA,KAAK,GAAG,SAAS;AACvB,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,OAAO,GAAG,MAAAA,CAAA;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA,UAFZN,KAAK;IAAA,IAAAG,MAAA;MAAA,OAAAC,QAAA;IAAA;EAAA,CAKR;AACH,CAAC",
+    "mappings": ";AACM,MAAMA,KAAK,GAAG,SAAS;AACvB,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,OAAO,GAAG,MAAAA,CAAA;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;MAAAC,CAAA,GAFZP,KAAK;MAAAQ,CAAA;IAAA;IAAA,IAAAL,MAAA;MAAA,OAAAC,QAAA;IAAA;EAAA,CAKR;AACH,CAAC",
     "names": [
       "value",
       "outer",
@@ -406,6 +434,8 @@ export default entry("26ecc3a5-0-example", root);",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -434,7 +464,10 @@ exports[`ArrowFunctionExpression > server > should transform valid server functi
 {
   "code": "import { $$func as $$func_1 } from "my-example/runtime";
 const example = async () => {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)([[], []]);
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)({
+    l: [],
+    m: []
+  });
   if (type_1 === 2) {
     return result_1;
   }
@@ -490,13 +523,15 @@ export default entry("26ecc3a5-0-example", root);",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,MAAMA,OAAO,GAAG,MAAAA,CAAA;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;EAAA,IAAAH,MAAA;IAAA,OAAAC,QAAA;EAAA;AAAA,CAGf",
+    "mappings": ";AACM,MAAMA,OAAO,GAAG,MAAAA,CAAA;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;IAAAC,CAAA;IAAAC,CAAA;EAAA;EAAA,IAAAL,MAAA;IAAA,OAAAC,QAAA;EAAA;AAAA,CAGf",
     "names": [
       "example",
       "type_1",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -524,7 +559,10 @@ exports[`ArrowFunctionExpression > server > should transform valid server functi
 const outer = () => {
   const value = 'foo bar';
   const example = async () => {
-    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)([[value], []]);
+    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)({
+      l: [value],
+      m: []
+    });
     if (type_1 === 2) {
       return result_1;
     }
@@ -583,7 +621,7 @@ export default entry("26ecc3a5-0-example", root);",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,MAAMA,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,MAAMC,OAAO,GAAG,MAAAA,CAAA;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA,UADVL,KAAK;IAAA,IAAAE,MAAA;MAAA,OAAAC,QAAA;IAAA;EAAA,CAIV;AACH,CAAC",
+    "mappings": ";AACM,MAAMA,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,MAAMC,OAAO,GAAG,MAAAA,CAAA;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;MAAAC,CAAA,GADVN,KAAK;MAAAO,CAAA;IAAA;IAAA,IAAAL,MAAA;MAAA,OAAAC,QAAA;IAAA;EAAA,CAIV;AACH,CAAC",
     "names": [
       "outer",
       "value",
@@ -592,6 +630,8 @@ export default entry("26ecc3a5-0-example", root);",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [

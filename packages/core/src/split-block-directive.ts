@@ -380,12 +380,18 @@ function getBlockDirectiveReplacement(
                 ],
               ),
               [
-                t.arrayExpression([
-                  t.arrayExpression(
-                    dependencies.locals.map(id => id.identifier),
+                t.objectExpression([
+                  t.objectProperty(
+                    t.identifier('l'),
+                    t.arrayExpression(
+                      dependencies.locals.map(id => id.identifier),
+                    ),
                   ),
-                  t.arrayExpression(
-                    dependencies.mutations.map(id => id.identifier),
+                  t.objectProperty(
+                    t.identifier('m'),
+                    t.arrayExpression(
+                      dependencies.mutations.map(id => id.identifier),
+                    ),
                   ),
                 ]),
               ],

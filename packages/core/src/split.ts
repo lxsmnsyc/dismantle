@@ -3,9 +3,9 @@ import type { Binding } from '@babel/traverse';
 import * as t from '@babel/types';
 import {
   DISMANTLE_CONTEXT,
+  DISMANTLE_GEN,
   DISMANTLE_RUN,
   HIDDEN_FUNC,
-  HIDDEN_GENERATOR,
 } from './constants';
 import { patchV8Identifier } from './patch-v8-identifier';
 import type { ImportDefinition, ModuleDefinition, StateContext } from './types';
@@ -710,34 +710,34 @@ export function getFunctionReplacement(
       t.variableDeclaration('const', [
         t.variableDeclarator(
           funcID,
-          t.callExpression(
-            getImportIdentifier(ctx.imports, path, {
-              ...HIDDEN_GENERATOR,
-              source: ctx.options.runtime,
-            }),
-            [
-              source,
-              dependencies.mutations.length
-                ? t.arrowFunctionExpression(
-                    [returnMutations],
-                    t.assignmentExpression(
-                      '=',
-                      t.arrayPattern(
-                        dependencies.mutations.map(id => id.identifier),
-                      ),
-                      returnMutations,
+          t.callExpression(t.v8IntrinsicIdentifier(DISMANTLE_GEN), [
+            source,
+            dependencies.mutations.length
+              ? t.arrowFunctionExpression(
+                  [returnMutations],
+                  t.assignmentExpression(
+                    '=',
+                    t.arrayPattern(
+                      dependencies.mutations.map(id => id.identifier),
                     ),
-                  )
-                : t.nullLiteral(),
-            ],
-          ),
+                    returnMutations,
+                  ),
+                )
+              : t.nullLiteral(),
+          ]),
         ),
       ]),
     );
     const [reps, step] = getGeneratorReplacementForBlock(path, funcID, [
-      t.arrayExpression([
-        t.arrayExpression(dependencies.locals.map(id => id.identifier)),
-        t.arrayExpression(dependencies.mutations.map(id => id.identifier)),
+      t.objectExpression([
+        t.objectProperty(
+          t.identifier('l'),
+          t.arrayExpression(dependencies.locals.map(id => id.identifier)),
+        ),
+        t.objectProperty(
+          t.identifier('m'),
+          t.arrayExpression(dependencies.mutations.map(id => id.identifier)),
+        ),
       ]),
       t.spreadElement(rest),
     ]);
@@ -781,12 +781,18 @@ export function getFunctionReplacement(
                 ],
               ),
               [
-                t.arrayExpression([
-                  t.arrayExpression(
-                    dependencies.locals.map(id => id.identifier),
+                t.objectExpression([
+                  t.objectProperty(
+                    t.identifier('l'),
+                    t.arrayExpression(
+                      dependencies.locals.map(id => id.identifier),
+                    ),
                   ),
-                  t.arrayExpression(
-                    dependencies.mutations.map(id => id.identifier),
+                  t.objectProperty(
+                    t.identifier('m'),
+                    t.arrayExpression(
+                      dependencies.mutations.map(id => id.identifier),
+                    ),
                   ),
                 ]),
                 t.spreadElement(rest),
