@@ -71,6 +71,7 @@ export function transformCall(
   const expr = args[0];
   if (isPathValid(expr, isValidFunction)) {
     const replacement = splitFunction(ctx, expr, definition);
+    path.scope.crawl();
 
     path.replaceWith(
       t.addComment(

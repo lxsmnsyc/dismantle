@@ -382,13 +382,12 @@ export function transformFunctionForSplit(
   transformInnerReferences(body, context, dependencies);
 
   header.push(...body.node.body);
-  body.replaceWith(t.blockStatement(header));
   const current = path.node;
-  path.replaceWith(backup);
+  path.node = backup;
   return t.functionDeclaration(
     id,
     current.params,
-    current.body as t.BlockStatement,
+    t.blockStatement(header),
     current.generator,
     current.async,
   );

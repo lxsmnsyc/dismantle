@@ -46,6 +46,7 @@ export function transformFunctionDirective(
     const definition = getFunctionDirectiveDefinition(ctx, body);
     if (definition) {
       const replacement = splitFunction(ctx, path, definition);
+      path.scope.crawl();
       path.replaceWith(
         t.addComment(
           t.callExpression(
