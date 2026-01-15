@@ -12,22 +12,16 @@ export const HIDDEN_GENERATOR: ImportDefinition = {
   name: '$$gen',
 };
 
-export const HIDDEN_PUSH: ImportDefinition = {
+export const HIDDEN_CREATE: ImportDefinition = {
   kind: 'named',
   source: 'dismantle/runtime',
-  name: '$$push',
+  name: '$$create',
 };
 
 export const HIDDEN_CONTEXT: ImportDefinition = {
   kind: 'named',
   source: 'dismantle/runtime',
   name: '$$context',
-};
-
-export const HIDDEN_POP: ImportDefinition = {
-  kind: 'named',
-  source: 'dismantle/runtime',
-  name: '$$pop',
 };
 
 export const HIDDEN_RUN: ImportDefinition = {
@@ -37,10 +31,6 @@ export const HIDDEN_RUN: ImportDefinition = {
 };
 
 export const DISMANTLE_CONTEXT = 'dismantle__context';
-
-export const DISMANTLE_PUSH = 'dismantle__push';
-
-export const DISMANTLE_POP = 'dismantle__pop';
 
 export const DISMANTLE_GEN = 'dismantle__gen';
 

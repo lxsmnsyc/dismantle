@@ -11,19 +11,20 @@ interface State extends babel.PluginPass {
 }
 
 const FUNCTION_BUBBLE: babel.Visitor<State> = {
-  FunctionDeclaration(path, ctx) {
-    bubbleFunctionDeclaration(ctx.opts, path);
+  FunctionDeclaration(path) {
+    bubbleFunctionDeclaration(path);
   },
 };
 
 const PLUGIN: babel.PluginObj<State> = {
   name: 'dismantle',
   visitor: {
-    Program(program, ctx) {
-      registerImportSpecifiers(ctx.opts, program);
-      program.traverse(FUNCTION_BUBBLE, ctx);
-
-      program.scope.crawl();
+    Program: {
+      enter(program, ctx) {
+        registerImportSpecifiers(ctx.opts, program);
+        program.traverse(FUNCTION_BUBBLE, ctx);
+        program.scope.crawl();
+      },
     },
     ArrowFunctionExpression: {
       exit(path, ctx) {

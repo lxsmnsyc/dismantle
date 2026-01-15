@@ -52,7 +52,7 @@ function checkArrayPattern(
   node: t.ArrayPattern,
 ): void {
   for (const element of node.elements) {
-    if (element) {
+    if (element && t.isLVal(element)) {
       checkLVal(checker, scope, element);
     }
   }
@@ -81,11 +81,11 @@ function checkObjectPattern(
       if (property.shorthand) {
         // { foo } = bar;
         checkLVal(checker, scope, property.key);
-      } else if (t.isPatternLike(property.value)) {
+      } else if (t.isLVal(property.value)) {
         // { foo: bar } = baz;
         checkLVal(checker, scope, property.value);
       }
-    } else if (t.isPatternLike(property.value)) {
+    } else if (t.isLVal(property.value)) {
       // { foo: bar } = baz;
       checkLVal(checker, scope, property.value);
     }

@@ -19,7 +19,9 @@ export interface BlockDirectiveDefinition {
   type: 'block-directive';
   isomorphic?: boolean;
   pure?: boolean;
+  // Directive to look for
   directive: string;
+  // Wrapper for the entry
   target: ImportDefinition;
   idPrefix?: string;
 }
@@ -29,7 +31,9 @@ export interface FunctionDirectiveDefinition {
   isomorphic?: boolean;
   pure?: boolean;
   directive: string;
+  // Wrapper for the entry
   target: ImportDefinition;
+  // Wrapper for the function replacement
   handle: ImportDefinition;
   idPrefix?: string;
 }
@@ -42,8 +46,11 @@ export interface FunctionCallDefinition {
   type: 'function-call';
   isomorphic?: boolean;
   pure?: boolean;
+  // The wrapper function to look for
   source: ImportDefinition;
+  // Wrapper for the entry
   target: ImportDefinition;
+  // Wrapper for the function replacement
   handle: ImportDefinition;
   idPrefix?: string;
 }
@@ -53,11 +60,7 @@ export interface Options {
   runtime: string;
   mode: 'server' | 'client';
   env: 'production' | 'development';
-  definitions: (
-    | BlockDirectiveDefinition
-    | FunctionDirectiveDefinition
-    | FunctionCallDefinition
-  )[];
+  definitions: (DirectiveDefinition | FunctionCallDefinition)[];
 }
 
 export interface ModuleDefinition {

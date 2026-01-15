@@ -3,8 +3,6 @@ import type { Binding } from '@babel/traverse';
 import * as t from '@babel/types';
 import {
   DISMANTLE_CONTEXT,
-  DISMANTLE_POP,
-  DISMANTLE_PUSH,
   DISMANTLE_RUN,
   HIDDEN_FUNC,
   HIDDEN_GENERATOR,
@@ -286,7 +284,7 @@ function patchObjectPattern(
         return;
       }
       const value = property.get('value');
-      if (isPathValid(value, t.isPatternLike)) {
+      if (isPathValid(value, t.isLVal)) {
         patchLVal(dependencies, context, value);
       }
     }
@@ -587,7 +585,6 @@ export function transformRootFunction(
   const target =
     path.scope.getFunctionParent() || path.scope.getProgramParent();
 
-  const closure = generateUniqueName(root, 'closure');
   const context = generateUniqueName(root, 'ctx');
 
   const applyMutations = dependencies.mutations.length
@@ -647,7 +644,7 @@ export function transformRootFunction(
     t.variableDeclaration('const', [
       t.variableDeclarator(
         context,
-        t.callExpression(t.v8IntrinsicIdentifier(DISMANTLE_PUSH), [closure]),
+        t.callExpression(t.v8IntrinsicIdentifier(DISMANTLE_CONTEXT), []),
       ),
     ]),
     t.tryStatement(
@@ -656,11 +653,6 @@ export function transformRootFunction(
         error,
         t.blockStatement([t.returnStatement(t.arrayExpression(throwResult))]),
       ),
-      t.blockStatement([
-        t.expressionStatement(
-          t.callExpression(t.v8IntrinsicIdentifier(DISMANTLE_POP), [context]),
-        ),
-      ]),
     ),
     t.returnStatement(t.arrayExpression(haltResult)),
   ];
@@ -669,13 +661,13 @@ export function transformRootFunction(
     t.isFunctionExpression(root.node)
       ? t.functionExpression(
           root.node.id,
-          [closure, ...root.node.params],
+          root.node.params,
           root.node.body,
           root.node.generator,
           root.node.async,
         )
       : t.arrowFunctionExpression(
-          [closure, ...root.node.params],
+          root.node.params,
           root.node.body,
           root.node.async,
         ),

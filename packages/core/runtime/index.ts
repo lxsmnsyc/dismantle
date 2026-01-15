@@ -93,14 +93,6 @@ export function $$context(): DismantleContext {
   return current;
 }
 
-export function $$push([l, m]: [Closure, Closure]):
-  | DismantleContext
-  | undefined {
-  const parent = CURRENT_CONTEXT;
-  CURRENT_CONTEXT = { l, m };
-  return parent;
-}
-
-export function $$pop(parent: DismantleContext | undefined): void {
-  CURRENT_CONTEXT = parent;
+export function $$create([l, m]: [Closure, Closure]): DismantleContext {
+  return { l, m };
 }

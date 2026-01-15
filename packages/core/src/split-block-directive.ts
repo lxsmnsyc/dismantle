@@ -1,28 +1,23 @@
 import type * as babel from '@babel/core';
 import * as t from '@babel/types';
-import {
-  DISMANTLE_POP,
-  DISMANTLE_PUSH,
-  HIDDEN_FUNC,
-  HIDDEN_GENERATOR,
-} from './constants';
+import { DISMANTLE_CONTEXT, HIDDEN_FUNC, HIDDEN_GENERATOR } from './constants';
 import {
   BREAK_KEY,
   CONTINUE_KEY,
-  type Dependencies,
-  NO_HALT_KEY,
-  RETURN_KEY,
-  type RootBindings,
-  THROW_KEY,
-  YIELD_KEY,
   createEntryFile,
   createRootFile,
+  type Dependencies,
   getBindingMap,
   getGeneratorReplacementForBlock,
   getMergedDependencies,
   getModuleImports,
+  NO_HALT_KEY,
+  RETURN_KEY,
+  type RootBindings,
+  THROW_KEY,
   transformFunctionForSplit,
   transformInnerReferences,
+  YIELD_KEY,
 } from './split';
 import type { BlockDirectiveDefinition, StateContext } from './types';
 import { generateUniqueName } from './utils/generate-unique-name';
@@ -155,7 +150,7 @@ function transformBlockContent(
     t.variableDeclaration('const', [
       t.variableDeclarator(
         context,
-        t.callExpression(t.v8IntrinsicIdentifier(DISMANTLE_PUSH), [closure]),
+        t.callExpression(t.v8IntrinsicIdentifier(DISMANTLE_CONTEXT), []),
       ),
     ]),
     t.tryStatement(
@@ -164,11 +159,6 @@ function transformBlockContent(
         error,
         t.blockStatement([t.returnStatement(t.arrayExpression(throwResult))]),
       ),
-      t.blockStatement([
-        t.expressionStatement(
-          t.callExpression(t.v8IntrinsicIdentifier(DISMANTLE_POP), [context]),
-        ),
-      ]),
     ),
     t.returnStatement(t.arrayExpression(haltResult)),
   ];

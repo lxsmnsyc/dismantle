@@ -5,14 +5,10 @@ import {
   DISMANTLE_CONTEXT,
   DISMANTLE_FUNC,
   DISMANTLE_GEN,
-  DISMANTLE_POP,
-  DISMANTLE_PUSH,
   DISMANTLE_RUN,
   HIDDEN_CONTEXT,
   HIDDEN_FUNC,
   HIDDEN_GENERATOR,
-  HIDDEN_POP,
-  HIDDEN_PUSH,
   HIDDEN_RUN,
 } from './constants';
 import type { StateContext } from './types';
@@ -41,16 +37,6 @@ function getV8Replacement(
     case DISMANTLE_GEN:
       return getImportIdentifier(ctx.map, path, {
         ...HIDDEN_GENERATOR,
-        source: ctx.runtime,
-      });
-    case DISMANTLE_POP:
-      return getImportIdentifier(ctx.map, path, {
-        ...HIDDEN_POP,
-        source: ctx.runtime,
-      });
-    case DISMANTLE_PUSH:
-      return getImportIdentifier(ctx.map, path, {
-        ...HIDDEN_PUSH,
         source: ctx.runtime,
       });
     case DISMANTLE_RUN:

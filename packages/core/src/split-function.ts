@@ -14,7 +14,6 @@ import {
 import type {
   FunctionCallDefinition,
   FunctionDirectiveDefinition,
-  ModuleDirectiveDefinition,
   StateContext,
 } from './types';
 import getForeignBindings from './utils/get-foreign-bindings';
@@ -24,8 +23,7 @@ function replaceFunction(
   path: babel.NodePath<t.ArrowFunctionExpression | t.FunctionExpression>,
   definition:
     | FunctionDirectiveDefinition
-    | FunctionCallDefinition
-    | ModuleDirectiveDefinition,
+    | FunctionCallDefinition,
   bindings: RootBindings,
 ): t.Expression {
   const dependencies = getMergedDependencies(bindings);
@@ -55,8 +53,7 @@ export function splitFunction(
   path: babel.NodePath<t.ArrowFunctionExpression | t.FunctionExpression>,
   definition:
     | FunctionDirectiveDefinition
-    | FunctionCallDefinition
-    | ModuleDirectiveDefinition,
+    | FunctionCallDefinition,
 ): t.Expression {
   return replaceFunction(
     ctx,
@@ -65,7 +62,7 @@ export function splitFunction(
     getBindingMap(
       path,
       getForeignBindings(path, 'function'),
-      definition.type === 'module-directive' ? true : !!definition.pure,
+      !!definition.pure,
     ),
   );
 }
