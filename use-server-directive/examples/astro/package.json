@@ -9,7 +9,7 @@
 	},
 	"devDependencies": {
 		"astro": "^4.12.3",
-		"typescript": "^5.8.2",
+		"typescript": "^5.9.3",
 		"vite-plugin-use-server-directive": "0.4.3"
 	},
 	"dependencies": {
