@@ -341,17 +341,11 @@ const example = /*@dismantle ref*/$$server_1(async () => {
   ],
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
-      "code": "import { $$context as $$context_1 } from "my-example/runtime";
-export default () => {
-  const ctx_1 = $$context_1();
-  {
-    return 'foo bar';
-  }
-};",
+      "code": "export default () => 'foo bar';",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;;WAEoC,SAAS;EAAA;AAAA",
+        "mappings": "eAE8B,MAAM,SAAS",
         "names": [],
         "sourceRoot": undefined,
         "sources": [

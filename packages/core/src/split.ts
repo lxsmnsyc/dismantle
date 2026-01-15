@@ -589,10 +589,12 @@ export function transformRootFunction(
   root: babel.NodePath<t.ArrowFunctionExpression | t.FunctionExpression>,
   dependencies: Dependencies,
 ): t.Statement {
+  if (dependencies.locals.length === 0 && dependencies.mutations.length === 0) {
+    return t.exportDefaultDeclaration(root.node);
+  }
   const path = root.get('body');
 
   const context = generateUniqueName(root, 'ctx');
-
   transformInnerReferences(path, context, dependencies);
 
   const newStatement = isPathValid(path, t.isExpression)

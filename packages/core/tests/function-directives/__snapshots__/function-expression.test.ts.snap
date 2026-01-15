@@ -303,17 +303,13 @@ const example = /*@dismantle ref*/$$server_1(async () => {
   ],
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
-      "code": "import { $$context as $$context_1 } from "my-example/runtime";
-export default (function () {
-  const ctx_1 = $$context_1();
-  {
-    return 'foo bar';
-  }
+      "code": "export default (function () {
+  return 'foo bar';
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;EACkC;IAE1B,OAAO,SAAS;EAClB;AAAC",
+        "mappings": "gBACsB,YAAY;EAE1B,OAAO,SAAS;AAClB,CAAC",
         "names": [],
         "sourceRoot": undefined,
         "sources": [
@@ -502,17 +498,13 @@ const example = /*@dismantle ref*/$$server_1(async () => {
   ],
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
-      "code": "import { $$context as $$context_1 } from "my-example/runtime";
-export default (async function () {
-  const ctx_1 = $$context_1();
-  {
-    return 'foo bar';
-  }
+      "code": "export default (async function () {
+  return 'foo bar';
 });",
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;EACwC;IAEhC,OAAO,SAAS;EAClB;AAAC",
+        "mappings": "gBACsB,kBAAkB;EAEhC,OAAO,SAAS;AAClB,CAAC",
         "names": [],
         "sourceRoot": undefined,
         "sources": [
