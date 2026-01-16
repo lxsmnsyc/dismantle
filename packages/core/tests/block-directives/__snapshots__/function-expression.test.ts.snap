@@ -311,7 +311,8 @@ export default (async function () {
     "/path/to/example.ts?mode=server&my-example=1.ts" => {
       "code": "import { server as entry } from "my-example/server";
 import root from "./example.ts?mode=server&my-example=0.ts";
-export default entry("26ecc3a5-0-example", root);",
+import { $$wrapBlock as wrapper } from "my-example/runtime";
+export default entry("26ecc3a5-0-example", wrapper(root));",
       "map": {
         "file": undefined,
         "ignoreList": [],
@@ -409,7 +410,8 @@ export default (async function () {
     "/path/to/example.ts?mode=server&my-example=1.ts" => {
       "code": "import { server as entry } from "my-example/server";
 import root from "./example.ts?mode=server&my-example=0.ts";
-export default entry("26ecc3a5-0-example", root);",
+import { $$wrapBlock as wrapper } from "my-example/runtime";
+export default entry("26ecc3a5-0-example", wrapper(root));",
       "map": {
         "file": undefined,
         "ignoreList": [],
@@ -507,7 +509,8 @@ export default (async function () {
     "/path/to/example.ts?mode=server&my-example=1.ts" => {
       "code": "import { server as entry } from "my-example/server";
 import root from "./example.ts?mode=server&my-example=0.ts";
-export default entry("26ecc3a5-0-example", root);",
+import { $$wrapBlock as wrapper } from "my-example/runtime";
+export default entry("26ecc3a5-0-example", wrapper(root));",
       "map": {
         "file": undefined,
         "ignoreList": [],
@@ -605,7 +608,8 @@ export default (async function () {
     "/path/to/example.ts?mode=server&my-example=1.ts" => {
       "code": "import { server as entry } from "my-example/server";
 import root from "./example.ts?mode=server&my-example=0.ts";
-export default entry("26ecc3a5-0-example", root);",
+import { $$wrapBlock as wrapper } from "my-example/runtime";
+export default entry("26ecc3a5-0-example", wrapper(root));",
       "map": {
         "file": undefined,
         "ignoreList": [],
