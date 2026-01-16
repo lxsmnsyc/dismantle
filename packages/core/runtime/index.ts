@@ -21,7 +21,7 @@ export function $$func<T extends any[], R>(
     if (type === 4) {
       throw result;
     }
-    return result;
+    return [type, result];
   };
 }
 
@@ -58,7 +58,7 @@ export function $$gen<T extends any[], R>(
     if (type === 4) {
       throw result;
     }
-    return result;
+    return [type, result];
   };
 }
 

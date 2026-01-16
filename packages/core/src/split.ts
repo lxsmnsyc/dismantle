@@ -481,18 +481,22 @@ export function createEntryFile(
       source: rootFile,
       local: rootID.name,
     });
+    const wrapper = t.identifier('wrapper');
+    let keyword: string;
     if (type === 'block') {
-      args.push(rootID);
+      keyword = '$$wrapBlock';
+    } else if (type === 'function') {
+      keyword = '$$wrapFunction';
     } else {
-      const wrapper = t.identifier('wrapper');
-      entryImports.push({
-        kind: 'named',
-        source: ctx.options.runtime,
-        local: wrapper.name,
-        imported: type === 'function' ? '$$wrapFunction' : '$$wrapGenerator',
-      });
-      args.push(t.callExpression(wrapper, [rootID]));
+      keyword = '$$wrapGenerator';
     }
+    entryImports.push({
+      kind: 'named',
+      source: ctx.options.runtime,
+      local: wrapper.name,
+      imported: keyword,
+    });
+    args.push(t.callExpression(wrapper, [rootID]));
   }
 
   // Create the registration call

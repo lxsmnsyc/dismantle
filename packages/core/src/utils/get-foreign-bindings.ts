@@ -16,19 +16,26 @@ function isForeignBinding(
   current: Scope,
   name: string,
 ): boolean {
+  // If identifier is global, mark as false
   if (current.hasGlobal(name)) {
     return false;
   }
-  if (checker.root === current) {
-    return true;
-  }
+  // If identifier is identified within this scope
   if (current.hasOwnBinding(name)) {
-    if (checker.mode === 'block') {
+    if (checker.mode === 'block' && current === checker.root) {
       const binding = current.getBinding(name);
-      return !!binding && binding.kind === 'param';
+      if (binding && binding.kind === 'param') {
+        return true;
+      }
     }
     return false;
   }
+  // If the scope is already the root and the binding isn't
+  // in the scope, then it is foreign
+  if (checker.root === current) {
+    return true;
+  }
+  // Otherwise, we look at the parent until we hit the root.
   if (current.parent) {
     return isForeignBinding(checker, current.parent, name);
   }
@@ -140,7 +147,7 @@ export default function getForeignBindings(
 ): Set<string> {
   const checker: ForeignBindingChecker = {
     ids: new Set(),
-    root: path.isFunction() ? path.scope.parent : path.scope,
+    root: path.scope,
     mode,
   };
 
@@ -151,6 +158,9 @@ export default function getForeignBindings(
         !isInTypescript(p) &&
         isForeignBinding(checker, p.scope, p.node.name)
       ) {
+        if (p.node.name === 'immediate') {
+          console.log('ayo', p.node.name);
+        }
         checker.ids.add(p.node.name);
       }
     },
