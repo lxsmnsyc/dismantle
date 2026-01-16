@@ -7,7 +7,8 @@ export function isPathValid<V extends t.Node>(
   path: unknown,
   key: TypeFilter<V>,
 ): path is babel.NodePath<V> {
-  return key((path as babel.NodePath).node);
+  const node = (path as babel.NodePath).node;
+  return node ? key(node) : false;
 }
 
 export type NestedExpression =

@@ -81,7 +81,7 @@ const useWorkerDirectivePlugin = (
     options.filter?.exclude || DEFAULT_EXCLUDE,
   );
 
-  let env: Options['env'];
+  const env: Options['env'] = 'production';
 
   const manifest = createManifest();
 

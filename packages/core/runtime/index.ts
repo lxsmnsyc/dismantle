@@ -61,3 +61,80 @@ export function $$gen<T extends any[], R>(
     return [type, result];
   };
 }
+
+type Closure = unknown[];
+
+let CURRENT_CONTEXT: DismantleContext | undefined;
+
+interface DismantleContext {
+  l: Closure;
+  m: Closure;
+}
+
+export function $$run<T extends any[], R>(
+  context: DismantleContext,
+  callback: (...args: T) => R,
+  ...args: T
+): R {
+  const parent = CURRENT_CONTEXT;
+  CURRENT_CONTEXT = context;
+  try {
+    return callback.apply(null, args);
+  } finally {
+    CURRENT_CONTEXT = parent;
+  }
+}
+
+export function $$context(): DismantleContext {
+  const current = CURRENT_CONTEXT;
+  if (!current) {
+    throw new Error('Missing dismantle context');
+  }
+  return current;
+}
+
+export function $$wrapFunction<T extends any[], R>(
+  callback: (...args: T) => R,
+) {
+  return async (
+    context: DismantleContext,
+    ...args: T
+  ): Promise<[type: BasicFunctionCode, result: R, mutations: unknown]> => {
+    try {
+      const result = await $$run(context, callback, ...args);
+      return [2, result, context.m];
+    } catch (error) {
+      return [4, error as R, context.m];
+    }
+  };
+}
+
+export function $$wrapGenerator<T extends any[], R>(
+  callback: (...args: T) => AsyncGenerator<R>,
+) {
+  return async function* (
+    context: DismantleContext,
+    ...args: T
+  ): AsyncGenerator<[type: BasicGeneratorCode, result: R, mutations: unknown]> {
+    try {
+      let step: IteratorResult<R>;
+      const iterator = $$run(context, callback, ...args);
+      while (true) {
+        step = await iterator.next();
+        if (step.done) {
+          break;
+        }
+        yield [5, step.value, context.m];
+      }
+      return [2, step.value, context.m];
+    } catch (error) {
+      return [4, error as R, context.m];
+    }
+  };
+}
+
+export function $$wrapBlock<R>(callback: () => R) {
+  return (context: DismantleContext) => {
+    return $$run(context, callback);
+  };
+}

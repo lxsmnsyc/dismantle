@@ -2,24 +2,50 @@
 
 exports[`CatchClause > client > should skip server try statements in non-async functions 1`] = `
 {
-  "code": "const example = () => {
+  "code": "import { $$func as $$func_1 } from "my-example/runtime";
+const example = () => {
   try {
     doStuff();
   } catch (err) {
-    'use server';
-    report(err);
+    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)({
+      l: [],
+      m: []
+    });
   }
 };",
-  "entries": [],
-  "files": Map {},
+  "entries": [
+    "/path/to/example.ts?mode=client&my-example=0.ts",
+  ],
+  "files": Map {
+    "/path/to/example.ts?mode=client&my-example=0.ts" => {
+      "code": "import { server as entry } from "my-example/client";
+export default entry("26ecc3a5-0-example");",
+      "map": {
+        "file": undefined,
+        "ignoreList": [],
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
+  },
   "map": {
     "file": undefined,
-    "mappings": "AACM,MAAMA,OAAO,GAAGA,CAAA,KAAM;EACpB,IAAI;IACFC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG,EAAE;IACZ,YAAY;IACZC,MAAM,CAACD,GAAG,CAAC;EACb;AACF,CAAC",
+    "ignoreList": [],
+    "mappings": ";AACM,MAAMA,OAAO,GAAGA,CAAA,KAAM;EACpB,IAAI;IACFC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;MAAAC,CAAA;MAAAC,CAAA;IAAA;EAAA;AAId,CAAC",
     "names": [
       "example",
       "doStuff",
       "err",
-      "report",
+      "type_1",
+      "result_1",
+      "$$func_1",
+      "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -46,39 +72,25 @@ exports[`CatchClause > client > should skip server try statements in non-async f
 exports[`CatchClause > client > should skip top-level values for scope 1`] = `
 {
   "code": "import { $$func as $$func_1 } from "my-example/runtime";
-import { value } from "./example.ts?mode=client&my-example=0.ts";
+const value = 'foo bar';
 try {
   doStuff();
 } catch (err) {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=1.ts")).default, null)();
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)({
+    l: [value],
+    m: []
+  });
 }",
   "entries": [
-    "/path/to/example.ts?mode=client&my-example=1.ts",
+    "/path/to/example.ts?mode=client&my-example=0.ts",
   ],
   "files": Map {
     "/path/to/example.ts?mode=client&my-example=0.ts" => {
-      "code": "export const value = 'foo bar';",
+      "code": "import { server as entry } from "my-example/client";
+export default entry("26ecc3a5-0-anonymous");",
       "map": {
         "file": undefined,
-        "mappings": "aACYA,KAAK,GAAG,SAAS",
-        "names": [
-          "value",
-        ],
-        "sourceRoot": undefined,
-        "sources": [
-          "/path/to/example.ts",
-        ],
-        "sourcesContent": [
-          null,
-        ],
-        "version": 3,
-      },
-    },
-    "/path/to/example.ts?mode=client&my-example=1.ts" => {
-      "code": "import { server as entry_1 } from "my-example/client";
-export default entry_1("26ecc3a5-0-anonymous");",
-      "map": {
-        "file": undefined,
+        "ignoreList": [],
         "mappings": "",
         "names": [],
         "sourceRoot": undefined,
@@ -90,14 +102,18 @@ export default entry_1("26ecc3a5-0-anonymous");",
   },
   "map": {
     "file": undefined,
-    "mappings": ";;AAEM,IAAI;EACFA,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;AAAA",
+    "ignoreList": [],
+    "mappings": ";AACM,MAAMA,KAAK,GAAG,SAAS;AACvB,IAAI;EACFC,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;IAAAC,CAAA,GAHNP,KAAK;IAAAQ,CAAA;EAAA;AAAA",
     "names": [
+      "value",
       "doStuff",
       "err",
       "type_1",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -128,7 +144,10 @@ async function foo() {
   try {
     doStuff();
   } catch (err) {
-    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)(value);
+    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)({
+      l: [value],
+      m: []
+    });
   }
 }",
   "entries": [
@@ -136,10 +155,11 @@ async function foo() {
   ],
   "files": Map {
     "/path/to/example.ts?mode=client&my-example=0.ts" => {
-      "code": "import { server as entry_1 } from "my-example/client";
-export default entry_1("26ecc3a5-0-foo");",
+      "code": "import { server as entry } from "my-example/client";
+export default entry("26ecc3a5-0-foo");",
       "map": {
         "file": undefined,
+        "ignoreList": [],
         "mappings": "",
         "names": [],
         "sourceRoot": undefined,
@@ -151,7 +171,8 @@ export default entry_1("26ecc3a5-0-foo");",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB,IAAI;IACFC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA,QAHNN,KAAK;EAAA;AAOb",
+    "ignoreList": [],
+    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB,IAAI;IACFC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;MAAAC,CAAA,GAHNP,KAAK;MAAAQ,CAAA;IAAA;EAAA;AAOb",
     "names": [
       "foo",
       "value",
@@ -161,6 +182,8 @@ export default entry_1("26ecc3a5-0-foo");",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -191,17 +214,21 @@ exports[`CatchClause > client > should transform valid server try statements 1`]
 try {
   doStuff();
 } catch (err) {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)();
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=client&my-example=0.ts")).default, null)({
+    l: [],
+    m: []
+  });
 }",
   "entries": [
     "/path/to/example.ts?mode=client&my-example=0.ts",
   ],
   "files": Map {
     "/path/to/example.ts?mode=client&my-example=0.ts" => {
-      "code": "import { server as entry_1 } from "my-example/client";
-export default entry_1("26ecc3a5-0-anonymous");",
+      "code": "import { server as entry } from "my-example/client";
+export default entry("26ecc3a5-0-anonymous");",
       "map": {
         "file": undefined,
+        "ignoreList": [],
         "mappings": "",
         "names": [],
         "sourceRoot": undefined,
@@ -213,7 +240,8 @@ export default entry_1("26ecc3a5-0-anonymous");",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AACM,IAAI;EACFA,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;AAAA",
+    "ignoreList": [],
+    "mappings": ";AACM,IAAI;EACFA,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;IAAAC,CAAA;IAAAC,CAAA;EAAA;AAAA",
     "names": [
       "doStuff",
       "err",
@@ -221,6 +249,8 @@ export default entry_1("26ecc3a5-0-anonymous");",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -244,24 +274,85 @@ export default entry_1("26ecc3a5-0-anonymous");",
 
 exports[`CatchClause > server > should skip server try statements in non-async functions 1`] = `
 {
-  "code": "const example = () => {
+  "code": "import { $$func as $$func_1 } from "my-example/runtime";
+const example = () => {
   try {
     doStuff();
   } catch (err) {
-    'use server';
-    report(err);
+    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)({
+      l: [],
+      m: []
+    });
   }
 };",
-  "entries": [],
-  "files": Map {},
+  "entries": [
+    "/path/to/example.ts?mode=server&my-example=1.ts",
+  ],
+  "files": Map {
+    "/path/to/example.ts?mode=server&my-example=0.ts" => {
+      "code": "import { $$run as $$run_1 } from "my-example/runtime";
+import { $$context as $$context_1 } from "my-example/runtime";
+export default (async function () {
+  const ctx_1 = $$context_1();
+  try {
+    $$run_1(ctx_1, report, err);
+  } catch (error_1) {
+    return [4, error_1];
+  }
+  return [3];
+});",
+      "map": {
+        "file": undefined,
+        "ignoreList": [],
+        "mappings": ";;;;;IAMUA,OAAA,CAAAC,KAAA,EAAAC,MAAM,EAACC,GAAG;EAAE,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAAA",
+        "names": [
+          "$$run_1",
+          "ctx_1",
+          "report",
+          "err",
+          "error_1",
+        ],
+        "sourceRoot": undefined,
+        "sources": [
+          "/path/to/example.ts",
+        ],
+        "sourcesContent": [
+          null,
+        ],
+        "version": 3,
+      },
+    },
+    "/path/to/example.ts?mode=server&my-example=1.ts" => {
+      "code": "import { server as entry } from "my-example/server";
+import root from "./example.ts?mode=server&my-example=0.ts";
+import { $$wrapBlock as wrapper } from "my-example/runtime";
+export default entry("26ecc3a5-0-example", wrapper(root));",
+      "map": {
+        "file": undefined,
+        "ignoreList": [],
+        "mappings": "",
+        "names": [],
+        "sourceRoot": undefined,
+        "sources": [],
+        "sourcesContent": [],
+        "version": 3,
+      },
+    },
+  },
   "map": {
     "file": undefined,
-    "mappings": "AACM,MAAMA,OAAO,GAAGA,CAAA,KAAM;EACpB,IAAI;IACFC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG,EAAE;IACZ,YAAY;IACZC,MAAM,CAACD,GAAG,CAAC;EACb;AACF,CAAC",
+    "ignoreList": [],
+    "mappings": ";AACM,MAAMA,OAAO,GAAGA,CAAA,KAAM;EACpB,IAAI;IACFC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;MAAAC,CAAA;MAAAC,CAAA;IAAA;EAAA;AAId,CAAC",
     "names": [
       "example",
       "doStuff",
       "err",
-      "report",
+      "type_1",
+      "result_1",
+      "$$func_1",
+      "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -281,7 +372,9 @@ exports[`CatchClause > server > should skip server try statements in non-async f
     ],
     "version": 3,
   },
-  "roots": [],
+  "roots": [
+    "/path/to/example.ts?mode=server&my-example=0.ts",
+  ],
 }
 `;
 
@@ -292,16 +385,22 @@ const value = 'foo bar';
 try {
   doStuff();
 } catch (err) {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)();
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)({
+    l: [],
+    m: []
+  });
 }",
   "entries": [
     "/path/to/example.ts?mode=server&my-example=1.ts",
   ],
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
-      "code": "export default (async function () {
+      "code": "import { $$run as $$run_1 } from "my-example/runtime";
+import { $$context as $$context_1 } from "my-example/runtime";
+export default (async function () {
+  const ctx_1 = $$context_1();
   try {
-    await report(err);
+    await $$run_1(ctx_1, report, err);
   } catch (error_1) {
     return [4, error_1];
   }
@@ -309,8 +408,11 @@ try {
 });",
       "map": {
         "file": undefined,
-        "mappings": ";;IAMQ,MAAMA,MAAM,CAACC,GAAG,CAAC;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAAA",
+        "ignoreList": [],
+        "mappings": ";;;;;IAMQ,MAAAA,OAAA,CAAAC,KAAA,EAAMC,MAAM,EAACC,GAAG,CAAC;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAAA",
         "names": [
+          "$$run_1",
+          "ctx_1",
           "report",
           "err",
           "error_1",
@@ -326,11 +428,13 @@ try {
       },
     },
     "/path/to/example.ts?mode=server&my-example=1.ts" => {
-      "code": "import { server as entry_1 } from "my-example/server";
-import root_1 from "./example.ts?mode=server&my-example=0.ts";
-export default entry_1("26ecc3a5-0-anonymous", root_1);",
+      "code": "import { server as entry } from "my-example/server";
+import root from "./example.ts?mode=server&my-example=0.ts";
+import { $$wrapBlock as wrapper } from "my-example/runtime";
+export default entry("26ecc3a5-0-anonymous", wrapper(root));",
       "map": {
         "file": undefined,
+        "ignoreList": [],
         "mappings": "",
         "names": [],
         "sourceRoot": undefined,
@@ -342,7 +446,8 @@ export default entry_1("26ecc3a5-0-anonymous", root_1);",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AACM,MAAMA,KAAK,GAAG,SAAS;AACvB,IAAI;EACFC,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;AAAA",
+    "ignoreList": [],
+    "mappings": ";AACM,MAAMA,KAAK,GAAG,SAAS;AACvB,IAAI;EACFC,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;IAAAC,CAAA;IAAAC,CAAA;EAAA;AAAA",
     "names": [
       "value",
       "doStuff",
@@ -351,6 +456,8 @@ export default entry_1("26ecc3a5-0-anonymous", root_1);",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -383,7 +490,10 @@ async function foo() {
   try {
     doStuff();
   } catch (err) {
-    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)();
+    const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)({
+      l: [],
+      m: []
+    });
   }
 }",
   "entries": [
@@ -391,9 +501,12 @@ async function foo() {
   ],
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
-      "code": "export default (async function () {
+      "code": "import { $$run as $$run_1 } from "my-example/runtime";
+import { $$context as $$context_1 } from "my-example/runtime";
+export default (async function () {
+  const ctx_1 = $$context_1();
   try {
-    await report(err);
+    await $$run_1(ctx_1, report, err);
   } catch (error_1) {
     return [4, error_1];
   }
@@ -401,8 +514,11 @@ async function foo() {
 });",
       "map": {
         "file": undefined,
-        "mappings": ";;IAOU,MAAMA,MAAM,CAACC,GAAG,CAAC;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAAA",
+        "ignoreList": [],
+        "mappings": ";;;;;IAOU,MAAAA,OAAA,CAAAC,KAAA,EAAMC,MAAM,EAACC,GAAG,CAAC;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAAA",
         "names": [
+          "$$run_1",
+          "ctx_1",
           "report",
           "err",
           "error_1",
@@ -418,11 +534,13 @@ async function foo() {
       },
     },
     "/path/to/example.ts?mode=server&my-example=1.ts" => {
-      "code": "import { server as entry_1 } from "my-example/server";
-import root_1 from "./example.ts?mode=server&my-example=0.ts";
-export default entry_1("26ecc3a5-0-foo", root_1);",
+      "code": "import { server as entry } from "my-example/server";
+import root from "./example.ts?mode=server&my-example=0.ts";
+import { $$wrapBlock as wrapper } from "my-example/runtime";
+export default entry("26ecc3a5-0-foo", wrapper(root));",
       "map": {
         "file": undefined,
+        "ignoreList": [],
         "mappings": "",
         "names": [],
         "sourceRoot": undefined,
@@ -434,7 +552,8 @@ export default entry_1("26ecc3a5-0-foo", root_1);",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB,IAAI;IACFC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;EAAA;AAId",
+    "ignoreList": [],
+    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB,IAAI;IACFC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;MAAAC,CAAA;MAAAC,CAAA;IAAA;EAAA;AAId",
     "names": [
       "foo",
       "value",
@@ -444,6 +563,8 @@ export default entry_1("26ecc3a5-0-foo", root_1);",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [
@@ -476,16 +597,22 @@ exports[`CatchClause > server > should transform valid server try statements 1`]
 try {
   doStuff();
 } catch (err) {
-  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)();
+  const [type_1, result_1] = await $$func_1((await import("./example.ts?mode=server&my-example=1.ts")).default, null)({
+    l: [],
+    m: []
+  });
 }",
   "entries": [
     "/path/to/example.ts?mode=server&my-example=1.ts",
   ],
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
-      "code": "export default (async function () {
+      "code": "import { $$run as $$run_1 } from "my-example/runtime";
+import { $$context as $$context_1 } from "my-example/runtime";
+export default (async function () {
+  const ctx_1 = $$context_1();
   try {
-    await report(err);
+    await $$run_1(ctx_1, report, err);
   } catch (error_1) {
     return [4, error_1];
   }
@@ -493,8 +620,11 @@ try {
 });",
       "map": {
         "file": undefined,
-        "mappings": ";;IAKQ,MAAMA,MAAM,CAACC,GAAG,CAAC;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAAA",
+        "ignoreList": [],
+        "mappings": ";;;;;IAKQ,MAAAA,OAAA,CAAAC,KAAA,EAAMC,MAAM,EAACC,GAAG,CAAC;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAAA",
         "names": [
+          "$$run_1",
+          "ctx_1",
           "report",
           "err",
           "error_1",
@@ -510,11 +640,13 @@ try {
       },
     },
     "/path/to/example.ts?mode=server&my-example=1.ts" => {
-      "code": "import { server as entry_1 } from "my-example/server";
-import root_1 from "./example.ts?mode=server&my-example=0.ts";
-export default entry_1("26ecc3a5-0-anonymous", root_1);",
+      "code": "import { server as entry } from "my-example/server";
+import root from "./example.ts?mode=server&my-example=0.ts";
+import { $$wrapBlock as wrapper } from "my-example/runtime";
+export default entry("26ecc3a5-0-anonymous", wrapper(root));",
       "map": {
         "file": undefined,
+        "ignoreList": [],
         "mappings": "",
         "names": [],
         "sourceRoot": undefined,
@@ -526,7 +658,8 @@ export default entry_1("26ecc3a5-0-anonymous", root_1);",
   },
   "map": {
     "file": undefined,
-    "mappings": ";AACM,IAAI;EACFA,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;AAAA",
+    "ignoreList": [],
+    "mappings": ";AACM,IAAI;EACFA,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;IAAAC,CAAA;IAAAC,CAAA;EAAA;AAAA",
     "names": [
       "doStuff",
       "err",
@@ -534,6 +667,8 @@ export default entry_1("26ecc3a5-0-anonymous", root_1);",
       "result_1",
       "$$func_1",
       "default",
+      "l",
+      "m",
     ],
     "sourceRoot": undefined,
     "sources": [

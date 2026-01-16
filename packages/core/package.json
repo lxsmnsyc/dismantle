@@ -15,19 +15,19 @@
   ],
   "devDependencies": {
     "@types/babel__core": "^7.20.5",
-    "@types/babel__generator": "^7.6.8",
-    "@types/babel__traverse": "^7.20.6",
-    "@types/node": "^22.0.0",
-    "pridepack": "2.6.1",
-    "tslib": "^2.6.3",
-    "typescript": "^5.5.4",
-    "vitest": "^2.0.5"
+    "@types/babel__generator": "^7.27.0",
+    "@types/babel__traverse": "^7.28.0",
+    "@types/node": "^25.0.8",
+    "pridepack": "2.6.4",
+    "tslib": "^2.8.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.17"
   },
   "dependencies": {
-    "@babel/core": "^7.25.2",
-    "@babel/generator": "^7.25.0",
-    "@babel/traverse": "^7.25.3",
-    "@babel/types": "^7.25.2"
+    "@babel/core": "^7.28.6",
+    "@babel/generator": "^7.28.6",
+    "@babel/traverse": "^7.28.6",
+    "@babel/types": "^7.28.6"
   },
   "scripts": {
     "prepublishOnly": "pridepack clean && pridepack build",
@@ -63,22 +63,22 @@
   },
   "exports": {
     ".": {
+      "types": "./dist/types/src/index.d.ts",
       "development": {
         "require": "./dist/cjs/development/index.cjs",
         "import": "./dist/esm/development/index.mjs"
       },
       "require": "./dist/cjs/production/index.cjs",
-      "import": "./dist/esm/production/index.mjs",
-      "types": "./dist/types/src/index.d.ts"
+      "import": "./dist/esm/production/index.mjs"
     },
     "./runtime": {
+      "types": "./dist/types/runtime/index.d.ts",
       "development": {
         "require": "./dist/cjs/development/runtime.cjs",
         "import": "./dist/esm/development/runtime.mjs"
       },
       "require": "./dist/cjs/production/runtime.cjs",
-      "import": "./dist/esm/production/runtime.mjs",
-      "types": "./dist/types/runtime/index.d.ts"
+      "import": "./dist/esm/production/runtime.mjs"
     }
   },
   "types": "./dist/types/src/index.d.ts",

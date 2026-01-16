@@ -1,6 +1,7 @@
 import type * as babel from '@babel/core';
 import * as t from '@babel/types';
-import { splitFunctionDirective } from './split-function-directive';
+import { DISMANTLE_REF } from './constants';
+import { splitFunction } from './split-function';
 import type { FunctionDirectiveDefinition, StateContext } from './types';
 import {
   cleanDirectives,
@@ -44,11 +45,17 @@ export function transformFunctionDirective(
   if (isPathValid(body, t.isBlockStatement)) {
     const definition = getFunctionDirectiveDefinition(ctx, body);
     if (definition) {
-      const replacement = splitFunctionDirective(ctx, path, definition);
+      const replacement = splitFunction(ctx, path, definition);
+      path.scope.crawl();
       path.replaceWith(
-        t.callExpression(getImportIdentifier(ctx, path, definition.handle), [
-          replacement,
-        ]),
+        t.addComment(
+          t.callExpression(
+            getImportIdentifier(ctx.imports, path, definition.handle),
+            [replacement],
+          ),
+          'leading',
+          DISMANTLE_REF,
+        ),
       );
     }
   }

@@ -1,15 +1,22 @@
 import type * as babel from '@babel/core';
-import type { Binding, BindingKind } from '@babel/traverse';
+import type { Binding } from '@babel/traverse';
 import * as t from '@babel/types';
+import {
+  DISMANTLE_CONTEXT,
+  DISMANTLE_RUN,
+  HIDDEN_FUNC,
+  HIDDEN_GENERATOR,
+} from './constants';
+import { patchV8Identifier } from './patch-v8-identifier';
 import type { ImportDefinition, ModuleDefinition, StateContext } from './types';
+import assert from './utils/assert';
 import { generateUniqueName } from './utils/generate-unique-name';
 import { generateCode } from './utils/generator-shim';
 import { getDescriptiveName } from './utils/get-descriptive-name';
 import getForeignBindings from './utils/get-foreign-bindings';
-import { getIdentifiersFromLVal } from './utils/get-identifiers-from-lval';
+import { getImportIdentifier } from './utils/get-import-identifier';
 import { getModuleDefinition } from './utils/get-module-definition';
-import { getRootStatementPath } from './utils/get-root-statement-path';
-import { isPathValid, unwrapPath } from './utils/unwrap';
+import { isPathValid, unwrapNode, unwrapPath } from './utils/unwrap';
 
 function moduleDefinitionToImportSpecifier(definition: ModuleDefinition) {
   switch (definition.kind) {
@@ -27,7 +34,9 @@ function moduleDefinitionToImportSpecifier(definition: ModuleDefinition) {
   }
 }
 
-function moduleDefinitionToImportDeclaration(definition: ModuleDefinition) {
+export function moduleDefinitionToImportDeclaration(
+  definition: ModuleDefinition,
+) {
   return t.importDeclaration(
     [moduleDefinitionToImportSpecifier(definition)],
     t.stringLiteral(definition.source),
@@ -44,98 +53,380 @@ function moduleDefinitionsToImportDeclarations(
   return declarations;
 }
 
-function isMutation(kind: BindingKind): boolean {
-  switch (kind) {
-    case 'let':
-    case 'var':
-    case 'param':
-      return true;
+export interface Dependencies {
+  modules: Binding[];
+  locals: Binding[];
+  mutations: Binding[];
+}
+
+export interface LocalDependencies extends Dependencies {
+  variable: t.Identifier;
+}
+
+export type BindingMap = Map<babel.NodePath<ValidFunction>, LocalDependencies>;
+
+export interface RootBindings {
+  map: BindingMap;
+  root: LocalDependencies;
+}
+
+interface ExtractDependenciesState {
+  map: BindingMap;
+  visited: Set<babel.NodePath>;
+}
+
+function extractDependenciesFromFunction(
+  state: ExtractDependenciesState,
+  target: Binding,
+  path: babel.NodePath<
+    t.FunctionDeclaration | t.ArrowFunctionExpression | t.FunctionExpression
+  >,
+): void {
+  if (state.visited.has(target.path)) {
+    return;
+  }
+  state.visited.add(target.path);
+  if (!state.map.has(path)) {
+    state.map.set(
+      path,
+      getBindingDependencies(
+        state,
+        path,
+        getForeignBindings(path, 'function'),
+        false,
+      ),
+    );
+  }
+}
+
+function addLocalDependency(
+  dependencies: LocalDependencies,
+  target: Binding,
+): void {
+  if (target.constant) {
+    if (!dependencies.locals.includes(target)) {
+      dependencies.locals.push(target);
+    }
+  } else if (!dependencies.mutations.includes(target)) {
+    dependencies.mutations.push(target);
+  }
+}
+
+function extractDependenciesFromVariableDeclarator(
+  state: ExtractDependenciesState,
+  dependencies: LocalDependencies,
+  target: Binding,
+): void {
+  if (!isPathValid(target.path, t.isVariableDeclarator)) {
+    return;
+  }
+  // Get the init
+  const init = unwrapPath(target.path.get('init'), t.isExpression);
+  // Check for init
+  if (init) {
+    // Check if init is a function expression
+    if (
+      isPathValid(init, t.isArrowFunctionExpression) ||
+      isPathValid(init, t.isFunctionExpression)
+    ) {
+      extractDependenciesFromFunction(state, target, init);
+      return;
+    }
+  }
+  addLocalDependency(dependencies, target);
+}
+
+function extractDependency(
+  state: ExtractDependenciesState,
+  dependencies: LocalDependencies,
+  target: Binding,
+  isPure: boolean,
+): void {
+  switch (target.kind) {
+    // For module imports, we just push to them
+    // to the module bindings
+    case 'module': {
+      dependencies.modules.push(target);
+      break;
+    }
+    // For params, we push them as mutable locals
+    case 'param': {
+      if (!isPure) {
+        addLocalDependency(dependencies, target);
+      }
+      break;
+    }
     case 'const':
-    case 'hoisted':
+    case 'let':
+    case 'var': {
+      if (!isPure) {
+        extractDependenciesFromVariableDeclarator(state, dependencies, target);
+      }
+      break;
+    }
+    case 'hoisted': {
+      if (!isPure && isPathValid(target.path, t.isFunctionDeclaration)) {
+        extractDependenciesFromFunction(state, target, target.path);
+      }
+      break;
+    }
     case 'local':
-    case 'module':
     case 'unknown':
-      return false;
+      break;
   }
 }
 
-function registerModuleLevelBinding(
-  ctx: StateContext,
-  modules: ModuleDefinition[],
-  binding: string,
-  target: Binding,
-): void {
-  const current = ctx.bindings.get(binding);
-  if (current) {
-    modules.push(current);
-  } else if (isPathValid(target.path, t.isVariableDeclarator)) {
-    const definitions = splitVariableDeclarator(ctx, target.path);
-    for (let k = 0, klen = definitions.length; k < klen; k++) {
-      modules.push(definitions[k]);
-      ctx.bindings.set(definitions[k].local, definitions[k]);
+function getBindingDependencies(
+  state: ExtractDependenciesState,
+  path: babel.NodePath,
+  identifiers: Set<string>,
+  isPure: boolean,
+): LocalDependencies {
+  const bindings: LocalDependencies = {
+    variable: t.identifier(getDescriptiveName(path, 'func')),
+    modules: [],
+    locals: [],
+    mutations: [],
+  };
+  for (const identifier of identifiers) {
+    const target = path.scope.getBinding(identifier);
+    if (target) {
+      // Recursively extract
+      extractDependency(state, bindings, target, isPure);
+    } else {
+      // TODO globals
     }
-  } else if (isPathValid(target.path, t.isFunctionDeclaration)) {
-    const definition = splitFunctionDeclaration(ctx, target.path);
-    modules.push(definition);
-    ctx.bindings.set(definition.local, definition);
+  }
+
+  return bindings;
+}
+
+export function getBindingMap(
+  path: babel.NodePath<ValidBlock>,
+  identifiers: Set<string>,
+  isPure: boolean,
+): RootBindings {
+  const state: ExtractDependenciesState = {
+    map: new Map(),
+    visited: new Set(),
+  };
+  state.visited.add(path);
+  const dependencies = getBindingDependencies(state, path, identifiers, isPure);
+  return {
+    map: state.map,
+    root: dependencies,
+  };
+}
+
+type ValidFunction =
+  | t.FunctionDeclaration
+  | t.FunctionExpression
+  | t.ArrowFunctionExpression;
+
+type ValidBlock = ValidFunction | t.BlockStatement;
+
+function patchIdentifier(
+  dependencies: Dependencies,
+  context: t.Identifier,
+  path: babel.NodePath<t.Identifier | t.JSXIdentifier>,
+): void {
+  const binding = path.scope.getBinding(path.node.name);
+  if (binding) {
+    const localsIndex = dependencies.locals.indexOf(binding);
+    if (localsIndex > -1) {
+      path.replaceWith(
+        t.memberExpression(
+          t.memberExpression(context, t.identifier('l')),
+          t.numericLiteral(localsIndex),
+          true,
+        ),
+      );
+    }
+    const mutationsIndex = dependencies.mutations.indexOf(binding);
+    if (mutationsIndex > -1) {
+      path.replaceWith(
+        t.memberExpression(
+          t.memberExpression(context, t.identifier('m')),
+          t.numericLiteral(mutationsIndex),
+          true,
+        ),
+      );
+    }
   }
 }
 
-function registerBinding(
-  ctx: StateContext,
-  modules: ModuleDefinition[],
-  locals: t.Identifier[],
-  mutations: t.Identifier[],
-  binding: string,
-  target: Binding,
-  pure?: boolean,
+function patchArrayPattern(
+  dependencies: Dependencies,
+  context: t.Identifier,
+  path: babel.NodePath<t.ArrayPattern>,
 ): void {
-  if (target.kind === 'module') {
-    const result = getModuleDefinition(target.path);
-    if (result) {
-      modules.push(result);
+  for (const element of path.get('elements')) {
+    if (isPathValid(element, t.isLVal)) {
+      patchLVal(dependencies, context, element);
     }
-  } else if (target.kind === 'param') {
-    locals.push(target.identifier);
-  } else {
-    let blockParent = target.path.scope.getBlockParent();
-    const programParent = target.path.scope.getProgramParent();
-    // a FunctionDeclaration binding refers to itself as the block parent
-    if (blockParent.path === target.path) {
-      blockParent = blockParent.parent;
-    }
-    if (blockParent === programParent) {
-      registerModuleLevelBinding(ctx, modules, binding, target);
-    } else if (!pure) {
-      locals.push(target.identifier);
-      if (isMutation(target.kind)) {
-        mutations.push(target.identifier);
+  }
+}
+
+function patchObjectPattern(
+  dependencies: Dependencies,
+  context: t.Identifier,
+  path: babel.NodePath<t.ObjectPattern>,
+): void {
+  for (const property of path.get('properties')) {
+    if (isPathValid(property, t.isRestElement)) {
+      // {...rest} = foo;
+      patchLVal(dependencies, context, property.get('argument'));
+    } else if (isPathValid(property, t.isObjectProperty)) {
+      const key = property.get('key');
+      if (isPathValid(key, t.isIdentifier) && property.node.shorthand) {
+        // { foo } = bar;
+        patchLVal(dependencies, context, key);
+        return;
+      }
+      const value = property.get('value');
+      if (isPathValid(value, t.isLVal)) {
+        patchLVal(dependencies, context, value);
       }
     }
   }
 }
 
-export interface ExtractedBindings {
-  modules: ModuleDefinition[];
-  locals: t.Identifier[];
-  mutations: t.Identifier[];
+function patchLVal(
+  dependencies: Dependencies,
+  context: t.Identifier,
+  path: babel.NodePath<t.LVal>,
+): void {
+  if (isPathValid(path, t.isArrayPattern)) {
+    patchArrayPattern(dependencies, context, path);
+  } else if (isPathValid(path, t.isAssignmentPattern)) {
+    // [foo = bar] = baz;
+    patchLVal(dependencies, context, path.get('left'));
+  } else if (isPathValid(path, t.isIdentifier)) {
+    patchIdentifier(dependencies, context, path);
+  } else if (isPathValid(path, t.isObjectPattern)) {
+    patchObjectPattern(dependencies, context, path);
+  } else if (isPathValid(path, t.isRestElement)) {
+    // {...rest} = foo;
+    patchLVal(dependencies, context, path.get('argument'));
+  } // TODO TS type casts
 }
 
-export function extractBindings(
-  ctx: StateContext,
-  path: babel.NodePath,
-  bindings: Set<string>,
-  pure?: boolean,
-): ExtractedBindings {
-  const modules: ModuleDefinition[] = [];
-  const locals: t.Identifier[] = [];
-  const mutations: t.Identifier[] = [];
-  for (const binding of bindings) {
-    const target = path.scope.getBinding(binding);
-    if (target) {
-      registerBinding(ctx, modules, locals, mutations, binding, target, pure);
+export function transformInnerReferences(
+  body: babel.NodePath,
+  context: t.Identifier,
+  dependencies: Dependencies,
+): void {
+  body.traverse({
+    ReferencedIdentifier(path) {
+      patchIdentifier(dependencies, context, path);
+    },
+    AssignmentExpression(path) {
+      const left = path.get('left');
+      if (isPathValid(left, t.isLVal)) {
+        patchLVal(dependencies, context, left);
+      }
+    },
+    ForXStatement(path) {
+      const left = path.get('left');
+      if (isPathValid(left, t.isLVal)) {
+        patchLVal(dependencies, context, left);
+      }
+    },
+    UpdateExpression(path) {
+      const id = unwrapPath(path.get('argument'), t.isIdentifier);
+      if (id) {
+        patchIdentifier(dependencies, context, id);
+      }
+    },
+    CallExpression: {
+      exit(child) {
+        if (t.isExpression(child.node.callee)) {
+          const id = unwrapNode(child.node.callee, t.isIdentifier);
+          if (id) {
+            child.replaceWith(
+              t.callExpression(t.v8IntrinsicIdentifier(DISMANTLE_RUN), [
+                context,
+                child.node.callee,
+                ...child.node.arguments,
+              ]),
+            );
+            child.skip();
+          }
+        }
+      },
+    },
+  });
+}
+
+export function transformFunctionForSplit(
+  path: babel.NodePath<ValidFunction>,
+  id: t.Identifier,
+  dependencies: Dependencies,
+): t.FunctionDeclaration {
+  const backup = t.cloneNode(path.node, true, false);
+  // Ensure body is a block statement
+  const body = path.get('body');
+  if (isPathValid(body, t.isExpression)) {
+    body.replaceWith(t.blockStatement([t.returnStatement(body.node)]));
+  }
+  assert(isPathValid(body, t.isBlockStatement), 'invariant');
+  // First, insert a context hook
+  const context = generateUniqueName(path, 'ctx');
+  const contextCall = t.v8IntrinsicIdentifier(DISMANTLE_CONTEXT);
+  const header: t.Statement[] = [
+    t.variableDeclaration('const', [
+      t.variableDeclarator(context, t.callExpression(contextCall, [])),
+    ]),
+  ];
+  // Transform body for closure context wrapping
+  transformInnerReferences(body, context, dependencies);
+
+  header.push(...body.node.body);
+  const current = path.node;
+  path.node = backup;
+  return t.functionDeclaration(
+    id,
+    current.params,
+    t.blockStatement(header),
+    current.generator,
+    current.async,
+  );
+}
+
+function createVirtualFileName(ctx: StateContext) {
+  return `./${ctx.path.base}?mode=${ctx.options.mode}&${ctx.options.key}=${ctx
+    .virtual.count++}${ctx.path.ext}`;
+}
+
+export function getModuleImports(modules: Binding[]): t.Statement[] {
+  const statements: t.Statement[] = [];
+  for (const mod of modules) {
+    const definition = getModuleDefinition(mod.path);
+    if (definition) {
+      statements.push(moduleDefinitionToImportDeclaration(definition));
     }
   }
+  return statements;
+}
+
+export function getMergedDependencies(bindings: RootBindings): Dependencies {
+  const dirtyLocals: Binding[] = [];
+  const dirtyMutations: Binding[] = [];
+  const dirtyModules: Binding[] = [];
+
+  dirtyLocals.push.apply(dirtyLocals, bindings.root.locals);
+  dirtyMutations.push.apply(dirtyMutations, bindings.root.mutations);
+  dirtyModules.push.apply(dirtyModules, bindings.root.modules);
+
+  for (const [, binding] of bindings.map) {
+    dirtyLocals.push.apply(dirtyLocals, binding.locals);
+    dirtyMutations.push.apply(dirtyMutations, binding.mutations);
+    dirtyModules.push.apply(dirtyModules, binding.modules);
+  }
+
+  const modules = [...new Set(dirtyModules)];
+  const locals = [...new Set(dirtyLocals)];
+  const mutations = [...new Set(dirtyMutations)];
 
   return {
     modules,
@@ -144,26 +435,14 @@ export function extractBindings(
   };
 }
 
-function createVirtualFileName(ctx: StateContext) {
-  return `./${ctx.path.base}?mode=${ctx.options.mode}&${ctx.options.key}=${ctx
-    .virtual.count++}${ctx.path.ext}`;
-}
-
 export function createRootFile(
   ctx: StateContext,
-  bindings: ExtractedBindings,
-  replacement: t.Expression,
+  statements: t.Statement[],
 ): string {
   const rootFile = createVirtualFileName(ctx);
-  const rootContent = generateCode(
-    ctx.id,
-    t.program([
-      ...(ctx.options.mode === 'server'
-        ? moduleDefinitionsToImportDeclarations(bindings.modules)
-        : []),
-      t.exportDefaultDeclaration(replacement),
-    ]),
-  );
+  const node = t.file(t.program(statements));
+  patchV8Identifier(ctx, node);
+  const rootContent = generateCode(ctx.id, node);
   ctx.onVirtualFile(
     rootFile,
     { code: rootContent.code, map: rootContent.map },
@@ -174,6 +453,7 @@ export function createRootFile(
 
 export function createEntryFile(
   ctx: StateContext,
+  type: 'block' | 'function' | 'generator',
   path: babel.NodePath,
   rootFile: string | undefined,
   imported: ImportDefinition,
@@ -184,7 +464,7 @@ export function createEntryFile(
   if (ctx.options.env !== 'production') {
     id += `-${getDescriptiveName(path, 'anonymous')}`;
   }
-  const entryID = generateUniqueName(path, 'entry');
+  const entryID = t.identifier('entry');
   const entryImports: ModuleDefinition[] = [
     {
       kind: imported.kind,
@@ -195,13 +475,28 @@ export function createEntryFile(
   ];
   const args: t.Expression[] = [t.stringLiteral(id)];
   if (rootFile) {
-    const rootID = generateUniqueName(path, 'root');
+    const rootID = t.identifier('root');
     entryImports.push({
       kind: 'default',
       source: rootFile,
       local: rootID.name,
     });
-    args.push(rootID);
+    const wrapper = t.identifier('wrapper');
+    let keyword: string;
+    if (type === 'block') {
+      keyword = '$$wrapBlock';
+    } else if (type === 'function') {
+      keyword = '$$wrapFunction';
+    } else {
+      keyword = '$$wrapGenerator';
+    }
+    entryImports.push({
+      kind: 'named',
+      source: ctx.options.runtime,
+      local: wrapper.name,
+      imported: keyword,
+    });
+    args.push(t.callExpression(wrapper, [rootID]));
   }
 
   // Create the registration call
@@ -222,80 +517,6 @@ export function createEntryFile(
   return entryFile;
 }
 
-function splitFunctionDeclaration(
-  ctx: StateContext,
-  path: babel.NodePath<t.FunctionDeclaration>,
-): ModuleDefinition {
-  const bindings = getForeignBindings(path, 'function');
-  const { modules } = extractBindings(ctx, path, bindings);
-  const file = createVirtualFileName(ctx);
-  const compiled = generateCode(
-    ctx.id,
-    t.program([
-      ...moduleDefinitionsToImportDeclarations(modules),
-      t.exportNamedDeclaration(path.node),
-    ]),
-  );
-  ctx.onVirtualFile(file, { code: compiled.code, map: compiled.map }, 'none');
-
-  const statement = getRootStatementPath(path);
-
-  const identifier = path.node.id || generateUniqueName(path, 'func');
-  const definition: ModuleDefinition = {
-    kind: 'named',
-    local: identifier.name,
-    source: file,
-  };
-
-  statement.insertBefore(moduleDefinitionToImportDeclaration(definition));
-  path.remove();
-  return definition;
-}
-
-function splitVariableDeclarator(
-  ctx: StateContext,
-  path: babel.NodePath<t.VariableDeclarator>,
-): ModuleDefinition[] {
-  const init = unwrapPath(path.get('init'), t.isExpression);
-  const modules = init
-    ? extractBindings(
-        ctx,
-        path,
-        getForeignBindings(
-          path,
-          isPathValid(init, t.isArrowFunctionExpression) ||
-            isPathValid(init, t.isFunctionExpression)
-            ? 'function'
-            : 'expression',
-        ),
-      ).modules
-    : [];
-  const file = createVirtualFileName(ctx);
-  const parent = path.parentPath.node as t.VariableDeclaration;
-  const compiled = generateCode(
-    ctx.id,
-    t.program([
-      ...moduleDefinitionsToImportDeclarations(modules),
-      t.exportNamedDeclaration(t.variableDeclaration(parent.kind, [path.node])),
-    ]),
-  );
-  ctx.onVirtualFile(file, { code: compiled.code, map: compiled.map }, 'none');
-  const definitions: ModuleDefinition[] = getIdentifiersFromLVal(
-    path.node.id,
-  ).map(name => ({
-    kind: 'named',
-    local: name,
-    source: file,
-  }));
-  // Replace declaration with definition
-  const statement = getRootStatementPath(path);
-  if (statement) {
-    statement.insertBefore(moduleDefinitionsToImportDeclarations(definitions));
-  }
-  path.remove();
-  return definitions;
-}
-
 /**
  * These are internal code for the control flow of the server block
  * The goal is to transform these into return statements, and the
@@ -314,7 +535,7 @@ export const YIELD_KEY = t.numericLiteral(5);
 export function getGeneratorReplacementForBlock(
   path: babel.NodePath,
   registerID: t.Identifier,
-  args: (t.Identifier | t.SpreadElement | t.ArrayExpression)[],
+  args: (t.Expression | t.SpreadElement)[],
 ): [replacements: t.Statement[], step: t.Identifier] {
   const iterator = generateUniqueName(path, 'iterator');
   const step = generateUniqueName(path, 'step');
@@ -365,4 +586,217 @@ export function getGeneratorReplacementForBlock(
     ),
   ];
   return [replacement, step];
+}
+
+export function transformRootFunction(
+  root: babel.NodePath<t.ArrowFunctionExpression | t.FunctionExpression>,
+  dependencies: Dependencies,
+): t.Statement {
+  if (dependencies.locals.length === 0 && dependencies.mutations.length === 0) {
+    return t.exportDefaultDeclaration(root.node);
+  }
+  const path = root.get('body');
+
+  const context = generateUniqueName(root, 'ctx');
+  transformInnerReferences(path, context, dependencies);
+
+  const newStatement = isPathValid(path, t.isExpression)
+    ? t.blockStatement([t.returnStatement(path.node)])
+    : (path.node as t.Statement);
+
+  const statements = t.blockStatement([
+    t.variableDeclaration('const', [
+      t.variableDeclarator(
+        context,
+        t.callExpression(t.v8IntrinsicIdentifier(DISMANTLE_CONTEXT), []),
+      ),
+    ]),
+    newStatement,
+  ]);
+
+  return t.exportDefaultDeclaration(
+    t.isFunctionExpression(root.node)
+      ? t.functionExpression(
+          root.node.id,
+          root.node.params,
+          statements,
+          root.node.generator,
+          root.node.async,
+        )
+      : t.arrowFunctionExpression(
+          root.node.params,
+          statements,
+          root.node.async,
+        ),
+  );
+}
+
+export function compileBindingMap(
+  bindings: RootBindings,
+  dependencies: Dependencies,
+): t.Statement[] {
+  const statements: t.Statement[] = [];
+
+  for (const [path, binding] of bindings.map) {
+    statements.push(
+      transformFunctionForSplit(path, binding.variable, dependencies),
+    );
+  }
+
+  return statements;
+}
+
+export function getFunctionReplacement(
+  ctx: StateContext,
+  path: babel.NodePath<t.ArrowFunctionExpression | t.FunctionExpression>,
+  entryFile: string,
+  dependencies: Dependencies,
+): t.Expression {
+  const rest = generateUniqueName(path, 'rest');
+
+  const returnType = generateUniqueName(path, 'type');
+  const returnResult = generateUniqueName(path, 'result');
+  const returnMutations = generateUniqueName(path, 'mutations');
+
+  const source = generateUniqueName(path, 'source');
+
+  const replacement: t.Statement[] = [];
+  if (path.node.generator) {
+    const funcID = generateUniqueName(path, 'fn');
+    replacement.push(
+      t.variableDeclaration('const', [
+        t.variableDeclarator(
+          funcID,
+          t.callExpression(
+            getImportIdentifier(ctx.imports, path, {
+              ...HIDDEN_GENERATOR,
+              source: ctx.options.runtime,
+            }),
+            [
+              source,
+              dependencies.mutations.length
+                ? t.arrowFunctionExpression(
+                    [returnMutations],
+                    t.assignmentExpression(
+                      '=',
+                      t.arrayPattern(
+                        dependencies.mutations.map(id => id.identifier),
+                      ),
+                      returnMutations,
+                    ),
+                  )
+                : t.nullLiteral(),
+            ],
+          ),
+        ),
+      ]),
+    );
+    const [reps, step] = getGeneratorReplacementForBlock(path, funcID, [
+      t.objectExpression([
+        t.objectProperty(
+          t.identifier('l'),
+          t.arrayExpression(dependencies.locals.map(id => id.identifier)),
+        ),
+        t.objectProperty(
+          t.identifier('m'),
+          t.arrayExpression(dependencies.mutations.map(id => id.identifier)),
+        ),
+      ]),
+      t.spreadElement(rest),
+    ]);
+    for (let i = 0, len = reps.length; i < len; i++) {
+      replacement.push(reps[i]);
+    }
+    replacement.push(
+      t.variableDeclaration('const', [
+        t.variableDeclarator(
+          t.arrayPattern([returnType, returnResult]),
+          t.memberExpression(step, t.identifier('value')),
+        ),
+      ]),
+    );
+  } else {
+    replacement.push(
+      t.variableDeclaration('const', [
+        t.variableDeclarator(
+          t.arrayPattern([returnType, returnResult]),
+          t.awaitExpression(
+            t.callExpression(
+              t.callExpression(
+                getImportIdentifier(ctx.imports, path, {
+                  ...HIDDEN_FUNC,
+                  source: ctx.options.runtime,
+                }),
+                [
+                  source,
+                  dependencies.mutations.length
+                    ? t.arrowFunctionExpression(
+                        [returnMutations],
+                        t.assignmentExpression(
+                          '=',
+                          t.arrayPattern(
+                            dependencies.mutations.map(id => id.identifier),
+                          ),
+                          returnMutations,
+                        ),
+                      )
+                    : t.nullLiteral(),
+                ],
+              ),
+              [
+                t.objectExpression([
+                  t.objectProperty(
+                    t.identifier('l'),
+                    t.arrayExpression(
+                      dependencies.locals.map(id => id.identifier),
+                    ),
+                  ),
+                  t.objectProperty(
+                    t.identifier('m'),
+                    t.arrayExpression(
+                      dependencies.mutations.map(id => id.identifier),
+                    ),
+                  ),
+                ]),
+                t.spreadElement(rest),
+              ],
+            ),
+          ),
+        ),
+      ]),
+    );
+  }
+
+  replacement.push(t.returnStatement(returnResult));
+
+  return t.arrowFunctionExpression(
+    [],
+    t.blockStatement([
+      t.variableDeclaration('const', [
+        t.variableDeclarator(
+          source,
+          t.memberExpression(
+            t.awaitExpression(t.importExpression(t.stringLiteral(entryFile))),
+            t.identifier('default'),
+          ),
+        ),
+      ]),
+      t.returnStatement(
+        isPathValid(path, t.isFunctionExpression)
+          ? t.functionExpression(
+              path.node.id,
+              [t.restElement(rest)],
+              t.blockStatement(replacement),
+              path.node.generator,
+              true,
+            )
+          : t.arrowFunctionExpression(
+              [t.restElement(rest)],
+              t.blockStatement(replacement),
+              true,
+            ),
+      ),
+    ]),
+    true,
+  );
 }
