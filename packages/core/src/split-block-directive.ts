@@ -18,6 +18,7 @@ import {
 } from './split';
 import type { BlockDirectiveDefinition, StateContext } from './types';
 import { generateUniqueName } from './utils/generate-unique-name';
+import { getDescriptiveName } from './utils/get-descriptive-name';
 import getForeignBindings from './utils/get-foreign-bindings';
 import { getImportIdentifier } from './utils/get-import-identifier';
 
@@ -431,13 +432,18 @@ function replaceBlockDirective(
     ),
   );
 
+  // Create an ID
+  let id = `${directive.idPrefix || ''}${ctx.blocks.hash}-${ctx.blocks.count++}`;
+  if (ctx.options.env !== 'production') {
+    id += `-${getDescriptiveName(path, 'anonymous')}`;
+  }
+
   const entryFile = createEntryFile(
     ctx,
+    id,
     'block',
-    path,
     ctx.options.mode === 'server' ? createRootFile(ctx, statements) : undefined,
     directive.target,
-    directive.idPrefix,
   );
 
   const result = getBlockDirectiveReplacement(

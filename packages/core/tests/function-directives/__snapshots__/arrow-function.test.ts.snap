@@ -4,7 +4,7 @@ exports[`ArrowFunctionExpression > client > should skip non-async server functio
 {
   "code": "import { $$server as $$server_1 } from "my-example/server";
 import { $$func as $$func_1 } from "my-example/runtime";
-const example = $$server_1(async () => {
+const example = $$server_1("26ecc3a5-0-example", async () => {
   const source_1 = (await import("./example.ts?mode=client&my-example=0.ts")).default;
   return async (...rest_1) => {
     const [type_1, result_1] = await $$func_1(source_1, null)({
@@ -73,7 +73,7 @@ exports[`ArrowFunctionExpression > client > should skip top-level values for sco
 import { $$func as $$func_1 } from "my-example/runtime";
 const value = 'foo bar';
 const outer = () => {
-  const example = $$server_1(async () => {
+  const example = $$server_1("26ecc3a5-0-example", async () => {
     const source_1 = (await import("./example.ts?mode=client&my-example=0.ts")).default;
     return async (...rest_1) => {
       const [type_1, result_1] = await $$func_1(source_1, null)({
@@ -146,7 +146,7 @@ exports[`ArrowFunctionExpression > client > should transform valid server functi
 {
   "code": "import { $$server as $$server_1 } from "my-example/server";
 import { $$func as $$func_1 } from "my-example/runtime";
-const example = $$server_1(async () => {
+const example = $$server_1("26ecc3a5-0-example", async () => {
   const source_1 = (await import("./example.ts?mode=client&my-example=0.ts")).default;
   return async (...rest_1) => {
     const [type_1, result_1] = await $$func_1(source_1, null)({
@@ -215,7 +215,7 @@ exports[`ArrowFunctionExpression > client > should transform valid server functi
 import { $$func as $$func_1 } from "my-example/runtime";
 const outer = () => {
   const value = 'foo bar';
-  const example = $$server_1(async () => {
+  const example = $$server_1("26ecc3a5-0-example", async () => {
     const source_1 = (await import("./example.ts?mode=client&my-example=0.ts")).default;
     return async (...rest_1) => {
       const [type_1, result_1] = await $$func_1(source_1, null)({
@@ -288,7 +288,7 @@ exports[`ArrowFunctionExpression > server > should skip non-async server functio
 {
   "code": "import { $$server as $$server_1 } from "my-example/server";
 import { $$func as $$func_1 } from "my-example/runtime";
-const example = $$server_1(async () => {
+const example = $$server_1("26ecc3a5-0-example", async () => {
   const source_1 = (await import("./example.ts?mode=server&my-example=1.ts")).default;
   return async (...rest_1) => {
     const [type_1, result_1] = await $$func_1(source_1, null)({
@@ -380,7 +380,7 @@ exports[`ArrowFunctionExpression > server > should skip top-level values for sco
 import { $$func as $$func_1 } from "my-example/runtime";
 const value = 'foo bar';
 const outer = () => {
-  const example = $$server_1(async () => {
+  const example = $$server_1("26ecc3a5-0-example", async () => {
     const source_1 = (await import("./example.ts?mode=server&my-example=1.ts")).default;
     return async (...rest_1) => {
       const [type_1, result_1] = await $$func_1(source_1, null)({
@@ -483,7 +483,7 @@ exports[`ArrowFunctionExpression > server > should transform valid server functi
 {
   "code": "import { $$server as $$server_1 } from "my-example/server";
 import { $$func as $$func_1 } from "my-example/runtime";
-const example = $$server_1(async () => {
+const example = $$server_1("26ecc3a5-0-example", async () => {
   const source_1 = (await import("./example.ts?mode=server&my-example=1.ts")).default;
   return async (...rest_1) => {
     const [type_1, result_1] = await $$func_1(source_1, null)({
@@ -575,7 +575,7 @@ exports[`ArrowFunctionExpression > server > should transform valid server functi
 import { $$func as $$func_1 } from "my-example/runtime";
 const outer = () => {
   const value = 'foo bar';
-  const example = $$server_1(async () => {
+  const example = $$server_1("26ecc3a5-0-example", async () => {
     const source_1 = (await import("./example.ts?mode=server&my-example=1.ts")).default;
     return async (...rest_1) => {
       const [type_1, result_1] = await $$func_1(source_1, null)({

@@ -293,17 +293,11 @@ export function createRootFile(
 
 export function createEntryFile(
   ctx: StateContext,
+  id: string,
   type: 'block' | 'function' | 'generator',
-  path: babel.NodePath,
   rootFile: string | undefined,
   imported: ImportDefinition,
-  idPrefix?: string,
 ): string {
-  // Create an ID
-  let id = `${idPrefix || ''}${ctx.blocks.hash}-${ctx.blocks.count++}`;
-  if (ctx.options.env !== 'production') {
-    id += `-${getDescriptiveName(path, 'anonymous')}`;
-  }
   const entryID = t.identifier('entry');
   const entryImports: ModuleDefinition[] = [
     {

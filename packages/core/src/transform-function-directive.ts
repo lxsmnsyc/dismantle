@@ -44,12 +44,12 @@ export function transformFunctionDirective(
   if (isPathValid(body, t.isBlockStatement)) {
     const definition = getFunctionDirectiveDefinition(ctx, body);
     if (definition) {
-      const replacement = splitFunction(ctx, path, definition);
+      const [id, replacement] = splitFunction(ctx, path, definition);
       path.scope.crawl();
       path.replaceWith(
         t.callExpression(
           getImportIdentifier(ctx.imports, path, definition.handle),
-          [replacement],
+          [t.stringLiteral(id), replacement],
         ),
       );
     }

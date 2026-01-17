@@ -14,6 +14,7 @@ import type {
   FunctionDirectiveDefinition,
   StateContext,
 } from './types';
+import { getDescriptiveName } from './utils/get-descriptive-name';
 import getForeignBindings from './utils/get-foreign-bindings';
 
 function replaceFunction(
@@ -21,28 +22,36 @@ function replaceFunction(
   path: babel.NodePath<t.ArrowFunctionExpression | t.FunctionExpression>,
   definition: FunctionDirectiveDefinition | FunctionCallDefinition,
   dependencies: Dependencies,
-): t.Expression {
+) {
   const statements = getModuleImports(dependencies.modules);
 
   statements.push(transformRootFunction(path, dependencies));
 
+  // Create an ID
+  let id = `${definition.idPrefix || ''}${ctx.blocks.hash}-${ctx.blocks.count++}`;
+  if (ctx.options.env !== 'production') {
+    id += `-${getDescriptiveName(path, 'anonymous')}`;
+  }
+
   const entryFile = createEntryFile(
     ctx,
+    id,
     path.node.generator ? 'generator' : 'function',
-    path,
     ctx.options.mode === 'server' ? createRootFile(ctx, statements) : undefined,
     definition.target,
-    definition.idPrefix,
   );
 
-  return getFunctionReplacement(ctx, path, entryFile, dependencies);
+  return [
+    id,
+    getFunctionReplacement(ctx, path, entryFile, dependencies),
+  ] as const;
 }
 
 export function splitFunction(
   ctx: StateContext,
   path: babel.NodePath<t.ArrowFunctionExpression | t.FunctionExpression>,
   definition: FunctionDirectiveDefinition | FunctionCallDefinition,
-): t.Expression {
+) {
   return replaceFunction(
     ctx,
     path,
