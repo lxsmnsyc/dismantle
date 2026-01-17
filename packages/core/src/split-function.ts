@@ -1,13 +1,11 @@
 import type * as babel from '@babel/core';
 import type * as t from '@babel/types';
-import type { RootBindings } from './split';
+import type { Dependencies } from './split';
 import {
-  compileBindingMap,
   createEntryFile,
   createRootFile,
-  getBindingMap,
+  getBindingDependencies,
   getFunctionReplacement,
-  getMergedDependencies,
   getModuleImports,
   transformRootFunction,
 } from './split';
@@ -22,10 +20,8 @@ function replaceFunction(
   ctx: StateContext,
   path: babel.NodePath<t.ArrowFunctionExpression | t.FunctionExpression>,
   definition: FunctionDirectiveDefinition | FunctionCallDefinition,
-  bindings: RootBindings,
+  dependencies: Dependencies,
 ): t.Expression {
-  const dependencies = getMergedDependencies(bindings);
-
   const statements = getModuleImports(dependencies.modules);
 
   statements.push(transformRootFunction(path, dependencies));
@@ -34,12 +30,7 @@ function replaceFunction(
     ctx,
     path.node.generator ? 'generator' : 'function',
     path,
-    ctx.options.mode === 'server'
-      ? createRootFile(
-          ctx,
-          statements.concat(compileBindingMap(bindings, dependencies)),
-        )
-      : undefined,
+    ctx.options.mode === 'server' ? createRootFile(ctx, statements) : undefined,
     definition.target,
     definition.idPrefix,
   );
@@ -56,7 +47,7 @@ export function splitFunction(
     ctx,
     path,
     definition,
-    getBindingMap(
+    getBindingDependencies(
       path,
       getForeignBindings(path, 'function'),
       !!definition.pure,

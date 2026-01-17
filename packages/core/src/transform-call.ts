@@ -1,6 +1,5 @@
 import type * as babel from '@babel/core';
 import * as t from '@babel/types';
-import { DISMANTLE_REF } from './constants';
 import { splitFunction } from './split-function';
 import type { FunctionCallDefinition, StateContext } from './types';
 import { getImportIdentifier } from './utils/get-import-identifier';
@@ -74,13 +73,9 @@ export function transformCall(
     path.scope.crawl();
 
     path.replaceWith(
-      t.addComment(
-        t.callExpression(
-          getImportIdentifier(ctx.imports, path, definition.handle),
-          [replacement],
-        ),
-        'leading',
-        DISMANTLE_REF,
+      t.callExpression(
+        getImportIdentifier(ctx.imports, path, definition.handle),
+        [replacement],
       ),
     );
   }

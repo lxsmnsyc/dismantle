@@ -5,11 +5,9 @@ import {
   DISMANTLE_CONTEXT,
   DISMANTLE_FUNC,
   DISMANTLE_GEN,
-  DISMANTLE_RUN,
   HIDDEN_CONTEXT,
   HIDDEN_FUNC,
   HIDDEN_GENERATOR,
-  HIDDEN_RUN,
 } from './constants';
 import type { StateContext } from './types';
 import { getImportIdentifier } from './utils/get-import-identifier';
@@ -37,11 +35,6 @@ function getV8Replacement(
     case DISMANTLE_GEN:
       return getImportIdentifier(ctx.map, path, {
         ...HIDDEN_GENERATOR,
-        source: ctx.runtime,
-      });
-    case DISMANTLE_RUN:
-      return getImportIdentifier(ctx.map, path, {
-        ...HIDDEN_RUN,
         source: ctx.runtime,
       });
     default:

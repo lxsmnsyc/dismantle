@@ -7,15 +7,12 @@ import {
   createEntryFile,
   createRootFile,
   type Dependencies,
-  getBindingMap,
+  getBindingDependencies,
   getGeneratorReplacementForBlock,
-  getMergedDependencies,
   getModuleImports,
   NO_HALT_KEY,
   RETURN_KEY,
-  type RootBindings,
   THROW_KEY,
-  transformFunctionForSplit,
   transformInnerReferences,
   YIELD_KEY,
 } from './split';
@@ -31,6 +28,8 @@ interface HaltingBlockResult {
   continueCount: number;
   hasReturn: boolean;
   hasYield: boolean;
+
+  block: t.BlockStatement;
 }
 
 function transformBlockContent(
@@ -144,22 +143,6 @@ function transformBlockContent(
 
   transformInnerReferences(path, context, dependencies);
 
-  path.node.body = [
-    t.variableDeclaration('const', [
-      t.variableDeclarator(
-        context,
-        t.callExpression(t.v8IntrinsicIdentifier(DISMANTLE_CONTEXT), []),
-      ),
-    ]),
-    t.tryStatement(
-      t.blockStatement(path.node.body),
-      t.catchClause(
-        error,
-        t.blockStatement([t.returnStatement(t.arrayExpression(throwResult))]),
-      ),
-    ),
-    t.returnStatement(t.arrayExpression(haltResult)),
-  ];
   return {
     breaks,
     continues,
@@ -167,6 +150,22 @@ function transformBlockContent(
     hasYield,
     breakCount,
     continueCount,
+    block: t.blockStatement([
+      t.variableDeclaration('const', [
+        t.variableDeclarator(
+          context,
+          t.callExpression(t.v8IntrinsicIdentifier(DISMANTLE_CONTEXT), []),
+        ),
+      ]),
+      t.tryStatement(
+        t.blockStatement(path.node.body),
+        t.catchClause(
+          error,
+          t.blockStatement([t.returnStatement(t.arrayExpression(throwResult))]),
+        ),
+      ),
+      t.returnStatement(t.arrayExpression(haltResult)),
+    ]),
   };
 }
 
@@ -402,56 +401,41 @@ function getBlockDirectiveReplacement(
     replacement.push(check);
   }
 
-  return t.blockStatement(replacement);
-}
-
-function compileBindingMapForBlock(
-  bindings: RootBindings,
-  dependencies: Dependencies,
-): t.Statement[] {
-  const statements: t.Statement[] = [];
-
-  for (const [path, binding] of bindings.map) {
-    statements.push(
-      transformFunctionForSplit(path, binding.variable, dependencies),
-    );
-  }
-
-  return statements;
+  return replacement;
 }
 
 function replaceBlockDirective(
   ctx: StateContext,
   path: babel.NodePath<t.BlockStatement>,
   directive: BlockDirectiveDefinition,
-  bindings: RootBindings,
+  dependencies: Dependencies,
 ) {
-  const backup = t.cloneNode(path.node, true, false);
-  const dependencies = getMergedDependencies(bindings);
+  // Create a backup for this node
+  const original = path.node;
+  path.node = t.cloneNode(path.node, true, false);
+
   // Transform all control statements
   const halting = transformBlockContent(path, dependencies);
 
   const statements = getModuleImports(dependencies.modules);
-  const block = t.blockStatement(path.node.body);
 
   statements.push(
     t.exportDefaultDeclaration(
-      t.functionExpression(undefined, [], block, halting.hasYield, true),
+      t.functionExpression(
+        undefined,
+        [],
+        halting.block,
+        halting.hasYield,
+        true,
+      ),
     ),
   );
-
-  path.node.body = backup.body;
 
   const entryFile = createEntryFile(
     ctx,
     'block',
     path,
-    ctx.options.mode === 'server'
-      ? createRootFile(
-          ctx,
-          statements.concat(compileBindingMapForBlock(bindings, dependencies)),
-        )
-      : undefined,
+    ctx.options.mode === 'server' ? createRootFile(ctx, statements) : undefined,
     directive.target,
     directive.idPrefix,
   );
@@ -463,6 +447,8 @@ function replaceBlockDirective(
     dependencies,
     halting,
   );
+
+  path.node = original;
 
   return result;
 }
@@ -476,6 +462,10 @@ export function splitBlockDirective(
     ctx,
     path,
     directive,
-    getBindingMap(path, getForeignBindings(path, 'block'), !!directive.pure),
+    getBindingDependencies(
+      path,
+      getForeignBindings(path, 'block'),
+      !!directive.pure,
+    ),
   );
 }

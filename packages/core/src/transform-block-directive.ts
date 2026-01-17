@@ -29,15 +29,13 @@ function getBlockDirectiveDefinition(
   }
   return undefined;
 }
-
 export function transformBlockDirective(
   ctx: StateContext,
   path: babel.NodePath<t.BlockStatement>,
 ): void {
   const definition = getBlockDirectiveDefinition(ctx, path);
   if (definition) {
-    const result = splitBlockDirective(ctx, path, definition);
+    path.node.body = splitBlockDirective(ctx, path, definition);
     path.scope.crawl();
-    path.replaceWith(result);
   }
 }

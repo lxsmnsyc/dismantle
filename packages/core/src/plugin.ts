@@ -29,7 +29,6 @@ const PLUGIN: babel.PluginObj<State> = {
     ArrowFunctionExpression: {
       exit(path, ctx) {
         transformFunctionDirective(ctx.opts, path);
-        path.scope.crawl();
       },
     },
     FunctionExpression: {

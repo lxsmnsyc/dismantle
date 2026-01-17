@@ -1,22 +1,15 @@
 import type * as babel from '@babel/core';
 import type { Binding } from '@babel/traverse';
 import * as t from '@babel/types';
-import {
-  DISMANTLE_CONTEXT,
-  DISMANTLE_RUN,
-  HIDDEN_FUNC,
-  HIDDEN_GENERATOR,
-} from './constants';
+import { DISMANTLE_CONTEXT, HIDDEN_FUNC, HIDDEN_GENERATOR } from './constants';
 import { patchV8Identifier } from './patch-v8-identifier';
 import type { ImportDefinition, ModuleDefinition, StateContext } from './types';
-import assert from './utils/assert';
 import { generateUniqueName } from './utils/generate-unique-name';
 import { generateCode } from './utils/generator-shim';
 import { getDescriptiveName } from './utils/get-descriptive-name';
-import getForeignBindings from './utils/get-foreign-bindings';
 import { getImportIdentifier } from './utils/get-import-identifier';
 import { getModuleDefinition } from './utils/get-module-definition';
-import { isPathValid, unwrapNode, unwrapPath } from './utils/unwrap';
+import { isPathValid, unwrapPath } from './utils/unwrap';
 
 function moduleDefinitionToImportSpecifier(definition: ModuleDefinition) {
   switch (definition.kind) {
@@ -54,55 +47,12 @@ function moduleDefinitionsToImportDeclarations(
 }
 
 export interface Dependencies {
-  modules: Binding[];
+  modules: ModuleDefinition[];
   locals: Binding[];
   mutations: Binding[];
 }
 
-export interface LocalDependencies extends Dependencies {
-  variable: t.Identifier;
-}
-
-export type BindingMap = Map<babel.NodePath<ValidFunction>, LocalDependencies>;
-
-export interface RootBindings {
-  map: BindingMap;
-  root: LocalDependencies;
-}
-
-interface ExtractDependenciesState {
-  map: BindingMap;
-  visited: Set<babel.NodePath>;
-}
-
-function extractDependenciesFromFunction(
-  state: ExtractDependenciesState,
-  target: Binding,
-  path: babel.NodePath<
-    t.FunctionDeclaration | t.ArrowFunctionExpression | t.FunctionExpression
-  >,
-): void {
-  if (state.visited.has(target.path)) {
-    return;
-  }
-  state.visited.add(target.path);
-  if (!state.map.has(path)) {
-    state.map.set(
-      path,
-      getBindingDependencies(
-        state,
-        path,
-        getForeignBindings(path, 'function'),
-        false,
-      ),
-    );
-  }
-}
-
-function addLocalDependency(
-  dependencies: LocalDependencies,
-  target: Binding,
-): void {
+function addLocalDependency(dependencies: Dependencies, target: Binding): void {
   if (target.constant) {
     if (!dependencies.locals.includes(target)) {
       dependencies.locals.push(target);
@@ -113,9 +63,9 @@ function addLocalDependency(
 }
 
 function extractDependenciesFromVariableDeclarator(
-  state: ExtractDependenciesState,
-  dependencies: LocalDependencies,
+  dependencies: Dependencies,
   target: Binding,
+  isPure: boolean,
 ): void {
   if (!isPathValid(target.path, t.isVariableDeclarator)) {
     return;
@@ -129,16 +79,16 @@ function extractDependenciesFromVariableDeclarator(
       isPathValid(init, t.isArrowFunctionExpression) ||
       isPathValid(init, t.isFunctionExpression)
     ) {
-      extractDependenciesFromFunction(state, target, init);
       return;
     }
   }
-  addLocalDependency(dependencies, target);
+  if (!isPure) {
+    addLocalDependency(dependencies, target);
+  }
 }
 
 function extractDependency(
-  state: ExtractDependenciesState,
-  dependencies: LocalDependencies,
+  dependencies: Dependencies,
   target: Binding,
   isPure: boolean,
 ): void {
@@ -146,7 +96,10 @@ function extractDependency(
     // For module imports, we just push to them
     // to the module bindings
     case 'module': {
-      dependencies.modules.push(target);
+      const definition = getModuleDefinition(target.path);
+      if (definition) {
+        dependencies.modules.push(definition);
+      }
       break;
     }
     // For params, we push them as mutable locals
@@ -159,31 +112,23 @@ function extractDependency(
     case 'const':
     case 'let':
     case 'var': {
-      if (!isPure) {
-        extractDependenciesFromVariableDeclarator(state, dependencies, target);
-      }
+      extractDependenciesFromVariableDeclarator(dependencies, target, isPure);
       break;
     }
-    case 'hoisted': {
-      if (!isPure && isPathValid(target.path, t.isFunctionDeclaration)) {
-        extractDependenciesFromFunction(state, target, target.path);
-      }
+    case 'hoisted':
       break;
-    }
     case 'local':
     case 'unknown':
       break;
   }
 }
 
-function getBindingDependencies(
-  state: ExtractDependenciesState,
+export function getBindingDependencies(
   path: babel.NodePath,
   identifiers: Set<string>,
   isPure: boolean,
-): LocalDependencies {
-  const bindings: LocalDependencies = {
-    variable: t.identifier(getDescriptiveName(path, 'func')),
+): Dependencies {
+  const bindings: Dependencies = {
     modules: [],
     locals: [],
     mutations: [],
@@ -191,8 +136,7 @@ function getBindingDependencies(
   for (const identifier of identifiers) {
     const target = path.scope.getBinding(identifier);
     if (target) {
-      // Recursively extract
-      extractDependency(state, bindings, target, isPure);
+      extractDependency(bindings, target, isPure);
     } else {
       // TODO globals
     }
@@ -201,33 +145,9 @@ function getBindingDependencies(
   return bindings;
 }
 
-export function getBindingMap(
-  path: babel.NodePath<ValidBlock>,
-  identifiers: Set<string>,
-  isPure: boolean,
-): RootBindings {
-  const state: ExtractDependenciesState = {
-    map: new Map(),
-    visited: new Set(),
-  };
-  state.visited.add(path);
-  const dependencies = getBindingDependencies(state, path, identifiers, isPure);
-  return {
-    map: state.map,
-    root: dependencies,
-  };
-}
-
-type ValidFunction =
-  | t.FunctionDeclaration
-  | t.FunctionExpression
-  | t.ArrowFunctionExpression;
-
-type ValidBlock = ValidFunction | t.BlockStatement;
-
 function patchIdentifier(
   dependencies: Dependencies,
-  context: t.Identifier,
+  identifier: t.Identifier,
   path: babel.NodePath<t.Identifier | t.JSXIdentifier>,
 ): void {
   const binding = path.scope.getBinding(path.node.name);
@@ -236,17 +156,18 @@ function patchIdentifier(
     if (localsIndex > -1) {
       path.replaceWith(
         t.memberExpression(
-          t.memberExpression(context, t.identifier('l')),
+          t.memberExpression(identifier, t.identifier('l')),
           t.numericLiteral(localsIndex),
           true,
         ),
       );
+      return;
     }
     const mutationsIndex = dependencies.mutations.indexOf(binding);
     if (mutationsIndex > -1) {
       path.replaceWith(
         t.memberExpression(
-          t.memberExpression(context, t.identifier('m')),
+          t.memberExpression(identifier, t.identifier('m')),
           t.numericLiteral(mutationsIndex),
           true,
         ),
@@ -338,59 +259,7 @@ export function transformInnerReferences(
         patchIdentifier(dependencies, context, id);
       }
     },
-    CallExpression: {
-      exit(child) {
-        if (t.isExpression(child.node.callee)) {
-          const id = unwrapNode(child.node.callee, t.isIdentifier);
-          if (id) {
-            child.replaceWith(
-              t.callExpression(t.v8IntrinsicIdentifier(DISMANTLE_RUN), [
-                context,
-                child.node.callee,
-                ...child.node.arguments,
-              ]),
-            );
-            child.skip();
-          }
-        }
-      },
-    },
   });
-}
-
-export function transformFunctionForSplit(
-  path: babel.NodePath<ValidFunction>,
-  id: t.Identifier,
-  dependencies: Dependencies,
-): t.FunctionDeclaration {
-  const backup = t.cloneNode(path.node, true, false);
-  // Ensure body is a block statement
-  const body = path.get('body');
-  if (isPathValid(body, t.isExpression)) {
-    body.replaceWith(t.blockStatement([t.returnStatement(body.node)]));
-  }
-  assert(isPathValid(body, t.isBlockStatement), 'invariant');
-  // First, insert a context hook
-  const context = generateUniqueName(path, 'ctx');
-  const contextCall = t.v8IntrinsicIdentifier(DISMANTLE_CONTEXT);
-  const header: t.Statement[] = [
-    t.variableDeclaration('const', [
-      t.variableDeclarator(context, t.callExpression(contextCall, [])),
-    ]),
-  ];
-  // Transform body for closure context wrapping
-  transformInnerReferences(body, context, dependencies);
-
-  header.push(...body.node.body);
-  const current = path.node;
-  path.node = backup;
-  return t.functionDeclaration(
-    id,
-    current.params,
-    t.blockStatement(header),
-    current.generator,
-    current.async,
-  );
 }
 
 function createVirtualFileName(ctx: StateContext) {
@@ -398,41 +267,12 @@ function createVirtualFileName(ctx: StateContext) {
     .virtual.count++}${ctx.path.ext}`;
 }
 
-export function getModuleImports(modules: Binding[]): t.Statement[] {
+export function getModuleImports(modules: ModuleDefinition[]): t.Statement[] {
   const statements: t.Statement[] = [];
   for (const mod of modules) {
-    const definition = getModuleDefinition(mod.path);
-    if (definition) {
-      statements.push(moduleDefinitionToImportDeclaration(definition));
-    }
+    statements.push(moduleDefinitionToImportDeclaration(mod));
   }
   return statements;
-}
-
-export function getMergedDependencies(bindings: RootBindings): Dependencies {
-  const dirtyLocals: Binding[] = [];
-  const dirtyMutations: Binding[] = [];
-  const dirtyModules: Binding[] = [];
-
-  dirtyLocals.push.apply(dirtyLocals, bindings.root.locals);
-  dirtyMutations.push.apply(dirtyMutations, bindings.root.mutations);
-  dirtyModules.push.apply(dirtyModules, bindings.root.modules);
-
-  for (const [, binding] of bindings.map) {
-    dirtyLocals.push.apply(dirtyLocals, binding.locals);
-    dirtyMutations.push.apply(dirtyMutations, binding.mutations);
-    dirtyModules.push.apply(dirtyModules, binding.modules);
-  }
-
-  const modules = [...new Set(dirtyModules)];
-  const locals = [...new Set(dirtyLocals)];
-  const mutations = [...new Set(dirtyMutations)];
-
-  return {
-    modules,
-    locals,
-    mutations,
-  };
 }
 
 export function createRootFile(
@@ -629,21 +469,6 @@ export function transformRootFunction(
           root.node.async,
         ),
   );
-}
-
-export function compileBindingMap(
-  bindings: RootBindings,
-  dependencies: Dependencies,
-): t.Statement[] {
-  const statements: t.Statement[] = [];
-
-  for (const [path, binding] of bindings.map) {
-    statements.push(
-      transformFunctionForSplit(path, binding.variable, dependencies),
-    );
-  }
-
-  return statements;
 }
 
 export function getFunctionReplacement(

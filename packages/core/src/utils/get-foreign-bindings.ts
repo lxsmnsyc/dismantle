@@ -23,7 +23,7 @@ function isForeignBinding(
   // If identifier is identified within this scope
   if (current.hasOwnBinding(name)) {
     if (checker.mode === 'block' && current === checker.root) {
-      const binding = current.getBinding(name);
+      const binding = current.getOwnBinding(name);
       if (binding && binding.kind === 'param') {
         return true;
       }
@@ -158,9 +158,6 @@ export default function getForeignBindings(
         !isInTypescript(p) &&
         isForeignBinding(checker, p.scope, p.node.name)
       ) {
-        if (p.node.name === 'immediate') {
-          console.log('ayo', p.node.name);
-        }
         checker.ids.add(p.node.name);
       }
     },

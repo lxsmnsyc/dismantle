@@ -71,7 +71,7 @@ interface DismantleContext {
   m: Closure;
 }
 
-export function $$run<T extends any[], R>(
+function $$run<T extends any[], R>(
   context: DismantleContext,
   callback: (...args: T) => R,
   ...args: T
