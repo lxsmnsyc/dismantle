@@ -35,7 +35,7 @@ export default entry("26ecc3a5-0-example");",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,MAAMA,OAAO,GAAGA,CAAA,KAAM;EACpB,IAAI;IACFC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;MAAAC,CAAA;MAAAC,CAAA;IAAA;EAAA;AAId,CAAC",
+    "mappings": ";AACM,MAAMA,OAAO,GAAGA,CAAA,KAAM;EACpB,IAAI;IACFC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG,EAAE;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;MAAAC,CAAA;MAAAC,CAAA;IAAA;EAGd;AACF,CAAC",
     "names": [
       "example",
       "doStuff",
@@ -103,7 +103,7 @@ export default entry("26ecc3a5-0-anonymous");",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,MAAMA,KAAK,GAAG,SAAS;AACvB,IAAI;EACFC,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;IAAAC,CAAA,GAHNP,KAAK;IAAAQ,CAAA;EAAA;AAAA",
+    "mappings": ";AACM,MAAMA,KAAK,GAAG,SAAS;AACvB,IAAI;EACFC,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG,EAAE;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;IAAAC,CAAA,GAHRP,KAAK;IAAAQ,CAAA;EAAA;AAMX",
     "names": [
       "value",
       "doStuff",
@@ -172,7 +172,7 @@ export default entry("26ecc3a5-0-foo");",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB,IAAI;IACFC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;MAAAC,CAAA,GAHNP,KAAK;MAAAQ,CAAA;IAAA;EAAA;AAOb",
+    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB,IAAI;IACFC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG,EAAE;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;MAAAC,CAAA,GAHRP,KAAK;MAAAQ,CAAA;IAAA;EAMX;AACF",
     "names": [
       "foo",
       "value",
@@ -241,7 +241,7 @@ export default entry("26ecc3a5-0-anonymous");",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,IAAI;EACFA,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;IAAAC,CAAA;IAAAC,CAAA;EAAA;AAAA",
+    "mappings": ";AACM,IAAI;EACFA,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG,EAAE;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;IAAAC,CAAA;IAAAC,CAAA;EAAA;AAGd",
     "names": [
       "doStuff",
       "err",
@@ -290,12 +290,11 @@ const example = () => {
   ],
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
-      "code": "import { $$run as $$run_1 } from "my-example/runtime";
-import { $$context as $$context_1 } from "my-example/runtime";
+      "code": "import { $$context as $$context_1 } from "my-example/runtime";
 export default (async function () {
   const ctx_1 = $$context_1();
   try {
-    $$run_1(ctx_1, report, err);
+    report(err);
   } catch (error_1) {
     return [4, error_1];
   }
@@ -304,10 +303,8 @@ export default (async function () {
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;;;IAMUA,OAAA,CAAAC,KAAA,EAAAC,MAAM,EAACC,GAAG;EAAE,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAAA",
+        "mappings": ";;;;IAMUA,MAAM,CAACC,GAAG,CAAC;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAAA",
         "names": [
-          "$$run_1",
-          "ctx_1",
           "report",
           "err",
           "error_1",
@@ -342,7 +339,7 @@ export default entry("26ecc3a5-0-example", wrapper(root));",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,MAAMA,OAAO,GAAGA,CAAA,KAAM;EACpB,IAAI;IACFC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;MAAAC,CAAA;MAAAC,CAAA;IAAA;EAAA;AAId,CAAC",
+    "mappings": ";AACM,MAAMA,OAAO,GAAGA,CAAA,KAAM;EACpB,IAAI;IACFC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG,EAAE;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;MAAAC,CAAA;MAAAC,CAAA;IAAA;EAGd;AACF,CAAC",
     "names": [
       "example",
       "doStuff",
@@ -395,12 +392,11 @@ try {
   ],
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
-      "code": "import { $$run as $$run_1 } from "my-example/runtime";
-import { $$context as $$context_1 } from "my-example/runtime";
+      "code": "import { $$context as $$context_1 } from "my-example/runtime";
 export default (async function () {
   const ctx_1 = $$context_1();
   try {
-    await $$run_1(ctx_1, report, err);
+    await report(err);
   } catch (error_1) {
     return [4, error_1];
   }
@@ -409,10 +405,8 @@ export default (async function () {
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;;;IAMQ,MAAAA,OAAA,CAAAC,KAAA,EAAMC,MAAM,EAACC,GAAG,CAAC;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAAA",
+        "mappings": ";;;;IAMQ,MAAMA,MAAM,CAACC,GAAG,CAAC;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAAA",
         "names": [
-          "$$run_1",
-          "ctx_1",
           "report",
           "err",
           "error_1",
@@ -447,7 +441,7 @@ export default entry("26ecc3a5-0-anonymous", wrapper(root));",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,MAAMA,KAAK,GAAG,SAAS;AACvB,IAAI;EACFC,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;IAAAC,CAAA;IAAAC,CAAA;EAAA;AAAA",
+    "mappings": ";AACM,MAAMA,KAAK,GAAG,SAAS;AACvB,IAAI;EACFC,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG,EAAE;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;IAAAC,CAAA;IAAAC,CAAA;EAAA;AAGd",
     "names": [
       "value",
       "doStuff",
@@ -501,12 +495,11 @@ async function foo() {
   ],
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
-      "code": "import { $$run as $$run_1 } from "my-example/runtime";
-import { $$context as $$context_1 } from "my-example/runtime";
+      "code": "import { $$context as $$context_1 } from "my-example/runtime";
 export default (async function () {
   const ctx_1 = $$context_1();
   try {
-    await $$run_1(ctx_1, report, err);
+    await report(err);
   } catch (error_1) {
     return [4, error_1];
   }
@@ -515,10 +508,8 @@ export default (async function () {
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;;;IAOU,MAAAA,OAAA,CAAAC,KAAA,EAAMC,MAAM,EAACC,GAAG,CAAC;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAAA",
+        "mappings": ";;;;IAOU,MAAMA,MAAM,CAACC,GAAG,CAAC;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAAA",
         "names": [
-          "$$run_1",
-          "ctx_1",
           "report",
           "err",
           "error_1",
@@ -553,7 +544,7 @@ export default entry("26ecc3a5-0-foo", wrapper(root));",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB,IAAI;IACFC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;MAAAC,CAAA;MAAAC,CAAA;IAAA;EAAA;AAId",
+    "mappings": ";AACM,eAAeA,GAAGA,CAAA,EAAG;EACnB,MAAMC,KAAK,GAAG,SAAS;EACvB,IAAI;IACFC,OAAO,CAAC,CAAC;EACX,CAAC,CAAC,OAAOC,GAAG,EAAE;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;MAAAC,CAAA;MAAAC,CAAA;IAAA;EAGd;AACF",
     "names": [
       "foo",
       "value",
@@ -607,12 +598,11 @@ try {
   ],
   "files": Map {
     "/path/to/example.ts?mode=server&my-example=0.ts" => {
-      "code": "import { $$run as $$run_1 } from "my-example/runtime";
-import { $$context as $$context_1 } from "my-example/runtime";
+      "code": "import { $$context as $$context_1 } from "my-example/runtime";
 export default (async function () {
   const ctx_1 = $$context_1();
   try {
-    await $$run_1(ctx_1, report, err);
+    await report(err);
   } catch (error_1) {
     return [4, error_1];
   }
@@ -621,10 +611,8 @@ export default (async function () {
       "map": {
         "file": undefined,
         "ignoreList": [],
-        "mappings": ";;;;;IAKQ,MAAAA,OAAA,CAAAC,KAAA,EAAMC,MAAM,EAACC,GAAG,CAAC;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAAA",
+        "mappings": ";;;;IAKQ,MAAMA,MAAM,CAACC,GAAG,CAAC;EAAC,SAAAC,OAAA;IAAA,WAAAA,OAAA;EAAA;EAAA;AAAA",
         "names": [
-          "$$run_1",
-          "ctx_1",
           "report",
           "err",
           "error_1",
@@ -659,7 +647,7 @@ export default entry("26ecc3a5-0-anonymous", wrapper(root));",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";AACM,IAAI;EACFA,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;IAAAC,CAAA;IAAAC,CAAA;EAAA;AAAA",
+    "mappings": ";AACM,IAAI;EACFA,OAAO,CAAC,CAAC;AACX,CAAC,CAAC,OAAOC,GAAG,EAAE;EAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,4DAAAC,OAAA;IAAAC,CAAA;IAAAC,CAAA;EAAA;AAGd",
     "names": [
       "doStuff",
       "err",
