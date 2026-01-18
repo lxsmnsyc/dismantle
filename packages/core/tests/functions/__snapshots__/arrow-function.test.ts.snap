@@ -4,7 +4,6 @@ exports[`ArrowFunctionExpression > client > should skip top-level values for sco
 {
   "code": "import { $$server as $$server_1 } from "my-example/server";
 import { $$func as $$func_1 } from "my-example/runtime";
-import { server$ } from 'my-example';
 const value = 'foo bar';
 const outer = () => {
   const example = $$server_1("26ecc3a5-0-example", async () => {
@@ -40,9 +39,8 @@ export default entry("26ecc3a5-0-example");",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";;AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,KAAK,GAAG,SAAS;AACvB,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,OAAO,GAAAC,UAAA;IAAA,MAAAC,QAAA,8DAAAC,OAAA;IAAA,iBAAAC,MAAA;MAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA;QAAAM,CAAA,GAFTV,KAAK;QAAAW,CAAA;MAAA,MAAAL,MAAA;MAAA,OAAAE,QAAA;IAAA;EAAA,EAE2B;AACtC,CAAC",
+    "mappings": ";;AAEM,MAAMA,KAAK,GAAG,SAAS;AACvB,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,OAAO,GAAAC,UAAA;IAAA,MAAAC,QAAA,8DAAAC,OAAA;IAAA,iBAAAC,MAAA;MAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA;QAAAM,CAAA,GAFTV,KAAK;QAAAW,CAAA;MAAA,MAAAL,MAAA;MAAA,OAAAE,QAAA;IAAA;EAAA,EAE2B;AACtC,CAAC",
     "names": [
-      "server$",
       "value",
       "outer",
       "example",
@@ -79,7 +77,6 @@ exports[`ArrowFunctionExpression > client > should transform valid server functi
 {
   "code": "import { $$server as $$server_1 } from "my-example/server";
 import { $$func as $$func_1 } from "my-example/runtime";
-import { server$ } from 'my-example';
 const example = $$server_1("26ecc3a5-0-example", async () => {
   const source_1 = (await import("./example.ts?mode=client&my-example=0.ts")).default;
   return async (...rest_1) => {
@@ -112,9 +109,8 @@ export default entry("26ecc3a5-0-example");",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";;AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,OAAO,GAAAC,UAAA;EAAA,MAAAC,QAAA,8DAAAC,OAAA;EAAA,iBAAAC,MAAA;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA;MAAAM,CAAA;MAAAC,CAAA;IAAA,MAAAL,MAAA;IAAA,OAAAE,QAAA;EAAA;AAAA,EAA2B",
+    "mappings": ";;AAEM,MAAMA,OAAO,GAAAC,UAAA;EAAA,MAAAC,QAAA,8DAAAC,OAAA;EAAA,iBAAAC,MAAA;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA;MAAAM,CAAA;MAAAC,CAAA;IAAA,MAAAL,MAAA;IAAA,OAAAE,QAAA;EAAA;AAAA,EAA2B",
     "names": [
-      "server$",
       "example",
       "$$server_1",
       "source_1",
@@ -146,7 +142,6 @@ exports[`ArrowFunctionExpression > client > should transform valid server functi
 {
   "code": "import { $$server as $$server_1 } from "my-example/server";
 import { $$func as $$func_1 } from "my-example/runtime";
-import { server$ } from 'my-example';
 const outer = () => {
   const value = 'foo bar';
   const example = $$server_1("26ecc3a5-0-example", async () => {
@@ -182,9 +177,8 @@ export default entry("26ecc3a5-0-example");",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";;AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,MAAMC,OAAO,GAAAC,UAAA;IAAA,MAAAC,QAAA,8DAAAC,OAAA;IAAA,iBAAAC,MAAA;MAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA;QAAAM,CAAA,GADPT,KAAK;QAAAU,CAAA;MAAA,MAAAL,MAAA;MAAA,OAAAE,QAAA;IAAA;EAAA,EACyB;AACtC,CAAC",
+    "mappings": ";;AAEM,MAAMA,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,MAAMC,OAAO,GAAAC,UAAA;IAAA,MAAAC,QAAA,8DAAAC,OAAA;IAAA,iBAAAC,MAAA;MAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA;QAAAM,CAAA,GADPT,KAAK;QAAAU,CAAA;MAAA,MAAAL,MAAA;MAAA,OAAAE,QAAA;IAAA;EAAA,EACyB;AACtC,CAAC",
     "names": [
-      "server$",
       "outer",
       "value",
       "example",
@@ -221,7 +215,6 @@ exports[`ArrowFunctionExpression > server > should skip top-level values for sco
 {
   "code": "import { $$server as $$server_1 } from "my-example/server";
 import { $$func as $$func_1 } from "my-example/runtime";
-import { server$ } from 'my-example';
 const value = 'foo bar';
 const outer = () => {
   const example = $$server_1("26ecc3a5-0-example", async () => {
@@ -284,9 +277,8 @@ export default entry("26ecc3a5-0-example", wrapper(root));",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";;AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,KAAK,GAAG,SAAS;AACvB,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,OAAO,GAAAC,UAAA;IAAA,MAAAC,QAAA,8DAAAC,OAAA;IAAA,iBAAAC,MAAA;MAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA;QAAAM,CAAA,GAFTV,KAAK;QAAAW,CAAA;MAAA,MAAAL,MAAA;MAAA,OAAAE,QAAA;IAAA;EAAA,EAE2B;AACtC,CAAC",
+    "mappings": ";;AAEM,MAAMA,KAAK,GAAG,SAAS;AACvB,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,OAAO,GAAAC,UAAA;IAAA,MAAAC,QAAA,8DAAAC,OAAA;IAAA,iBAAAC,MAAA;MAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA;QAAAM,CAAA,GAFTV,KAAK;QAAAW,CAAA;MAAA,MAAAL,MAAA;MAAA,OAAAE,QAAA;IAAA;EAAA,EAE2B;AACtC,CAAC",
     "names": [
-      "server$",
       "value",
       "outer",
       "example",
@@ -325,7 +317,6 @@ exports[`ArrowFunctionExpression > server > should transform valid server functi
 {
   "code": "import { $$server as $$server_1 } from "my-example/server";
 import { $$func as $$func_1 } from "my-example/runtime";
-import { server$ } from 'my-example';
 const example = $$server_1("26ecc3a5-0-example", async () => {
   const source_1 = (await import("./example.ts?mode=server&my-example=1.ts")).default;
   return async (...rest_1) => {
@@ -377,9 +368,8 @@ export default entry("26ecc3a5-0-example", wrapper(root));",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";;AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,OAAO,GAAAC,UAAA;EAAA,MAAAC,QAAA,8DAAAC,OAAA;EAAA,iBAAAC,MAAA;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA;MAAAM,CAAA;MAAAC,CAAA;IAAA,MAAAL,MAAA;IAAA,OAAAE,QAAA;EAAA;AAAA,EAA2B",
+    "mappings": ";;AAEM,MAAMA,OAAO,GAAAC,UAAA;EAAA,MAAAC,QAAA,8DAAAC,OAAA;EAAA,iBAAAC,MAAA;IAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA;MAAAM,CAAA;MAAAC,CAAA;IAAA,MAAAL,MAAA;IAAA,OAAAE,QAAA;EAAA;AAAA,EAA2B",
     "names": [
-      "server$",
       "example",
       "$$server_1",
       "source_1",
@@ -413,7 +403,6 @@ exports[`ArrowFunctionExpression > server > should transform valid server functi
 {
   "code": "import { $$server as $$server_1 } from "my-example/server";
 import { $$func as $$func_1 } from "my-example/runtime";
-import { server$ } from 'my-example';
 const outer = () => {
   const value = 'foo bar';
   const example = $$server_1("26ecc3a5-0-example", async () => {
@@ -476,9 +465,8 @@ export default entry("26ecc3a5-0-example", wrapper(root));",
   "map": {
     "file": undefined,
     "ignoreList": [],
-    "mappings": ";;AACM,SAASA,OAAO,QAAQ,YAAY;AACpC,MAAMC,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,MAAMC,OAAO,GAAAC,UAAA;IAAA,MAAAC,QAAA,8DAAAC,OAAA;IAAA,iBAAAC,MAAA;MAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA;QAAAM,CAAA,GADPT,KAAK;QAAAU,CAAA;MAAA,MAAAL,MAAA;MAAA,OAAAE,QAAA;IAAA;EAAA,EACyB;AACtC,CAAC",
+    "mappings": ";;AAEM,MAAMA,KAAK,GAAGA,CAAA,KAAM;EAClB,MAAMC,KAAK,GAAG,SAAS;EACvB,MAAMC,OAAO,GAAAC,UAAA;IAAA,MAAAC,QAAA,8DAAAC,OAAA;IAAA,iBAAAC,MAAA;MAAA,OAAAC,MAAA,EAAAC,QAAA,UAAAC,QAAA,CAAAL,QAAA;QAAAM,CAAA,GADPT,KAAK;QAAAU,CAAA;MAAA,MAAAL,MAAA;MAAA,OAAAE,QAAA;IAAA;EAAA,EACyB;AACtC,CAAC",
     "names": [
-      "server$",
       "outer",
       "value",
       "example",

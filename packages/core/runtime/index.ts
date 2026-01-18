@@ -37,7 +37,8 @@ export function $$gen<T extends any[], R>(
     let step: IteratorResult<
       [type: BasicGeneratorCode, result: R, mutations: unknown]
     >;
-    const iterator = await callback(...args);
+    const generator = await callback(...args);
+    const iterator = generator[Symbol.asyncIterator]();
     while (true) {
       step = await iterator.next();
       if (step.done) {

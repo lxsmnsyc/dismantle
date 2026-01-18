@@ -6,7 +6,6 @@ import { patchV8Identifier } from './patch-v8-identifier';
 import type { ImportDefinition, ModuleDefinition, StateContext } from './types';
 import { generateUniqueName } from './utils/generate-unique-name';
 import { generateCode } from './utils/generator-shim';
-import { getDescriptiveName } from './utils/get-descriptive-name';
 import { getImportIdentifier } from './utils/get-import-identifier';
 import { getModuleDefinition } from './utils/get-module-definition';
 import { isPathValid, unwrapPath } from './utils/unwrap';
