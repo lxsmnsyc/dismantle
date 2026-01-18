@@ -1,6 +1,6 @@
 {
   "name": "use-worker-directive",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "type": "module",
   "files": [
     "dist",
@@ -21,7 +21,7 @@
     "vitest": "^2.0.5"
   },
   "dependencies": {
-    "dismantle": "^0.6.0",
+    "dismantle": "^0.6.1",
     "seroval": "^1.1.1",
     "seroval-plugins": "^1.1.1"
   },

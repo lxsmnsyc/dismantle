@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-use-worker-directive",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "type": "module",
   "types": "./dist/types/index.d.ts",
   "main": "./dist/cjs/production/index.cjs",
@@ -33,7 +33,7 @@
     "pridepack": "2.6.4",
     "tslib": "^2.8.1",
     "typescript": "^5.9.3",
-    "use-worker-directive": "0.6.0",
+    "use-worker-directive": "0.6.1",
     "vite": "^6.2.1"
   },
   "peerDependencies": {

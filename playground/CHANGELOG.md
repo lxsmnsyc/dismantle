@@ -1,5 +1,12 @@
 # playground
 
+## 0.4.4
+
+### Patch Changes
+
+- Updated dependencies [88f3e48]
+  - dismantle@0.6.1
+
 ## 0.4.3
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "use-server-directive",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "type": "module",
   "files": [
     "dist",
@@ -21,7 +21,7 @@
     "vitest": "^4.0.17"
   },
   "dependencies": {
-    "dismantle": "^0.6.0",
+    "dismantle": "^0.6.1",
     "seroval": "^1.4.2",
     "seroval-plugins": "^1.4.2"
   },

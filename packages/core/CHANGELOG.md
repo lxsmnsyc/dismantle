@@ -1,5 +1,11 @@
 # dismantle
 
+## 0.6.1
+
+### Patch Changes
+
+- 88f3e48: add tree-shaking, fix generator runtime
+
 ## 0.6.0
 
 ### Minor Changes

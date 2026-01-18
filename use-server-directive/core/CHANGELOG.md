@@ -1,5 +1,12 @@
 # use-server-directive
 
+## 0.6.1
+
+### Patch Changes
+
+- Updated dependencies [88f3e48]
+  - dismantle@0.6.1
+
 ## 0.6.0
 
 ### Patch Changes
