@@ -1,6 +1,6 @@
 import type * as babel from '@babel/core';
 import * as t from '@babel/types';
-import { splitFunction } from './split-function';
+import { splitFunction } from './split/function';
 import type { FunctionDirectiveDefinition, StateContext } from './types';
 import {
   cleanDirectives,
@@ -15,20 +15,12 @@ function getFunctionDirectiveDefinition(
   ctx: StateContext,
   path: babel.NodePath<t.BlockStatement>,
 ): FunctionDirectiveDefinition | undefined {
-  const definition = getDefinitionFromDirectives(
-    ctx,
-    'function-directive',
-    path,
-  );
+  const definition = getDefinitionFromDirectives(ctx, 'function-directive', path);
   if (definition) {
     cleanDirectives(path, definition);
     return definition;
   }
-  const fauxDefinition = getDefinitionFromFauxDirectives(
-    ctx,
-    'function-directive',
-    path,
-  );
+  const fauxDefinition = getDefinitionFromFauxDirectives(ctx, 'function-directive', path);
   if (fauxDefinition) {
     cleanFauxDirectives(path, fauxDefinition);
     return fauxDefinition;
@@ -47,10 +39,10 @@ export function transformFunctionDirective(
       const [id, replacement] = splitFunction(ctx, path, definition);
       path.scope.crawl();
       path.replaceWith(
-        t.callExpression(
-          getImportIdentifier(ctx.imports, path, definition.handle),
-          [t.stringLiteral(id), replacement],
-        ),
+        t.callExpression(getImportIdentifier(ctx.imports, path, definition.handle), [
+          t.stringLiteral(id),
+          replacement,
+        ]),
       );
     }
   }

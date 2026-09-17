@@ -1,15 +1,15 @@
 {
   "name": "playground",
-  "type": "module",
+  "version": "0.4.4",
   "private": true,
+  "type": "module",
   "publishConfig": {
     "access": "restricted"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.ts"
   },
   "dependencies": {
-    "dismantle": "0.6.1"
-  },
-  "version": "0.4.4"
+    "dismantle": "workspace:*"
+  }
 }

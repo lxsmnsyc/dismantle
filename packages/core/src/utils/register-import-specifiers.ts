@@ -5,10 +5,7 @@ import { getImportSpecifierName } from './get-import-specifier-name';
 
 function registerImportSpecifier(
   ctx: StateContext,
-  node:
-    | t.ImportSpecifier
-    | t.ImportDefaultSpecifier
-    | t.ImportNamespaceSpecifier,
+  node: t.ImportSpecifier | t.ImportDefaultSpecifier | t.ImportNamespaceSpecifier,
   definition: FunctionCallDefinition,
 ): void {
   if (t.isImportSpecifier(node)) {
@@ -23,17 +20,11 @@ function registerImportSpecifier(
       ctx.registrations.identifiers.set(node.local, definition);
     }
   }
-  if (
-    t.isImportDefaultSpecifier(node) &&
-    definition.source.kind === 'default'
-  ) {
+  if (t.isImportDefaultSpecifier(node) && definition.source.kind === 'default') {
     ctx.registrations.identifiers.set(node.local, definition);
   }
   if (t.isImportNamespaceSpecifier(node)) {
-    let current = ctx.registrations.namespaces.get(node.local);
-    if (!current) {
-      current = [];
-    }
+    const current = ctx.registrations.namespaces.get(node.local) ?? [];
     current.push(definition);
     ctx.registrations.namespaces.set(node.local, current);
   }
@@ -60,18 +51,12 @@ export function registerImportSpecifiers(
   }
   programPath.traverse({
     ImportDeclaration(path) {
-      if (
-        path.node.importKind === 'type' ||
-        path.node.importKind === 'typeof'
-      ) {
+      if (path.node.importKind === 'type' || path.node.importKind === 'typeof') {
         return;
       }
       for (let i = 0; i < len; i++) {
         const func = ctx.options.definitions[i];
-        if (
-          func.type === 'function-call' &&
-          func.source.source === path.node.source.value
-        ) {
+        if (func.type === 'function-call' && func.source.source === path.node.source.value) {
           registerImportDeclarationByDefinition(ctx, path, func);
         }
       }

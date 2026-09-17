@@ -1,6 +1,6 @@
 import type * as babel from '@babel/core';
 import type * as t from '@babel/types';
-import { splitBlockDirective } from './split-block-directive';
+import { splitBlockDirective } from './split/block';
 import type { BlockDirectiveDefinition, StateContext } from './types';
 import {
   cleanDirectives,
@@ -18,21 +18,24 @@ function getBlockDirectiveDefinition(
     cleanDirectives(path, definition);
     return definition;
   }
-  const fauxDefinition = getDefinitionFromFauxDirectives(
-    ctx,
-    'block-directive',
-    path,
-  );
+  const fauxDefinition = getDefinitionFromFauxDirectives(ctx, 'block-directive', path);
   if (fauxDefinition) {
     cleanFauxDirectives(path, fauxDefinition);
     return fauxDefinition;
   }
   return undefined;
 }
+
 export function transformBlockDirective(
   ctx: StateContext,
   path: babel.NodePath<t.BlockStatement>,
 ): void {
+  // The replacement awaits the split block, so it needs an async function
+  // (or a module, which has top-level await).
+  const parent = path.getFunctionParent();
+  if (parent && !parent.node.async) {
+    return;
+  }
   const definition = getBlockDirectiveDefinition(ctx, path);
   if (definition) {
     path.node.body = splitBlockDirective(ctx, path, definition);

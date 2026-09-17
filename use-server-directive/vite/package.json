@@ -1,67 +1,60 @@
 {
   "name": "vite-plugin-use-server-directive",
   "version": "0.6.1",
-  "type": "module",
-  "types": "./dist/types/index.d.ts",
-  "main": "./dist/cjs/production/index.cjs",
-  "module": "./dist/esm/production/index.mjs",
-  "exports": {
-    ".": {
-      "types": "./dist/types/index.d.ts",
-      "development": {
-        "require": "./dist/cjs/development/index.cjs",
-        "import": "./dist/esm/development/index.mjs"
-      },
-      "require": "./dist/cjs/production/index.cjs",
-      "import": "./dist/esm/production/index.mjs"
-    }
-  },
-  "files": [
-    "dist",
-    "src"
-  ],
-  "engines": {
-    "node": ">=10"
-  },
-  "license": "MIT",
+  "description": "Vite plugin for use-server-directive",
   "keywords": [
-    "pridepack",
-    "babel"
+    "use-server",
+    "vite",
+    "vite-plugin"
   ],
-  "devDependencies": {
-    "@types/node": "^22.13.10",
-    "pridepack": "2.6.4",
-    "tslib": "^2.8.1",
-    "typescript": "^5.9.3",
-    "use-server-directive": "0.6.1",
-    "vite": "^6.2.1"
-  },
-  "peerDependencies": {
-    "use-server-directive": "^0.6",
-    "vite": ">=4"
-  },
-  "scripts": {
-    "prepublish": "pridepack clean && pridepack build",
-    "build": "pridepack build",
-    "type-check": "pridepack check",
-    "clean": "pridepack clean",
-    "watch": "pridepack watch"
-  },
-  "description": "Universal \"use server\" functions",
-  "repository": {
-    "url": "https://github.com/lxsmnsyc/dismantle.git",
-    "type": "git"
-  },
-  "homepage": "https://github.com/lxsmnsyc/dismantle/tree/main/use-server-directive/core",
+  "homepage": "https://github.com/lxsmnsyc/dismantle/tree/main/use-server-directive/vite",
   "bugs": {
     "url": "https://github.com/lxsmnsyc/dismantle/issues"
+  },
+  "license": "MIT",
+  "author": "Alexis Munsayac",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lxsmnsyc/dismantle.git",
+    "directory": "use-server-directive/vite"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.cts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json"
   },
   "publishConfig": {
     "access": "public"
   },
-  "author": "Alexis Munsayac",
-  "private": false,
-  "typesVersions": {
-    "*": {}
+  "scripts": {
+    "build": "tsdown",
+    "prepublishOnly": "pnpm run build",
+    "type-check": "tsc --noEmit",
+    "watch": "tsdown --watch"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.1",
+    "publint": "^0.3.24",
+    "tsdown": "^0.23.0",
+    "typescript": "^7.0.2",
+    "use-server-directive": "workspace:^",
+    "vite": "^6.2.1"
+  },
+  "peerDependencies": {
+    "use-server-directive": "workspace:^",
+    "vite": ">=4"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

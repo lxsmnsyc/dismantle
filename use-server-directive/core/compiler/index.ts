@@ -12,11 +12,7 @@ export interface Options extends Pick<dismantle.Options, 'mode' | 'env'> {
 export type Output = dismantle.Output;
 export type CodeOutput = dismantle.CodeOutput;
 
-export async function compile(
-  id: string,
-  code: string,
-  options: Options,
-): Promise<Output> {
+export async function compile(id: string, code: string, options: Options): Promise<Output> {
   return await dismantle.compile(id, code, {
     runtime: 'use-server-directive/runtime',
     key: 'use-server-directive',
@@ -25,8 +21,8 @@ export async function compile(
     definitions: [
       {
         type: 'block-directive',
-        directive: options.directive || DEFAULT_DIRECTIVE,
-        idPrefix: `/${options.prefix || DEFAULT_PREFIX}/`,
+        directive: options.directive ?? DEFAULT_DIRECTIVE,
+        idPrefix: `/${options.prefix ?? DEFAULT_PREFIX}/`,
         pure: options.pure,
         target: {
           kind: 'named',

@@ -1,11 +1,14 @@
 packages:
-  - packages/**/*
-  - examples/**/*
+  - packages/*
   - playground
-  - use-server-directive/**/*
-  - use-worker-directive/**/*
+  - use-server-directive/*
+  - use-server-directive/examples/*
+  - use-worker-directive/*
+  - use-worker-directive/examples/*
 
 onlyBuiltDependencies:
   - '@sveltejs/kit'
   - esbuild
+  - oxfmt
+  - oxlint
   - svelte-preprocess

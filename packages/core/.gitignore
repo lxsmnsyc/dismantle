@@ -105,3 +105,6 @@ dist
 .tern-port
 
 .npmrc
+
+# Execution test output
+tests/harness/.output

@@ -1,6 +1,6 @@
 import type * as babel from '@babel/core';
 import * as t from '@babel/types';
-import { splitFunction } from './split-function';
+import { splitFunction } from './split/function';
 import type { FunctionCallDefinition, StateContext } from './types';
 import { getImportIdentifier } from './utils/get-import-identifier';
 import { isValidFunction } from './utils/is-valid-function';
@@ -36,21 +36,14 @@ function getFunctionDefinitionFromCallee(
     return undefined;
   }
   const memberExpr = unwrapNode(callee, t.isMemberExpression);
-  if (
-    memberExpr &&
-    !memberExpr.computed &&
-    t.isIdentifier(memberExpr.property)
-  ) {
+  if (memberExpr && !memberExpr.computed && t.isIdentifier(memberExpr.property)) {
     const object = unwrapNode(memberExpr.object, t.isIdentifier);
     if (object) {
       const binding = path.scope.getBindingIdentifier(object.name);
       if (binding) {
         const definitions = ctx.registrations.namespaces.get(binding);
         if (definitions) {
-          return getFunctionDefinitionFromPropName(
-            definitions,
-            memberExpr.property.name,
-          );
+          return getFunctionDefinitionFromPropName(definitions, memberExpr.property.name);
         }
       }
     }
@@ -58,10 +51,7 @@ function getFunctionDefinitionFromCallee(
   return undefined;
 }
 
-export function transformCall(
-  ctx: StateContext,
-  path: babel.NodePath<t.CallExpression>,
-): void {
+export function transformCall(ctx: StateContext, path: babel.NodePath<t.CallExpression>): void {
   const definition = getFunctionDefinitionFromCallee(ctx, path);
   if (!definition) {
     return;
@@ -73,10 +63,10 @@ export function transformCall(
     path.scope.crawl();
 
     path.replaceWith(
-      t.callExpression(
-        getImportIdentifier(ctx.imports, path, definition.handle),
-        [t.stringLiteral(id), replacement],
-      ),
+      t.callExpression(getImportIdentifier(ctx.imports, path, definition.handle), [
+        t.stringLiteral(id),
+        replacement,
+      ]),
     );
   }
 }
