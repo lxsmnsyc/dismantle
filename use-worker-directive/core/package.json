@@ -1,118 +1,93 @@
 {
   "name": "use-worker-directive",
   "version": "0.6.1",
-  "type": "module",
-  "files": [
-    "dist",
-    "src"
-  ],
-  "engines": {
-    "node": ">=10"
-  },
-  "license": "MIT",
-  "keywords": [
-    "pridepack"
-  ],
-  "devDependencies": {
-    "@types/node": "^22.13.10",
-    "pridepack": "2.6.4",
-    "tslib": "^2.8.1",
-    "typescript": "^5.9.3",
-    "vitest": "^2.0.5"
-  },
-  "dependencies": {
-    "dismantle": "^0.6.1",
-    "seroval": "^1.1.1",
-    "seroval-plugins": "^1.1.1"
-  },
-  "scripts": {
-    "prepublishOnly": "pridepack clean && pridepack build",
-    "build": "pridepack build",
-    "type-check": "pridepack check",
-    "clean": "pridepack clean",
-    "watch": "pridepack watch",
-    "start": "pridepack start",
-    "dev": "pridepack dev",
-    "test": "vitest"
-  },
   "description": "Universal \"use worker\" functions",
-  "repository": {
-    "url": "https://github.com/lxsmnsyc/dismantle.git",
-    "type": "git"
-  },
+  "keywords": [
+    "directive",
+    "seroval",
+    "use-worker",
+    "web-worker"
+  ],
   "homepage": "https://github.com/lxsmnsyc/dismantle/tree/main/use-worker-directive/core",
   "bugs": {
     "url": "https://github.com/lxsmnsyc/dismantle/issues"
   },
-  "publishConfig": {
-    "access": "public"
-  },
+  "license": "MIT",
   "author": "Alexis Munsayac",
-  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lxsmnsyc/dismantle.git",
+    "directory": "use-worker-directive/core"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
   "typesVersions": {
     "*": {
-      "compiler": [
-        "./dist/types/compiler/index.d.ts"
-      ],
       "client": [
-        "./dist/types/client/index.d.ts"
+        "./dist/client.d.ts"
       ],
-      "server": [
-        "./dist/types/server/index.d.ts"
+      "compiler": [
+        "./dist/compiler.d.ts"
       ],
       "runtime": [
-        "./dist/types/runtime/index.d.ts"
+        "./dist/runtime.d.ts"
+      ],
+      "server": [
+        "./dist/server.d.ts"
       ],
       "setup": [
-        "./dist/types/setup/index.d.ts"
+        "./dist/setup.d.ts"
       ]
     }
   },
   "exports": {
-    "./compiler": {
-      "types": "./dist/types/compiler/index.d.ts",
-      "development": {
-        "require": "./dist/cjs/development/compiler.cjs",
-        "import": "./dist/esm/development/compiler.mjs"
-      },
-      "require": "./dist/cjs/production/compiler.cjs",
-      "import": "./dist/esm/production/compiler.mjs"
-    },
     "./client": {
-      "types": "./dist/types/client/index.d.ts",
-      "development": {
-        "require": "./dist/cjs/development/client.cjs",
-        "import": "./dist/esm/development/client.mjs"
-      },
-      "require": "./dist/cjs/production/client.cjs",
-      "import": "./dist/esm/production/client.mjs"
+      "import": "./dist/client.js",
+      "require": "./dist/client.cjs"
     },
-    "./server": {
-      "types": "./dist/types/server/index.d.ts",
-      "development": {
-        "require": "./dist/cjs/development/server.cjs",
-        "import": "./dist/esm/development/server.mjs"
-      },
-      "require": "./dist/cjs/production/server.cjs",
-      "import": "./dist/esm/production/server.mjs"
+    "./compiler": {
+      "import": "./dist/compiler.js",
+      "require": "./dist/compiler.cjs"
     },
     "./runtime": {
-      "types": "./dist/types/runtime/index.d.ts",
-      "development": {
-        "require": "./dist/cjs/development/runtime.cjs",
-        "import": "./dist/esm/development/runtime.mjs"
-      },
-      "require": "./dist/cjs/production/runtime.cjs",
-      "import": "./dist/esm/production/runtime.mjs"
+      "import": "./dist/runtime.js",
+      "require": "./dist/runtime.cjs"
+    },
+    "./server": {
+      "import": "./dist/server.js",
+      "require": "./dist/server.cjs"
     },
     "./setup": {
-      "types": "./dist/types/setup/index.d.ts",
-      "development": {
-        "require": "./dist/cjs/development/setup.cjs",
-        "import": "./dist/esm/development/setup.mjs"
-      },
-      "require": "./dist/cjs/production/setup.cjs",
-      "import": "./dist/esm/production/setup.mjs"
-    }
+      "import": "./dist/setup.js",
+      "require": "./dist/setup.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "prepublishOnly": "pnpm run build",
+    "test": "vitest run",
+    "type-check": "tsc --noEmit",
+    "watch": "tsdown --watch"
+  },
+  "dependencies": {
+    "dismantle": "workspace:^",
+    "seroval": "^1.4.2",
+    "seroval-plugins": "^1.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.1",
+    "publint": "^0.3.24",
+    "tsdown": "^0.23.0",
+    "typescript": "^7.0.2",
+    "vitest": "^4.0.17"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

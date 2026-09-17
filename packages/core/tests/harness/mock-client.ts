@@ -2,35 +2,37 @@ import { getHandler } from './mock-server';
 
 export { handle, handleGenerator } from './mock-server';
 
+type Handler = (...args: unknown[]) => unknown;
+
+function isAsyncIterable(value: unknown): value is AsyncIterable<unknown> {
+  return typeof value === 'object' && value !== null && Symbol.asyncIterator in value;
+}
+
 /**
  * Simulates a network boundary: everything crossing it gets cloned, so
  * functions or shared references would fail loudly.
  */
-async function* transferIterator(
-  iterable: AsyncIterable<unknown>,
-): AsyncGenerator<unknown> {
+async function* transferIterator(iterable: AsyncIterable<unknown>): AsyncGenerator {
   for await (const value of iterable) {
     yield structuredClone(value);
   }
 }
 
-export function register(
-  id: string,
-  handler?: (...args: unknown[]) => unknown,
-) {
+async function transferValue(value: unknown): Promise<unknown> {
+  return structuredClone(await value);
+}
+
+export function register(id: string, handler?: Handler): Handler {
   // Isomorphic splits pass the handler, so it runs locally
   if (handler) {
     return handler;
   }
-  return (...args: unknown[]) => {
+  // Returns an async iterable for generators, and a promise otherwise.
+  return (...args): unknown => {
     const result = getHandler(id)(...structuredClone(args));
-    if (
-      result &&
-      typeof result === 'object' &&
-      Symbol.asyncIterator in result
-    ) {
-      return transferIterator(result as AsyncIterable<unknown>);
+    if (isAsyncIterable(result)) {
+      return transferIterator(result);
     }
-    return Promise.resolve(result).then(value => structuredClone(value));
+    return transferValue(result);
   };
 }

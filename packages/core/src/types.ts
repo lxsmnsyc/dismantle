@@ -71,9 +71,7 @@ export interface FunctionDirectiveDefinition extends BaseDefinition {
   handle: ImportDefinition;
 }
 
-export type DirectiveDefinition =
-  | BlockDirectiveDefinition
-  | FunctionDirectiveDefinition;
+export type DirectiveDefinition = BlockDirectiveDefinition | FunctionDirectiveDefinition;
 
 export interface FunctionCallDefinition extends BaseDefinition {
   type: 'function-call';
@@ -129,11 +127,7 @@ export interface StateContext {
     names: Map<string, number>;
   };
   options: Options;
-  onVirtualFile: (
-    path: string,
-    content: CodeOutput,
-    mode: 'entry' | 'root' | 'none',
-  ) => void;
+  onVirtualFile: (path: string, content: CodeOutput, mode: 'entry' | 'root' | 'none') => void;
   registrations: {
     identifiers: Map<t.Identifier, FunctionCallDefinition>;
     namespaces: Map<t.Identifier, FunctionCallDefinition[]>;

@@ -33,7 +33,7 @@ function resolveNames(closure: Closure): Map<Binding, string> {
   const bindings = [
     ...closure.values,
     ...closure.mutables,
-    ...closure.functions.map(fn => fn.binding),
+    ...closure.functions.map((fn) => fn.binding),
   ];
   for (const binding of bindings) {
     const name = binding.identifier.name;
@@ -49,11 +49,7 @@ function resolveNames(closure: Closure): Map<Binding, string> {
 
 function isNameReference(path: babel.NodePath): boolean {
   const parent = path.parent;
-  if (
-    t.isLabeledStatement(parent) ||
-    t.isBreakStatement(parent) ||
-    t.isContinueStatement(parent)
-  ) {
+  if (t.isLabeledStatement(parent) || t.isBreakStatement(parent) || t.isContinueStatement(parent)) {
     return false;
   }
   if (path.isJSXIdentifier()) {
@@ -61,8 +57,7 @@ function isNameReference(path: babel.NodePath): boolean {
   }
   const grandparent = path.parentPath?.parent;
   return (
-    t.isReferenced(path.node, parent, grandparent) ||
-    t.isBinding(path.node, parent, grandparent)
+    t.isReferenced(path.node, parent, grandparent) || t.isBinding(path.node, parent, grandparent)
   );
 }
 
@@ -79,7 +74,7 @@ function cloneRegions(closure: Closure, names: Map<Binding, string>): t.Node[] {
     if (name === original) {
       continue;
     }
-    const visit = (path: babel.NodePath<t.Identifier | t.JSXIdentifier>) => {
+    const visit = (path: babel.NodePath<t.Identifier | t.JSXIdentifier>): void => {
       if (
         path.node.name === original &&
         isNameReference(path) &&
@@ -97,9 +92,7 @@ function cloneRegions(closure: Closure, names: Map<Binding, string>): t.Node[] {
   for (const [node, name] of renames) {
     node.name = name;
   }
-  const clones = closure.regions.map(region =>
-    t.cloneNode(region.node, true, false),
-  );
+  const clones = closure.regions.map((region) => t.cloneNode(region.node, true, false));
   for (let i = 0, len = renames.length; i < len; i++) {
     renames[i][0].name = originals[i];
   }
@@ -109,15 +102,14 @@ function cloneRegions(closure: Closure, names: Map<Binding, string>): t.Node[] {
 function createImports(closure: Closure): t.ImportDeclaration[] {
   const declarations: t.ImportDeclaration[] = [];
   for (const specifier of closure.imports) {
-    const parent = specifier.parent as t.ImportDeclaration;
+    const parent = specifier.parent;
+    assert(t.isImportDeclaration(parent), 'invariant');
     const declaration = t.importDeclaration(
       [t.cloneNode(specifier.node, true, false)],
       t.cloneNode(parent.source),
     );
     if (parent.attributes) {
-      declaration.attributes = parent.attributes.map(attribute =>
-        t.cloneNode(attribute),
-      );
+      declaration.attributes = parent.attributes.map((attribute) => t.cloneNode(attribute));
     }
     declarations.push(declaration);
   }
@@ -130,11 +122,8 @@ function getName(names: Map<Binding, string>, binding: Binding): string {
   return name;
 }
 
-function identifiersOf(
-  bindings: Binding[],
-  names: Map<Binding, string>,
-): t.Identifier[] {
-  return bindings.map(binding => t.identifier(getName(names, binding)));
+function identifiersOf(bindings: Binding[], names: Map<Binding, string>): t.Identifier[] {
+  return bindings.map((binding) => t.identifier(getName(names, binding)));
 }
 
 export interface RootProgram<T extends t.Expression> {
@@ -170,11 +159,7 @@ export function createRootProgram<T extends t.Expression>(
   const [targetClone, ...functionClones] = cloneRegions(closure, names);
   const target = createTarget(targetClone);
 
-  const taken = new Set([
-    ...closure.names,
-    ...closure.globals,
-    ...names.values(),
-  ]);
+  const taken = new Set([...closure.names, ...closure.globals, ...names.values()]);
   const closureID = t.identifier(createUniqueName('closure', taken));
 
   const body: t.Statement[] = [];
@@ -211,10 +196,9 @@ export function createRootProgram<T extends t.Expression>(
     } else if (t.isClassDeclaration(clone)) {
       declarations.unshift(clone);
     } else {
+      assert(t.isExpression(clone), 'invariant');
       declarations.unshift(
-        t.variableDeclaration('const', [
-          t.variableDeclarator(t.identifier(name), clone as t.Expression),
-        ]),
+        t.variableDeclaration('const', [t.variableDeclarator(t.identifier(name), clone)]),
       );
     }
   }
@@ -225,10 +209,7 @@ export function createRootProgram<T extends t.Expression>(
       t.arrayExpression([
         target,
         closure.mutables.length
-          ? t.arrowFunctionExpression(
-              [],
-              t.arrayExpression(identifiersOf(closure.mutables, names)),
-            )
+          ? t.arrowFunctionExpression([], t.arrayExpression(identifiersOf(closure.mutables, names)))
           : t.nullLiteral(),
       ]),
     ),

@@ -1,14 +1,10 @@
 import type * as babel from '@babel/core';
 import * as t from '@babel/types';
 import type { BlockDirectiveDefinition, StateContext } from '../types';
+import assert from '../utils/assert';
 import { generateUniqueName } from '../utils/generate-unique-name';
-import {
-  createClosureArray,
-  createUpdater,
-  getRuntimeIdentifier,
-  importEntry,
-} from './caller';
-import { analyzeClosure, type Closure } from './closure';
+import { createClosureArray, createUpdater, getRuntimeIdentifier, importEntry } from './caller';
+import { type Closure, analyzeClosure } from './closure';
 import {
   BREAK_CODE,
   CALL_BLOCK,
@@ -70,20 +66,10 @@ function createReplacement(
   entryFile: string,
 ): t.Statement[] {
   const call = t.callExpression(
-    getRuntimeIdentifier(
-      ctx,
-      path,
-      flow.hasYield ? CALL_BLOCK_GENERATOR : CALL_BLOCK,
-    ),
-    [
-      importEntry(entryFile),
-      createClosureArray(closure),
-      createUpdater(path, closure),
-    ],
+    getRuntimeIdentifier(ctx, path, flow.hasYield ? CALL_BLOCK_GENERATOR : CALL_BLOCK),
+    [importEntry(entryFile), createClosureArray(closure), createUpdater(path, closure)],
   );
-  const invoke = flow.hasYield
-    ? t.yieldExpression(call, true)
-    : t.awaitExpression(call);
+  const invoke = flow.hasYield ? t.yieldExpression(call, true) : t.awaitExpression(call);
 
   const type = generateUniqueName(path, 'type');
   const result = generateUniqueName(path, 'result');
@@ -103,7 +89,7 @@ function createReplacement(
     BREAK_CODE,
     flow.breakLabels,
     flow.hasBreak,
-    label => t.breakStatement(label),
+    (label) => t.breakStatement(label),
   );
   if (breakCheck) {
     checks.push(breakCheck);
@@ -114,7 +100,7 @@ function createReplacement(
     CONTINUE_CODE,
     flow.continueLabels,
     flow.hasContinue,
-    label => t.continueStatement(label),
+    (label) => t.continueStatement(label),
   );
   if (continueCheck) {
     checks.push(continueCheck);
@@ -124,9 +110,7 @@ function createReplacement(
     return [t.expressionStatement(invoke)];
   }
   return [
-    t.variableDeclaration('const', [
-      t.variableDeclarator(t.arrayPattern([type, result]), invoke),
-    ]),
+    t.variableDeclaration('const', [t.variableDeclarator(t.arrayPattern([type, result]), invoke)]),
     ...checks,
   ];
 }
@@ -139,9 +123,10 @@ export function splitBlockDirective(
   const closure = analyzeClosure(path, !!definition.pure);
   const id = createSplitID(ctx, path, definition.idPrefix);
 
-  const { program, target } = createRootProgram(closure, clone =>
-    t.functionExpression(undefined, [], clone as t.BlockStatement, false, true),
-  );
+  const { program, target } = createRootProgram(closure, (clone) => {
+    assert(t.isBlockStatement(clone), 'invariant');
+    return t.functionExpression(undefined, [], clone, false, true);
+  });
   // The control flow is needed on both sides: the root file returns it,
   // and the caller handles it.
   const flow = rewriteBlockControlFlow(program, target);

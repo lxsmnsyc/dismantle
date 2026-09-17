@@ -52,23 +52,24 @@ function toResult(code: ResultCode, value: unknown, sync: Sync): Result {
   return sync ? [code, value, sync()] : [code, value];
 }
 
+function isBlockResult(value: unknown): value is BlockResult {
+  return value === undefined || (Array.isArray(value) && typeof value[0] === 'number');
+}
+
 function toBlockResult(result: BlockResult, sync: Sync): Result {
-  return result
-    ? toResult(result[0], result[1], sync)
-    : toResult(NO_HALT, undefined, sync);
+  return result ? toResult(result[0], result[1], sync) : toResult(NO_HALT, undefined, sync);
 }
 
 async function* iterate(
   iterator: AnyIterator,
   sync: Sync,
 ): AsyncGenerator<Result, unknown, undefined> {
-  while (true) {
-    const step = await iterator.next();
-    if (step.done) {
-      return step.value;
-    }
+  let step = await iterator.next();
+  while (!step.done) {
     yield toResult(YIELD, step.value, sync);
+    step = await iterator.next();
   }
+  return step.value;
 }
 
 // Server side
@@ -91,8 +92,7 @@ export function $$wrapFunction<T extends unknown[]>(
 export function $$wrapGenerator<T extends unknown[]>(
   factory: Factory<(...args: T) => AnyIterator>,
 ): (closure: Closure, ...args: T) => AsyncGenerator<Result> {
-  // biome-ignore lint/suspicious/useAwait: async generator that only delegates
-  return async function* (closure, ...args) {
+  return async function* wrappedGenerator(closure, ...args) {
     let sync: Sync = null;
     try {
       const [target, currentSync] = factory(closure);
@@ -108,7 +108,7 @@ export function $$wrapGenerator<T extends unknown[]>(
 export function $$wrapBlock(
   factory: Factory<() => Promise<BlockResult>>,
 ): (closure: Closure) => Promise<Result> {
-  return async closure => {
+  return async (closure) => {
     let sync: Sync = null;
     try {
       const [target, currentSync] = factory(closure);
@@ -123,14 +123,13 @@ export function $$wrapBlock(
 export function $$wrapBlockGenerator(
   factory: Factory<() => AnyIterator>,
 ): (closure: Closure) => AsyncGenerator<Result> {
-  // biome-ignore lint/suspicious/useAwait: async generator that only delegates
-  return async function* (closure) {
+  return async function* wrappedBlockGenerator(closure) {
     let sync: Sync = null;
     try {
       const [target, currentSync] = factory(closure);
       sync = currentSync;
       const result = yield* iterate(target(), sync);
-      yield toBlockResult(result as BlockResult, sync);
+      yield toBlockResult(isBlockResult(result) ? result : undefined, sync);
     } catch (error) {
       yield toResult(THROW, error, sync);
     }
@@ -175,7 +174,6 @@ export async function $$callFunction<T extends unknown[]>(
   return settle(await source(closure, ...args), update)[1];
 }
 
-// biome-ignore lint/suspicious/useAwait: async generator that only delegates
 export async function* $$callGenerator<T extends unknown[]>(
   source: (closure: Closure, ...args: T) => MaybePromise<AsyncIterable<Result>>,
   closure: Closure,

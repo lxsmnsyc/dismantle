@@ -1,5 +1,5 @@
 import { afterAll, describe, expect, it } from 'vitest';
-import { cleanup, compile, getRemoteCalls, load, MODES } from './harness';
+import { MODES, cleanup, compile, getRemoteCalls, load } from './harness';
 
 afterAll(cleanup);
 
@@ -13,28 +13,16 @@ interface Module {
  * Statements that can hold a directive block. `body` is the block content.
  */
 const STATEMENTS: [name: string, wrap: (body: string) => string][] = [
-  ['block statement', body => `{ ${body} }`],
-  ['if statement', body => `if (input) { ${body} } else { log = ['else']; }`],
-  ['else clause', body => `if (!input) { log = ['if']; } else { ${body} }`],
-  [
-    'try statement',
-    body => `try { ${body} } finally { log = [...log, 'finally']; }`,
-  ],
-  ['catch clause', body => `try { throw 'error'; } catch (error) { ${body} }`],
-  ['finally clause', body => `try { log = ['try']; } finally { ${body} }`],
-  ['labeled statement', body => `label: { ${body} }`],
-  [
-    'arrow function',
-    body => `const inner = async () => { ${body} }; await inner();`,
-  ],
-  [
-    'function declaration',
-    body => `async function inner() { ${body} } await inner();`,
-  ],
-  [
-    'function expression',
-    body => `const inner = async function () { ${body} }; await inner();`,
-  ],
+  ['block statement', (body) => `{ ${body} }`],
+  ['if statement', (body) => `if (input) { ${body} } else { log = ['else']; }`],
+  ['else clause', (body) => `if (!input) { log = ['if']; } else { ${body} }`],
+  ['try statement', (body) => `try { ${body} } finally { log = [...log, 'finally']; }`],
+  ['catch clause', (body) => `try { throw 'error'; } catch (error) { ${body} }`],
+  ['finally clause', (body) => `try { log = ['try']; } finally { ${body} }`],
+  ['labeled statement', (body) => `label: { ${body} }`],
+  ['arrow function', (body) => `const inner = async () => { ${body} }; await inner();`],
+  ['function declaration', (body) => `async function inner() { ${body} } await inner();`],
+  ['function expression', (body) => `const inner = async function () { ${body} }; await inner();`],
 ];
 
 const EXPECTED_LOGS: Record<string, unknown[]> = {
@@ -45,33 +33,29 @@ const EXPECTED_LOGS: Record<string, unknown[]> = {
 const LOOPS: [name: string, wrap: (body: string) => string][] = [
   [
     'for statement',
-    body =>
+    (body) =>
       `for (let i = 0; i < items.length; i++) { 'use server'; const item = items[i]; ${body} }`,
   ],
   [
     'for-in statement',
-    body =>
-      `for (const key in items) { 'use server'; const item = items[key]; ${body} }`,
+    (body) => `for (const key in items) { 'use server'; const item = items[key]; ${body} }`,
   ],
-  [
-    'for-of statement',
-    body => `for (const item of items) { 'use server'; ${body} }`,
-  ],
+  ['for-of statement', (body) => `for (const item of items) { 'use server'; ${body} }`],
   [
     'while statement',
-    body =>
+    (body) =>
       `let i = 0; while (i < items.length) { 'use server'; const item = items[i++]; ${body} }`,
   ],
   [
     'do-while statement',
-    body =>
+    (body) =>
       `let i = 0; do { 'use server'; const item = items[i++]; ${body} } while (i < items.length)`,
   ],
 ];
 
 const ITEMS = ['a', 'b', 'c', 'd'];
 
-describe.each(MODES)('block directives (%s)', mode => {
+describe.each(MODES)('block directives (%s)', (mode) => {
   describe.each(STATEMENTS)('%s', (name, wrap) => {
     it('runs the block remotely with local and top-level values', async () => {
       const mod = await load<Module>(
@@ -86,9 +70,7 @@ describe.each(MODES)('block directives (%s)', mode => {
         }
         `,
       );
-      expect(await mod.run('input')).toEqual(
-        EXPECTED_LOGS[name] ?? ['top', 'local', 'input'],
-      );
+      expect(await mod.run('input')).toEqual(EXPECTED_LOGS[name] ?? ['top', 'local', 'input']);
       expect(getRemoteCalls()).toBe(1);
     });
 
@@ -109,7 +91,7 @@ describe.each(MODES)('block directives (%s)', mode => {
   });
 
   describe.each(LOOPS)('%s', (_name, wrap) => {
-    const run = async (body: string, outer?: string) => {
+    const run = async (body: string, outer?: string): Promise<unknown> => {
       const loop = wrap(body);
       const mod = await load<Module>(
         mode,
@@ -130,23 +112,20 @@ describe.each(MODES)('block directives (%s)', mode => {
     });
 
     it('breaks out of the loop', async () => {
-      expect(
-        await run(`if (item === 'c') break; log = [...log, item];`),
-      ).toEqual(['a', 'b']);
+      expect(await run(`if (item === 'c') break; log = [...log, item];`)).toEqual(['a', 'b']);
     });
 
     it('continues the loop', async () => {
-      expect(
-        await run(`if (item === 'b') continue; log = [...log, item];`),
-      ).toEqual(['a', 'c', 'd']);
+      expect(await run(`if (item === 'b') continue; log = [...log, item];`)).toEqual([
+        'a',
+        'c',
+        'd',
+      ]);
     });
 
     it('breaks out of a labeled loop', async () => {
       expect(
-        await run(
-          `if (item === 'c') break outer; log = [...log, item];`,
-          `log = [...log, '|'];`,
-        ),
+        await run(`if (item === 'c') break outer; log = [...log, item];`, `log = [...log, '|'];`),
       ).toEqual(['a', 'b']);
     });
 
@@ -246,15 +225,13 @@ describe.each(MODES)('block directives (%s)', mode => {
     );
     const values: unknown[] = [];
     const iterator = mod.stream(3);
-    while (true) {
-      const step = await iterator.next();
-      if (step.done) {
-        expect(values).toEqual([1, 2, 3]);
-        expect(step.value).toEqual([10, 20, 30]);
-        break;
-      }
+    let step = await iterator.next();
+    while (!step.done) {
       values.push(step.value);
+      step = await iterator.next();
     }
+    expect(values).toEqual([1, 2, 3]);
+    expect(step.value).toEqual([10, 20, 30]);
   });
 
   it('runs top-level blocks', async () => {

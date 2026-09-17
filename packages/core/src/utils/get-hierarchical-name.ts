@@ -2,10 +2,7 @@ import type * as babel from '@babel/core';
 import * as t from '@babel/types';
 import { isNestedExpression } from './unwrap';
 
-function getKeyName(
-  key: t.Node,
-  computed: boolean | null | undefined,
-): string | undefined {
+function getKeyName(key: t.Node, computed: boolean | null | undefined): string | undefined {
   if (t.isPrivateName(key)) {
     return key.id.name;
   }
@@ -54,10 +51,7 @@ function getInferredName(path: babel.NodePath): string | undefined {
   if (t.isVariableDeclarator(node) && current.key === 'init') {
     return getMemberName(node.id);
   }
-  if (
-    (t.isAssignmentExpression(node) || t.isAssignmentPattern(node)) &&
-    current.key === 'right'
-  ) {
+  if ((t.isAssignmentExpression(node) || t.isAssignmentPattern(node)) && current.key === 'right') {
     return getMemberName(node.left);
   }
   if (

@@ -1,14 +1,14 @@
-# vite-plugin-use-server-directive
+# `vite-plugin-use-server-directive`
 
 > Vite plugin for [`use-server-directive`](https://github.com/lxsmnsyc/dismantle/tree/main/use-server-directive/core)
 
-[![NPM](https://img.shields.io/npm/v/vite-plugin-use-server-directive.svg)](https://www.npmjs.com/package/vite-plugin-use-server-directive) [![JavaScript Style Guide](https://badgen.net/badge/code%20style/airbnb/ff5a5f?icon=airbnb)](https://github.com/airbnb/javascript)
+[![NPM](https://img.shields.io/npm/v/vite-plugin-use-server-directive.svg)](https://www.npmjs.com/package/vite-plugin-use-server-directive)
 
 ## Install
 
 ```bash
-npm install use-server-directive
-npm install --D vite-plugin-use-server-directive
+npm i use-server-directive
+npm i -D vite-plugin-use-server-directive
 ```
 
 ```bash
@@ -24,15 +24,26 @@ pnpm add -D vite-plugin-use-server-directive
 ## Usage
 
 ```js
+// vite.config.js
+import { defineConfig } from 'vite';
 import useServerDirective from 'vite-plugin-use-server-directive';
 
-useServerDirective({
-  filter: {
-    include: 'src/**/*.{ts,js,tsx,jsx}',
-    exclude: 'node_modules/**/*.{ts,js,tsx,jsx}',
-  },
-})
+export default defineConfig({
+  plugins: [useServerDirective()],
+});
 ```
+
+Then follow the [setup of `use-server-directive`](https://github.com/lxsmnsyc/dismantle/tree/main/use-server-directive/core#setup) to handle requests on the server.
+
+## Options
+
+| Option | Default | Description |
+| --- | --- | --- |
+| `filter.include` | `'src/**/*.{jsx,tsx,ts,js,mjs,cjs}'` | Files to compile. |
+| `filter.exclude` | `'node_modules/**/*.{jsx,tsx,ts,js,mjs,cjs}'` | Files to skip. |
+| `directive` | `'use server'` | The directive to look for. |
+| `prefix` | `'__server'` | Added in front of every function ID. |
+| `pure` | `false` | Disables closures. Imports and local functions still work. |
 
 ## Sponsors
 

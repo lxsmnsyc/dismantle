@@ -5,8 +5,8 @@ import { generateCode } from '../utils/generator-shim';
 import { getHierarchicalName } from '../utils/get-hierarchical-name';
 
 function createVirtualFileName(ctx: StateContext): string {
-  return `./${ctx.path.base}?mode=${ctx.options.mode}&${ctx.options.key}=${ctx
-    .virtual.count++}${ctx.path.ext}`;
+  return `./${ctx.path.base}?mode=${ctx.options.mode}&${ctx.options.key}=${ctx.virtual
+    .count++}${ctx.path.ext}`;
 }
 
 /**
@@ -21,13 +21,13 @@ export function createSplitID(
   path: babel.NodePath,
   prefix: string | undefined,
 ): string {
-  const base = `${prefix || ''}${ctx.blocks.hash}-`;
+  const base = `${prefix ?? ''}${ctx.blocks.hash}-`;
   const index = ctx.blocks.count++;
   if (ctx.options.env === 'production') {
     return `${base}${index}`;
   }
-  const name = getHierarchicalName(path) || 'anonymous';
-  const seen = ctx.blocks.names.get(name) || 0;
+  const name = getHierarchicalName(path) ?? 'anonymous';
+  const seen = ctx.blocks.names.get(name) ?? 0;
   ctx.blocks.names.set(name, seen + 1);
   return seen ? `${base}${name}-${seen}` : `${base}${name}`;
 }
@@ -38,10 +38,7 @@ export function createRootFile(ctx: StateContext, program: t.Program): string {
   return rootFile;
 }
 
-function createImport(
-  local: t.Identifier,
-  definition: ImportDefinition,
-): t.ImportDeclaration {
+function createImport(local: t.Identifier, definition: ImportDefinition): t.ImportDeclaration {
   return t.importDeclaration(
     [
       definition.kind === 'named'
@@ -95,10 +92,6 @@ export function createEntryFile(
   statements.push(t.exportDefaultDeclaration(t.callExpression(entry, args)));
 
   const entryFile = createVirtualFileName(ctx);
-  ctx.onVirtualFile(
-    entryFile,
-    generateCode(ctx.id, t.program(statements)),
-    'entry',
-  );
+  ctx.onVirtualFile(entryFile, generateCode(ctx.id, t.program(statements)), 'entry');
   return entryFile;
 }

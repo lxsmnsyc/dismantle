@@ -22,11 +22,7 @@ export type {
   Options,
 } from './types';
 
-export async function compile(
-  id: string,
-  code: string,
-  options: Options,
-): Promise<Output> {
+export async function compile(id: string, code: string, options: Options): Promise<Output> {
   const parsedPath = path.parse(id);
 
   const entries: string[] = [];

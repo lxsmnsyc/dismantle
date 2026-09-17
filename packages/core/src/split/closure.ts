@@ -93,17 +93,12 @@ function isInTypeAnnotation(path: babel.NodePath, region: t.Node): boolean {
 
 function isValueIdentifier(path: babel.NodePath<t.Identifier>): boolean {
   const parent = path.parent;
-  if (
-    t.isLabeledStatement(parent) ||
-    t.isBreakStatement(parent) ||
-    t.isContinueStatement(parent)
-  ) {
+  if (t.isLabeledStatement(parent) || t.isBreakStatement(parent) || t.isContinueStatement(parent)) {
     return false;
   }
   const grandparent = path.parentPath?.parent;
   return (
-    t.isReferenced(path.node, parent, grandparent) ||
-    t.isBinding(path.node, parent, grandparent)
+    t.isReferenced(path.node, parent, grandparent) || t.isBinding(path.node, parent, grandparent)
   );
 }
 
@@ -111,11 +106,7 @@ function isValueIdentifier(path: babel.NodePath<t.Identifier>): boolean {
  * `this`, `super`, `arguments` and `new.target` only make sense if they
  * belong to a function that is copied along with the split code.
  */
-function assertOwnContext(
-  path: babel.NodePath,
-  region: t.Node,
-  keyword: string,
-): void {
+function assertOwnContext(path: babel.NodePath, region: t.Node, keyword: string): void {
   let current = path.parentPath;
   while (current) {
     const node = current.node;
@@ -133,36 +124,25 @@ function assertOwnContext(
     }
     current = current.parentPath;
   }
-  throw path.buildCodeFrameError(
-    `"${keyword}" cannot be referenced across a split boundary.`,
-  );
+  throw path.buildCodeFrameError(`"${keyword}" cannot be referenced across a split boundary.`);
 }
 
-function getExtractableFunction(
-  binding: Binding,
-): babel.NodePath<ExtractableNode> | undefined {
+function getExtractableFunction(binding: Binding): babel.NodePath<ExtractableNode> | undefined {
   if (!binding.constant) {
     return undefined;
   }
   const path = binding.path;
-  if (
-    isPathValid(path, t.isFunctionDeclaration) ||
-    isPathValid(path, t.isClassDeclaration)
-  ) {
+  if (isPathValid(path, t.isFunctionDeclaration) || isPathValid(path, t.isClassDeclaration)) {
     return path;
   }
   // Named function and class expressions bind their own name
   if (
     binding.kind === 'local' &&
-    (isPathValid(path, t.isFunctionExpression) ||
-      isPathValid(path, t.isClassExpression))
+    (isPathValid(path, t.isFunctionExpression) || isPathValid(path, t.isClassExpression))
   ) {
     return path;
   }
-  if (
-    isPathValid(path, t.isVariableDeclarator) &&
-    t.isIdentifier(path.node.id)
-  ) {
+  if (isPathValid(path, t.isVariableDeclarator) && t.isIdentifier(path.node.id)) {
     const init = unwrapPath(path.get('init'), t.isExpression);
     if (
       init &&
@@ -187,7 +167,10 @@ function addImport(state: AnalysisState, binding: Binding): void {
   ) {
     return;
   }
-  const declaration = path.parent as t.ImportDeclaration;
+  const declaration = path.parent;
+  if (!t.isImportDeclaration(declaration)) {
+    return;
+  }
   if (
     declaration.importKind === 'type' ||
     declaration.importKind === 'typeof' ||
@@ -308,10 +291,7 @@ function extractFunction(
  * Finds the binding a name resolves to at the split site, ignoring
  * bindings declared inside the target (they are gone after the split).
  */
-function getVisibleBinding(
-  target: babel.NodePath,
-  name: string,
-): Binding | undefined {
+function getVisibleBinding(target: babel.NodePath, name: string): Binding | undefined {
   let scope: babel.NodePath['scope'] | undefined = target.scope;
   while (scope) {
     const binding = scope.getOwnBinding(name);

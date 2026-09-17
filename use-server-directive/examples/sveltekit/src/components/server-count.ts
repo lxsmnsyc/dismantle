@@ -7,7 +7,7 @@ export async function serverCount(value: number) {
   const immediate = `${prefix}: ${value} 👩🏾‍❤️‍👩🏾`;
   return {
     immediate,
-    delayed: new Promise(res => {
+    delayed: new Promise((res) => {
       setTimeout(res, 1000, immediate);
     }),
   };

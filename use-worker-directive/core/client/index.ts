@@ -1,5 +1,5 @@
 import { deserialize } from 'seroval';
-import { sendWorkerData, type SerializedWorkerData } from '../shared/data';
+import { type SerializedWorkerData, sendWorkerData } from '../shared/data';
 
 let WORKER: Worker;
 
@@ -11,22 +11,27 @@ let INSTANCE = 0;
 
 declare const $R: Record<string, unknown>;
 
-function createWorkerPromise<R>(id: string, instance: string): Promise<R> {
-  return new Promise<R>((resolve, reject) => {
-    const onMessage = (event: MessageEvent<SerializedWorkerData>) => {
+async function createWorkerPromise(id: string, instance: string): Promise<unknown> {
+  return new Promise((resolve, reject) => {
+    const onMessage = (event: MessageEvent<SerializedWorkerData>): void => {
       if (!(event.data.id === id && event.data.instance === instance)) {
         return;
       }
       if (event.data.type === 'close') {
         WORKER.removeEventListener('message', onMessage);
-        delete $R[instance];
+        Reflect.deleteProperty($R, instance);
       } else if (event.data.type === 'error') {
-        reject(event.data.data);
-        delete $R[instance];
+        const reason = event.data.data;
+        reject(
+          reason instanceof Error
+            ? reason
+            : new Error('Worker function failed.', { cause: reason }),
+        );
+        Reflect.deleteProperty($R, instance);
       } else {
         const result = deserialize(event.data.data);
         if (event.data.initial) {
-          resolve(result as R);
+          resolve(result);
         }
       }
     };
@@ -34,21 +39,16 @@ function createWorkerPromise<R>(id: string, instance: string): Promise<R> {
   });
 }
 
-async function handler<T extends unknown[], R>(
-  id: string,
-  args: T,
-): Promise<R> {
+async function handler(id: string, args: unknown[]): Promise<unknown> {
   const instance = `use-worker-directive:${INSTANCE++}`;
 
-  const result = createWorkerPromise<R>(id, instance);
+  const result = createWorkerPromise(id, instance);
 
   sendWorkerData(WORKER, id, instance, args);
 
   return await result;
 }
 
-export function $$server<T extends unknown[], R>(
-  id: string,
-): (...args: T) => Promise<R> {
-  return (...args: T): Promise<R> => handler(id, args);
+export function $$server(id: string): (...args: unknown[]) => Promise<unknown> {
+  return async (...args) => handler(id, args);
 }

@@ -1,25 +1,18 @@
 type Handler = (...args: unknown[]) => unknown;
 
-interface Store {
-  handlers: Map<string, Handler>;
-  calls: number;
-}
-
-// Shared through globalThis so every copy of this module sees the same state
-const shared = globalThis as { __DISMANTLE_TEST__?: Store };
-shared.__DISMANTLE_TEST__ ||= { handlers: new Map(), calls: 0 };
-const store = shared.__DISMANTLE_TEST__;
+const handlers = new Map<string, Handler>();
+let calls = 0;
 
 export function getRemoteCalls(): number {
-  return store.calls;
+  return calls;
 }
 
 export function resetRemoteCalls(): void {
-  store.calls = 0;
+  calls = 0;
 }
 
 export function getHandler(id: string): Handler {
-  const handler = store.handlers.get(id);
+  const handler = handlers.get(id);
   if (!handler) {
     throw new Error(`Missing handler for ${id}`);
   }
@@ -28,10 +21,10 @@ export function getHandler(id: string): Handler {
 
 export function register(id: string, handler: Handler): Handler {
   const counted: Handler = (...args) => {
-    store.calls++;
+    calls++;
     return handler(...args);
   };
-  store.handlers.set(id, counted);
+  handlers.set(id, counted);
   return counted;
 }
 
@@ -45,9 +38,9 @@ export function handle(
 
 export function handleGenerator(
   _id: string,
-  factory: () => Promise<Handler>,
-): (...args: unknown[]) => AsyncGenerator<unknown> {
-  return async function* (...args) {
-    return yield* (await factory())(...args) as AsyncGenerator<unknown>;
+  factory: () => Promise<(...args: unknown[]) => AsyncGenerator<unknown, unknown>>,
+): (...args: unknown[]) => AsyncGenerator<unknown, unknown> {
+  return async function* callGenerator(...args) {
+    return yield* (await factory())(...args);
   };
 }

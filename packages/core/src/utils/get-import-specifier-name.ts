@@ -1,6 +1,6 @@
 import * as t from '@babel/types';
 
-export function getImportSpecifierName(node: t.ImportSpecifier) {
+export function getImportSpecifierName(node: t.ImportSpecifier): string {
   if (t.isIdentifier(node.imported)) {
     return node.imported.name;
   }

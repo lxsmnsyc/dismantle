@@ -1,5 +1,5 @@
 import { afterAll, describe, expect, it } from 'vitest';
-import { cleanup, load, MODES } from './harness';
+import { MODES, cleanup, load } from './harness';
 
 afterAll(cleanup);
 
@@ -7,7 +7,7 @@ interface Module {
   run: (...args: unknown[]) => Promise<unknown>;
 }
 
-describe.each(MODES)('closure (%s)', mode => {
+describe.each(MODES)('closure (%s)', (mode) => {
   it('captures local values', async () => {
     const mod = await load<Module>(
       mode,
@@ -237,8 +237,6 @@ describe('errors', () => {
         }
         `,
       ),
-    ).rejects.toThrow(
-      '"arguments" cannot be referenced across a split boundary.',
-    );
+    ).rejects.toThrow('"arguments" cannot be referenced across a split boundary.');
   });
 });

@@ -1,6 +1,7 @@
 import type * as babel from '@babel/core';
 import * as t from '@babel/types';
 import type { ImportDefinition } from '../types';
+import assert from './assert';
 import { generateUniqueName } from './generate-unique-name';
 
 export function getImportIdentifier(
@@ -16,8 +17,10 @@ export function getImportIdentifier(
   }
   const programParent = path.scope.getProgramParent();
   const uid = generateUniqueName(programParent.path, name);
+  const program = programParent.path;
+  assert(program.isProgram(), 'invariant');
   programParent.registerDeclaration(
-    (programParent.path as babel.NodePath<t.Program>).unshiftContainer(
+    program.unshiftContainer(
       'body',
       t.importDeclaration(
         [

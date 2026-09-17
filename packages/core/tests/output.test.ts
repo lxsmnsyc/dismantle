@@ -21,7 +21,7 @@ export async function page(id) {
 }
 `;
 
-function codeOf(output: Awaited<ReturnType<typeof compile>>, file: string) {
+function codeOf(output: Awaited<ReturnType<typeof compile>>, file: string): string {
   const content = output.files.get(file);
   expect(content).toBeDefined();
   return content?.code ?? '';
@@ -32,9 +32,7 @@ describe('output files', () => {
     const output = await compile('server', CODE);
     expect(output.roots).toHaveLength(2);
     expect(output.entries).toHaveLength(2);
-    expect([...output.files.keys()].sort()).toEqual(
-      [...output.roots, ...output.entries].sort(),
-    );
+    expect([...output.files.keys()].sort()).toEqual([...output.roots, ...output.entries].sort());
     for (const entry of output.entries) {
       expect(codeOf(output, entry)).toMatch(ROOT_IMPORT);
     }
@@ -60,9 +58,7 @@ describe('output files', () => {
 
     const server = await compile('server', CODE);
     for (const root of server.roots) {
-      expect(codeOf(server, root)).toContain(
-        `import { query } from 'database';`,
-      );
+      expect(codeOf(server, root)).toContain(`import { query } from 'database';`);
       expect(codeOf(server, root)).not.toContain('renderer');
     }
   });
@@ -89,11 +85,8 @@ async function getIDs(
   env: 'development' | 'production' = 'development',
 ): Promise<(string | undefined)[]> {
   const output = await compile('client', code, { env });
-  return output.entries.map(entry =>
-    ENTRY_ID.exec(output.files.get(entry)?.code ?? '')?.[1].replace(
-      HASH_PREFIX,
-      '',
-    ),
+  return output.entries.map((entry) =>
+    ENTRY_ID.exec(output.files.get(entry)?.code ?? '')?.[1].replace(HASH_PREFIX, ''),
   );
 }
 
@@ -126,11 +119,7 @@ describe('split IDs', () => {
       ['api.load', 'api.save'],
     ],
     ['assignments', 'exports.handler = server$(async () => 1);', ['handler']],
-    [
-      'named function expressions',
-      `const a = async function b() { 'use server'; };`,
-      ['b'],
-    ],
+    ['named function expressions', `const a = async function b() { 'use server'; };`, ['b']],
     ['anonymous functions', 'server$(async () => 1);', ['anonymous']],
     [
       'repeated names',
@@ -138,9 +127,7 @@ describe('split IDs', () => {
       ['foo', 'foo-1', 'foo-2'],
     ],
   ])('names %s', async (_name, code, expected) => {
-    expect(await getIDs(`import { server$ } from 'mock';\n${code}`)).toEqual(
-      expected,
-    );
+    expect(await getIDs(`import { server$ } from 'mock';\n${code}`)).toEqual(expected);
   });
 
   it('uses indexes in production', async () => {

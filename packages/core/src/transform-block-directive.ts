@@ -18,11 +18,7 @@ function getBlockDirectiveDefinition(
     cleanDirectives(path, definition);
     return definition;
   }
-  const fauxDefinition = getDefinitionFromFauxDirectives(
-    ctx,
-    'block-directive',
-    path,
-  );
+  const fauxDefinition = getDefinitionFromFauxDirectives(ctx, 'block-directive', path);
   if (fauxDefinition) {
     cleanFauxDirectives(path, fauxDefinition);
     return fauxDefinition;

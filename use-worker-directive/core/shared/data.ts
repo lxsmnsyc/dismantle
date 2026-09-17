@@ -37,13 +37,13 @@ export type SerializedWorkerData =
   | SerializedWorkerDataClose
   | SerializedWorkerDataError;
 
-export function sendWorkerData<T>(
+export function sendWorkerData(
   target: (Window & typeof globalThis) | Worker,
   id: string,
   instance: string,
-  data: T,
+  value: unknown,
 ): () => void {
-  return crossSerializeStream(data, {
+  return crossSerializeStream(value, {
     scopeId: instance,
     plugins: [
       CustomEventPlugin,
@@ -70,7 +70,7 @@ export function sendWorkerData<T>(
       target.postMessage({
         id,
         instance,
-        type: 'done',
+        type: 'close',
       });
     },
     onError(error) {

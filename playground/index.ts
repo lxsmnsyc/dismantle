@@ -6,6 +6,7 @@ const target = path.join(process.cwd(), 'input.js');
 
 const result = await compile(target, await fs.readFile(target, 'utf-8'), {
   key: 'example',
+  runtime: 'dismantle/runtime',
   mode: 'server',
   env: 'development',
   definitions: [

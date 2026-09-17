@@ -34,8 +34,7 @@ function getOptions(
     source: `mock/${mode}`,
     name: 'register',
   } as const;
-  const handle = (name: string) =>
-    ({ kind: 'named', source: `mock/${mode}`, name }) as const;
+  const handle = (name: string) => ({ kind: 'named', source: `mock/${mode}`, name }) as const;
   return {
     key: KEY,
     runtime: 'mock/runtime',
@@ -83,7 +82,7 @@ function toFileName(mode: Mode, specifier: string): string {
 }
 
 function rewriteImports(mode: Mode, code: string): string {
-  return code.replace(/(["'])([^"'\n]+)\1/g, (full, _quote, specifier) => {
+  return code.replace(/(["'])([^"'\n]+)\1/g, (full: string, _quote: string, specifier: string) => {
     if (specifier === 'mock') {
       return JSON.stringify(MOCK);
     }
@@ -103,15 +102,8 @@ function rewriteImports(mode: Mode, code: string): string {
   });
 }
 
-async function writeOutput(
-  dir: string,
-  mode: Mode,
-  output: compiler.Output,
-): Promise<void> {
-  await fs.writeFile(
-    path.join(dir, `${mode}-main.ts`),
-    rewriteImports(mode, output.code ?? ''),
-  );
+async function writeOutput(dir: string, mode: Mode, output: compiler.Output): Promise<void> {
+  await fs.writeFile(path.join(dir, `${mode}-main.ts`), rewriteImports(mode, output.code ?? ''));
   for (const [file, content] of output.files) {
     await fs.writeFile(
       path.join(dir, toFileName(mode, file)),
@@ -120,7 +112,7 @@ async function writeOutput(
   }
 }
 
-export function compile(
+export async function compile(
   mode: Mode,
   code: string,
   options: CompileOptions = {},
@@ -132,11 +124,7 @@ export function compile(
  * Compiles `code` for both sides, registers the server entries and loads
  * the module as `mode` sees it. Resets the remote call counter.
  */
-export async function load<T>(
-  mode: Mode,
-  code: string,
-  options: CompileOptions = {},
-): Promise<T> {
+export async function load<T>(mode: Mode, code: string, options: CompileOptions = {}): Promise<T> {
   const dir = path.join(OUTPUT, randomUUID());
   await fs.mkdir(dir, { recursive: true });
 

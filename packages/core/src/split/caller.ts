@@ -32,22 +32,15 @@ export function importEntry(entryFile: string): t.Expression {
  */
 export function createClosureArray(closure: Closure): t.ArrayExpression {
   return t.arrayExpression([
-    t.arrayExpression(
-      closure.values.map(binding => t.identifier(binding.identifier.name)),
-    ),
-    t.arrayExpression(
-      closure.mutables.map(binding => t.identifier(binding.identifier.name)),
-    ),
+    t.arrayExpression(closure.values.map((binding) => t.identifier(binding.identifier.name))),
+    t.arrayExpression(closure.mutables.map((binding) => t.identifier(binding.identifier.name))),
   ]);
 }
 
 /**
  * `(mutations) => { [a, b] = mutations; }`, or `null` if nothing is mutated.
  */
-export function createUpdater(
-  path: babel.NodePath,
-  closure: Closure,
-): t.Expression {
+export function createUpdater(path: babel.NodePath, closure: Closure): t.Expression {
   if (!closure.mutables.length) {
     return t.nullLiteral();
   }
@@ -58,11 +51,7 @@ export function createUpdater(
       t.expressionStatement(
         t.assignmentExpression(
           '=',
-          t.arrayPattern(
-            closure.mutables.map(binding =>
-              t.identifier(binding.identifier.name),
-            ),
-          ),
+          t.arrayPattern(closure.mutables.map((binding) => t.identifier(binding.identifier.name))),
           mutations,
         ),
       ),

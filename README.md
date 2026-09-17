@@ -2,7 +2,7 @@
 
 > Universal semi-automatic code-splitter
 
-[![NPM](https://img.shields.io/npm/v/dismantle.svg)](https://www.npmjs.com/package/dismantle) [![JavaScript Style Guide](https://badgen.net/badge/code%20style/airbnb/ff5a5f?icon=airbnb)](https://github.com/airbnb/javascript)
+[![NPM](https://img.shields.io/npm/v/dismantle.svg)](https://www.npmjs.com/package/dismantle)
 
 `dismantle` moves marked code into separate modules and replaces it with a call. Use it to build features like `'use server'` functions, where code written in one file runs somewhere else.
 
@@ -67,10 +67,24 @@ The block is moved into a separate module. The client output sends `title` and `
 - **Generators.** Split generators stream their values back.
 - **Isomorphic mode.** Optionally keep the split code in both bundles.
 
+## Packages
+
+| Package | Description |
+| --- | --- |
+| [`dismantle`](https://github.com/lxsmnsyc/dismantle/tree/main/packages/core) | The compiler and runtime. |
+| [`use-server-directive`](https://github.com/lxsmnsyc/dismantle/tree/main/use-server-directive/core) | `'use server'` functions and blocks. |
+| [`vite-plugin-use-server-directive`](https://github.com/lxsmnsyc/dismantle/tree/main/use-server-directive/vite) | Vite plugin for `use-server-directive`. |
+| [`use-worker-directive`](https://github.com/lxsmnsyc/dismantle/tree/main/use-worker-directive/core) | `'use worker'` functions and blocks. |
+| [`vite-plugin-use-worker-directive`](https://github.com/lxsmnsyc/dismantle/tree/main/use-worker-directive/vite) | Vite plugin for `use-worker-directive`. |
+
 ## Docs
 
 - [Configuration](https://github.com/lxsmnsyc/dismantle/blob/main/docs/configuration.md): options, definitions, output and bundler integration.
 - [Contracts](https://github.com/lxsmnsyc/dismantle/blob/main/docs/contracts.md): what the compiler generates and what your runtime must provide.
+
+## Contributing
+
+See [CONTRIBUTING.md](https://github.com/lxsmnsyc/dismantle/blob/main/CONTRIBUTING.md).
 
 ## Sponsors
 

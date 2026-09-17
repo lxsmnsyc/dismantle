@@ -1,5 +1,5 @@
 import { afterAll, describe, expect, it } from 'vitest';
-import { cleanup, getRemoteCalls, load, MODES } from './harness';
+import { MODES, cleanup, getRemoteCalls, load } from './harness';
 
 afterAll(cleanup);
 
@@ -8,15 +8,12 @@ interface Module {
 }
 
 const FUNCTIONS: [name: string, create: (body: string) => string][] = [
-  ['arrow function', body => `server$(async (input) => { ${body} })`],
-  [
-    'function expression',
-    body => `server$(async function (input) { ${body} })`,
-  ],
-  ['non-async function', body => `server$(function (input) { ${body} })`],
+  ['arrow function', (body) => `server$(async (input) => { ${body} })`],
+  ['function expression', (body) => `server$(async function (input) { ${body} })`],
+  ['non-async function', (body) => `server$(function (input) { ${body} })`],
 ];
 
-describe.each(MODES)('function calls (%s)', mode => {
+describe.each(MODES)('function calls (%s)', (mode) => {
   describe.each(FUNCTIONS)('%s', (_name, create) => {
     it('runs the function remotely', async () => {
       const mod = await load<Module>(
@@ -95,13 +92,6 @@ describe.each(MODES)('function calls (%s)', mode => {
       }
       `,
     );
-    expect(await mod.run()).toEqual([
-      ['a', 0],
-      ['b', 0],
-      [1, 1],
-      [2, 3],
-      [3, 6],
-      'done',
-    ]);
+    expect(await mod.run()).toEqual([['a', 0], ['b', 0], [1, 1], [2, 3], [3, 6], 'done']);
   });
 });

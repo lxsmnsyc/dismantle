@@ -26,10 +26,7 @@ function isLocalJump(
       if (current.isLabeledStatement() && current.node.label.name === label) {
         return true;
       }
-    } else if (
-      current.isLoop() ||
-      (path.isBreakStatement() && current.isSwitchStatement())
-    ) {
+    } else if (current.isLoop() || (path.isBreakStatement() && current.isSwitchStatement())) {
       return true;
     }
     current = current.parentPath;
@@ -37,10 +34,8 @@ function isLocalJump(
   return false;
 }
 
-function createResult(code: number, value?: t.Expression | null) {
-  return t.arrayExpression(
-    value ? [t.numericLiteral(code), value] : [t.numericLiteral(code)],
-  );
+function createResult(code: number, value?: t.Expression | null): t.ArrayExpression {
+  return t.arrayExpression(value ? [t.numericLiteral(code), value] : [t.numericLiteral(code)]);
 }
 
 /**
@@ -70,7 +65,7 @@ export function rewriteBlockControlFlow(
   const jump = (
     path: babel.NodePath<t.BreakStatement | t.ContinueStatement>,
     code: number,
-  ) => {
+  ): void => {
     if (isLocalJump(path, block)) {
       return;
     }
@@ -92,10 +87,7 @@ export function rewriteBlockControlFlow(
 
   traverse(t.file(program), {
     ReturnStatement(path) {
-      if (
-        generated.has(path.node) ||
-        path.getFunctionParent()?.node !== block
-      ) {
+      if (generated.has(path.node) || path.getFunctionParent()?.node !== block) {
         return;
       }
       flow.hasReturn = true;
