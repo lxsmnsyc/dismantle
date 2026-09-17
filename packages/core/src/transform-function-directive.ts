@@ -1,6 +1,6 @@
 import type * as babel from '@babel/core';
 import * as t from '@babel/types';
-import { splitFunction } from './split-function';
+import { splitFunction } from './split/function';
 import type { FunctionDirectiveDefinition, StateContext } from './types';
 import {
   cleanDirectives,

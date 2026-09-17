@@ -41,10 +41,10 @@ export async function compile(
       count: 0,
     },
     options,
-    bindings: new Map(),
     blocks: {
       hash: xxHash32(id).toString(16),
       count: 0,
+      names: new Map(),
     },
     onVirtualFile(current, content, mode) {
       const filePath = path.join(parsedPath.dir, current);

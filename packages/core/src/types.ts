@@ -5,70 +5,110 @@ import type * as t from '@babel/types';
 
 export interface NamedImportDefinition {
   kind: 'named';
+  /**
+   * The exported name to import.
+   */
   name: string;
+  /**
+   * The module to import from.
+   */
   source: string;
 }
 
 export interface DefaultImportDefinition {
   kind: 'default';
+  /**
+   * The module to import from.
+   */
   source: string;
 }
 
 export type ImportDefinition = DefaultImportDefinition | NamedImportDefinition;
 
-export interface BlockDirectiveDefinition {
-  type: 'block-directive';
-  isomorphic?: boolean;
-  pure?: boolean;
-  // Directive to look for
-  directive: string;
-  // Wrapper for the entry
+export interface BaseDefinition {
+  /**
+   * Called in entry files to register the split code.
+   * Receives the ID, and the wrapped root file if it was emitted.
+   */
   target: ImportDefinition;
+  /**
+   * Emits the root file in both modes, so the split code exists on both
+   * sides. `target` receives the wrapped root file in `client` mode too.
+   *
+   * Defaults to `false`.
+   */
+  isomorphic?: boolean;
+  /**
+   * Disables value capturing. Imports, functions and classes still work.
+   *
+   * Defaults to `false`.
+   */
+  pure?: boolean;
+  /**
+   * Added in front of every generated ID.
+   */
   idPrefix?: string;
 }
 
-export interface FunctionDirectiveDefinition {
-  type: 'function-directive';
-  isomorphic?: boolean;
-  pure?: boolean;
+export interface BlockDirectiveDefinition extends BaseDefinition {
+  type: 'block-directive';
+  /**
+   * The directive to look for, e.g. `'use server'`.
+   */
   directive: string;
-  // Wrapper for the entry
-  target: ImportDefinition;
-  // Wrapper for the function replacement
+}
+
+export interface FunctionDirectiveDefinition extends BaseDefinition {
+  type: 'function-directive';
+  /**
+   * The directive to look for, e.g. `'use server'`.
+   */
+  directive: string;
+  /**
+   * Called in place of the function with the ID and an async factory
+   * that returns the function to call.
+   */
   handle: ImportDefinition;
-  idPrefix?: string;
 }
 
 export type DirectiveDefinition =
   | BlockDirectiveDefinition
   | FunctionDirectiveDefinition;
 
-export interface FunctionCallDefinition {
+export interface FunctionCallDefinition extends BaseDefinition {
   type: 'function-call';
-  isomorphic?: boolean;
-  pure?: boolean;
-  // The wrapper function to look for
+  /**
+   * The imported function whose argument gets split, e.g. `server$`.
+   */
   source: ImportDefinition;
-  // Wrapper for the entry
-  target: ImportDefinition;
-  // Wrapper for the function replacement
+  /**
+   * Called in place of the call with the ID and an async factory
+   * that returns the function to call.
+   */
   handle: ImportDefinition;
-  idPrefix?: string;
 }
 
 export interface Options {
+  /**
+   * Added to the names of generated files,
+   * e.g. `./file.ts?mode=server&<key>=0.ts`.
+   */
   key: string;
+  /**
+   * The module the output imports runtime helpers from.
+   * It must re-export `dismantle/runtime`.
+   */
   runtime: string;
+  /**
+   * `server` emits root files. `client` only emits entry files.
+   */
   mode: 'server' | 'client';
+  /**
+   * `development` names IDs after the code that contains the split code.
+   * `production` uses indexes.
+   */
   env: 'production' | 'development';
   definitions: (DirectiveDefinition | FunctionCallDefinition)[];
-}
-
-export interface ModuleDefinition {
-  source: string;
-  kind: 'default' | 'named' | 'namespace';
-  local: string;
-  imported?: string;
 }
 
 export interface CodeOutput {
@@ -86,8 +126,8 @@ export interface StateContext {
   blocks: {
     hash: string;
     count: number;
+    names: Map<string, number>;
   };
-  bindings: Map<string, ModuleDefinition>;
   options: Options;
   onVirtualFile: (
     path: string,

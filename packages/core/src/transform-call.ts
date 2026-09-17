@@ -1,6 +1,6 @@
 import type * as babel from '@babel/core';
 import * as t from '@babel/types';
-import { splitFunction } from './split-function';
+import { splitFunction } from './split/function';
 import type { FunctionCallDefinition, StateContext } from './types';
 import { getImportIdentifier } from './utils/get-import-identifier';
 import { isValidFunction } from './utils/is-valid-function';
