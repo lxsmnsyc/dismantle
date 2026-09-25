@@ -6,9 +6,8 @@ packages:
   - use-worker-directive/*
   - use-worker-directive/examples/*
 
-onlyBuiltDependencies:
-  - '@sveltejs/kit'
-  - esbuild
-  - oxfmt
-  - oxlint
-  - svelte-preprocess
+allowBuilds:
+  '@sveltejs/kit': true
+  esbuild: true
+  sharp: true
+  svelte-preprocess: true
