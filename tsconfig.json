@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "types": ["node"],
+    "strict": true,
+    "noEmit": true,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true
+  },
+  "include": ["scripts", "playground/index.ts", "oxlint.config.ts", "oxfmt.config.ts"]
+}

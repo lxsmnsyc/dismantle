@@ -1,4 +1,4 @@
-import { compile, type Options } from 'use-worker-directive/compiler';
+import { type Options, compile } from 'use-worker-directive/compiler';
 import type { FilterPattern, Plugin } from 'vite';
 import { createFilter } from 'vite';
 import { createManifest, mergeManifestRecord } from './manifest';
@@ -8,8 +8,7 @@ export interface UseWorkerDirectivePluginFilter {
   exclude?: FilterPattern;
 }
 
-export interface UseWorkerDirectivePluginOptions
-  extends Omit<Options, 'mode' | 'env'> {
+export interface UseWorkerDirectivePluginOptions extends Omit<Options, 'mode' | 'env'> {
   filter?: UseWorkerDirectivePluginFilter;
 }
 
@@ -31,7 +30,7 @@ $$worker(new CustomWorker());`;
 interface DeferredPromise<T> {
   reference: Promise<T>;
   resolve: (value: T) => void;
-  reject: (value: any) => void;
+  reject: (value: unknown) => void;
 }
 
 function createDeferredPromise<T>(): DeferredPromise<T> {
@@ -57,7 +56,7 @@ class Debouncer<T> {
 
   private timeout: ReturnType<typeof setTimeout> | undefined;
 
-  constructor(private source: () => T) {
+  constructor(private readonly source: () => T) {
     this.promise = createDeferredPromise();
     this.defer();
   }
@@ -73,12 +72,10 @@ class Debouncer<T> {
   }
 }
 
-const useWorkerDirectivePlugin = (
-  options: UseWorkerDirectivePluginOptions,
-): Plugin[] => {
+const useWorkerDirectivePlugin = (options: UseWorkerDirectivePluginOptions = {}): Plugin[] => {
   const filter = createFilter(
-    options.filter?.include || DEFAULT_INCLUDE,
-    options.filter?.exclude || DEFAULT_EXCLUDE,
+    options.filter?.include ?? DEFAULT_INCLUDE,
+    options.filter?.exclude ?? DEFAULT_EXCLUDE,
   );
 
   const env: Options['env'] = 'production';
@@ -96,11 +93,11 @@ const useWorkerDirectivePlugin = (
         }
         return null;
       },
-      load(id) {
+      load(id): Promise<string> | null {
         if (id.startsWith(SERVER_VIRTUAL_MODULE)) {
           const current = new Debouncer(() => {
             const result = [...manifest.server.entries]
-              .map(entry => `import "${entry}";`)
+              .map((entry) => `import "${entry}";`)
               .join('\n');
 
             return `${result}\n${FOOTER_SCRIPT}`;
@@ -149,14 +146,14 @@ const useWorkerDirectivePlugin = (
         const clientResult = manifest.client.files.get(id);
         if (clientResult) {
           return {
-            code: clientResult.code || '',
+            code: clientResult.code ?? '',
             map: clientResult.map,
           };
         }
         const serverResult = manifest.server.files.get(id);
         if (serverResult) {
           return {
-            code: serverResult.code || '',
+            code: serverResult.code ?? '',
             map: serverResult.map,
           };
         }
@@ -199,7 +196,7 @@ const useWorkerDirectivePlugin = (
         });
 
         return {
-          code: clientResult.code || '',
+          code: clientResult.code ?? '',
           map: clientResult.map,
         };
       },

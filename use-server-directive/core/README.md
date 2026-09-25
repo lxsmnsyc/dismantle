@@ -1,8 +1,10 @@
 # `use-server-directive`
 
-> Universal `use server` functions
+> Universal `'use server'` functions
 
-[![NPM](https://img.shields.io/npm/v/use-server-directive.svg)](https://www.npmjs.com/package/use-server-directive) [![JavaScript Style Guide](https://badgen.net/badge/code%20style/airbnb/ff5a5f?icon=airbnb)](https://github.com/airbnb/javascript)
+[![NPM](https://img.shields.io/npm/v/use-server-directive.svg)](https://www.npmjs.com/package/use-server-directive)
+
+Mark a function or block with `'use server'`, and it runs on the server when called from the client. Built on [`dismantle`](https://github.com/lxsmnsyc/dismantle/tree/main/packages/core).
 
 ## Install
 
@@ -18,114 +20,145 @@ yarn add use-server-directive
 pnpm add use-server-directive
 ```
 
-## Features
+## Setup
+
+1. Add a bundler integration. See [Integrations](#integrations).
+2. Handle server function requests in your server.
+
+   ```js
+   import { handleRequest } from 'use-server-directive/server';
+
+   export async function handle(request) {
+     const response = await handleRequest(request);
+     if (response) {
+       return response;
+     }
+     // Handle other requests
+   }
+   ```
+
+   `handleRequest` returns `undefined` for requests that are not server function calls.
+
+3. Import `use-server-directive/preload` in a server module that loads when the server starts.
+
+   ```js
+   import 'use-server-directive/preload';
+   ```
+
+   This registers every server function right away. Without it, a function that is only loaded through a dynamic import may not be registered when the client calls it.
+
+## Usage
 
 ### Server functions
 
-Like the original `"use server"` directive, the compiler supports functions.
-
 ```js
-async function doStuff(x, y) {
-  "use server";
-  await foo(x);
-  await bar(y);
+async function addTodo(title) {
+  'use server';
+  await db.insert(title);
 }
-// also works for arrow functions
 
-const doStuff = async (x, y) => {
-  "use server";
-  await foo(x);
-  await bar(y);
+const removeTodo = async (id) => {
+  'use server';
+  await db.remove(id);
 };
 ```
 
-The compiler also supports async generators
+Async generators work too. Each yielded value is streamed to the client.
 
 ```js
-
-async function* doStuff(x, y) {
-  "use server";
-  yield foo(x);
-  yield bar(y);
-}
-```
-
-> **NOTE**
-> Server functions are only valid for async functions.
-
-### Server blocks
-
-The original `"use server"` is limited to functions, but what if you could mark block statements with the same directives?
-
-```js
-if (someCond()) {
-  'use stuff';
-  await doStuff();
-}
-```
-
-`use-server-directive` supports server blocks in almost all statements that supports it:
-
-- `if-else`
-- `try-catch-finally`
-- `for`
-- `for-in`
-- `for-of`
-- `for await`
-- `while`
-- `do-while`
-- labeled statements
-
-Server blocks also supports `break`, `continue`, `return` and `throw` statements, as well as `yield` expressions and delegations.
-
-```js
-for (const item of items) {
+async function* watchTodos() {
   'use server';
-  await processItem(item);
-}
-```
-
-> **NOTE**
-> Server blocks are only supported within async functions and at top-level scope (since modules now support top-level `await`)
-
-### Closure extraction
-
-`use-server-directive` supports closure extraction
-
-```js
-async function foo() {
-  const prefix = 'Message: ';
-
-  async function postMessage(message) {
-    'use server';
-    await addMessage(prefix + message);
+  for await (const change of db.changes()) {
+    yield change;
   }
 }
 ```
 
-### Streaming server functions
+### Server blocks
 
-If a server function returns a value with a `Promise`, `ReadableStream` or `AsyncIterable`, those instances' values are going to be streamed through the response.
+A block can also run on the server. It works in `if`, `try`, `catch`, `finally`, loops, labeled statements and plain blocks.
 
 ```js
-async function getMessage() {
+async function saveAll(items) {
+  for (const item of items) {
+    'use server';
+    if (item.skip) {
+      continue;
+    }
+    await db.insert(item);
+  }
+}
+```
+
+`return`, `break`, `continue`, `throw` and `yield` behave like they do in the original code.
+
+Directives only work in `async` functions and at the top level of a module. They are ignored anywhere else.
+
+### Closures
+
+Server code can use variables from the code around it.
+
+```js
+async function postMessage(user, text) {
+  let count = 0;
+  const format = (value) => `${user.name}: ${value}`;
+
+  async function send() {
+    'use server';
+    await db.insert(format(text));
+    count = await db.count();
+  }
+
+  await send();
+  return count;
+}
+```
+
+- `user` and `text` are sent with the call.
+- `format` is copied to the server, not sent.
+- `count` is sent, and the new value is assigned back after the call.
+
+Only reassignments are synced back. Changes inside an object, like `array.push(item)`, are not.
+
+### Streaming and serialization
+
+Values are serialized with [seroval](https://github.com/lxsmnsyc/seroval). See the [supported types](https://github.com/lxsmnsyc/seroval/blob/main/docs/compatibility.md#supported-types).
+
+Promises, `ReadableStream`s and async iterables inside the result are streamed. The client gets the result right away, and their values arrive later.
+
+```js
+async function getProfile(id) {
   'use server';
   return {
-    // `getAsyncData` returns a Promise
-    // On the client-side, this object is going to
-    // be received immedatiely, but the value
-    // to which the Promise resolves into
-    // is going to be streamed after.
-    message: getAsyncData(),
+    name: await db.getName(id),
+    // Resolves on the client once the server finishes loading it
+    posts: db.getPosts(id),
   };
 }
 ```
 
-### Advanced serialization
+### Request interceptors
 
-`use-server-directive` supports a wide range of data types, you can check [the compatibility table here](https://github.com/lxsmnsyc/seroval/blob/main/docs/compatibility.md#supported-types)
+Change requests before the client sends them, for example to add headers.
 
-### Customizable directive
+```js
+import { interceptRequest } from 'use-server-directive/client';
+
+interceptRequest((request) => {
+  request.headers.set('Authorization', `Bearer ${getToken()}`);
+  return request;
+});
+```
+
+## Options
+
+The compiler and the integrations accept these options.
+
+| Option | Default | Description |
+| --- | --- | --- |
+| `directive` | `'use server'` | The directive to look for. |
+| `prefix` | `'__server'` | The URL path prefix of server functions, like `/__server/<id>`. |
+| `pure` | `false` | Disables closures. Imports and local functions still work. |
 
 ## Integrations
 
@@ -135,16 +168,6 @@ async function getMessage() {
 
 - [Astro](https://github.com/lxsmnsyc/dismantle/tree/main/use-server-directive/examples/astro)
 - [SvelteKit](https://github.com/lxsmnsyc/dismantle/tree/main/use-server-directive/examples/sveltekit)
-
-## Preloading
-
-There are instances where a server function is only imported through a dynamic import, which causes unspecified registration timing, wherein the function might be available on the client but not on the server.
-
-To allow registration of server functions immediately, you can import `use-server-directive/preload` on any server entrypoints that will load immediately when the server runs.
-
-```js
-import 'use-server-directive/preload';
-```
 
 ## Sponsors
 

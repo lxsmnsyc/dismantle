@@ -1,9 +1,5 @@
 import type { SerovalJSON } from 'seroval';
-import {
-  crossSerializeStream,
-  fromJSON,
-  getCrossReferenceHeader,
-} from 'seroval';
+import { crossSerializeStream, fromJSON, getCrossReferenceHeader } from 'seroval';
 import {
   BlobPlugin,
   CustomEventPlugin,
@@ -19,15 +15,12 @@ import {
   URLSearchParamsPlugin,
 } from 'seroval-plugins/web';
 import {
+  type ServerHandler,
   USE_SERVER_DIRECTIVE_ID_HEADER,
   USE_SERVER_DIRECTIVE_INDEX_HEADER,
-  type ServerHandler,
 } from '../shared/utils';
 
-type HandlerRegistration = [
-  id: string,
-  callback: ServerHandler<unknown[], unknown>,
-];
+type HandlerRegistration = [id: string, callback: ServerHandler<unknown[], unknown>];
 
 const REGISTRATIONS = new Map<string, HandlerRegistration>();
 
@@ -44,7 +37,7 @@ function createChunk(data: string): Uint8Array {
   return chunk;
 }
 
-function serializeToStream<T>(instance: string, value: T): ReadableStream {
+function serializeToStream(instance: string, value: unknown): ReadableStream {
   return new ReadableStream({
     start(controller): void {
       crossSerializeStream(value, {
@@ -63,9 +56,7 @@ function serializeToStream<T>(instance: string, value: T): ReadableStream {
         ],
         onSerialize(data, initial) {
           controller.enqueue(
-            createChunk(
-              initial ? `(${getCrossReferenceHeader(instance)},${data})` : data,
-            ),
+            createChunk(initial ? `(${getCrossReferenceHeader(instance)},${data})` : data),
           );
         },
         onDone() {
@@ -79,9 +70,11 @@ function serializeToStream<T>(instance: string, value: T): ReadableStream {
   });
 }
 
-export async function handleRequest(
-  request: Request,
-): Promise<Response | undefined> {
+function isSerovalJSON(value: unknown): value is SerovalJSON {
+  return typeof value === 'object' && value !== null && 't' in value;
+}
+
+export async function handleRequest(request: Request): Promise<Response | undefined> {
   const url = new URL(request.url);
   const registration = REGISTRATIONS.get(url.pathname);
   const instance = request.headers.get(USE_SERVER_DIRECTIVE_INDEX_HEADER);
@@ -90,22 +83,23 @@ export async function handleRequest(
     const [id, callback] = registration;
     if (id !== target) {
       return new Response(
-        serializeToStream(
-          instance,
-          new Error(`Invalid request for ${instance}`),
-        ),
+        serializeToStream(instance, new Error(`Invalid request for ${instance}`)),
         {
           headers: {
             'Content-Type': 'text/javascript',
             [USE_SERVER_DIRECTIVE_INDEX_HEADER]: instance,
-            [USE_SERVER_DIRECTIVE_ID_HEADER]: target || '',
+            [USE_SERVER_DIRECTIVE_ID_HEADER]: target ?? '',
           },
           status: 500,
         },
       );
     }
     try {
-      const args = fromJSON<unknown[]>((await request.json()) as SerovalJSON, {
+      const payload: unknown = await request.json();
+      if (!isSerovalJSON(payload)) {
+        throw new Error(`Invalid request body for ${id}`);
+      }
+      const args = fromJSON<unknown[]>(payload, {
         plugins: [
           BlobPlugin,
           CustomEventPlugin,

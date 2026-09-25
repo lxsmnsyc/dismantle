@@ -3,7 +3,7 @@ interface ImportMeta {
 }
 
 interface ImportMetaEnv {
-  [key: string]: any;
+  [key: string]: unknown;
   MODE: string;
   DEV: boolean;
   PROD: boolean;

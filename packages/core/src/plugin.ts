@@ -21,9 +21,7 @@ const FUNCTION_BUBBLE: babel.Visitor<State> = {
 function treeshake(path: babel.NodePath, name: string): void {
   const binding = path.scope.getBinding(name);
 
-  if (
-    !(binding && binding.references + binding.constantViolations.length > 0)
-  ) {
+  if (!(binding && binding.references + binding.constantViolations.length > 0)) {
     if (isPathValid(path.parentPath, t.isImportDeclaration)) {
       const parent = path.parentPath;
       if (parent.node.specifiers.length === 1) {

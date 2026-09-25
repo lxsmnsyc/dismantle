@@ -2,7 +2,7 @@ import type { JSX } from 'solid-js';
 import { Suspense, createResource, createSignal } from 'solid-js';
 
 async function sleep<T>(value: T, ms: number): Promise<T> {
-  return new Promise<T>(res => {
+  return new Promise<T>((res) => {
     setTimeout(res, ms, value);
   });
 }
@@ -23,10 +23,10 @@ export function App(): JSX.Element {
     };
   }
 
-  const [data] = createResource(state, async value => serverCount(value));
+  const [data] = createResource(state, async (value) => serverCount(value));
 
   function increment(): void {
-    setState(c => c + 1);
+    setState((c) => c + 1);
   }
 
   return (

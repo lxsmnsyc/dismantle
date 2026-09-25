@@ -1,21 +1,28 @@
 {
-	"name": "root",
-	"private": true,
-	"workspaces": [
-		"packages/*",
-		"examples/*",
-		"playground",
-		"use-server-directive/*",
-		"use-worker-directive/*"
-	],
-	"devDependencies": {
-		"@biomejs/biome": "^2.3.11",
-    "@changesets/cli": "^2.29.7",
-		"typescript": "^5.9.3"
-	},
+  "name": "root",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "cs:ver": "changeset version",
+    "build": "pnpm --filter \"./packages/*\" --filter \"./use-*-directive/core\" --filter \"./use-*-directive/vite\" run build",
+    "cs:add": "changeset add",
     "cs:pub": "changeset publish",
-    "cs:add": "changeset add"
-  }
+    "cs:ver": "changeset version && pnpm install --lockfile-only",
+    "fmt": "oxfmt .",
+    "fmt:check": "oxfmt --check .",
+    "lint": "oxlint --type-aware",
+    "lint:fix": "oxlint --type-aware --fix",
+    "release": "node scripts/publish.ts",
+    "test": "pnpm --filter \"./packages/*\" --filter \"./use-*-directive/core\" run test",
+    "type-check": "tsc --noEmit && pnpm --filter \"./packages/*\" --filter \"./use-*-directive/core\" --filter \"./use-*-directive/vite\" run type-check"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^3.0.3",
+    "@lxsmnsyc/oxlint-config": "^0.1.3",
+    "@types/node": "^26.6.1",
+    "oxfmt": "^0.68.0",
+    "oxlint": "^1.83.0",
+    "oxlint-tsgolint": "^7.0.2001",
+    "typescript": "^7.0.2"
+  },
+  "packageManager": "pnpm@10.34.4"
 }

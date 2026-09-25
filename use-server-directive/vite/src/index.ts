@@ -9,8 +9,7 @@ export interface UseServerDirectivePluginFilter {
   exclude?: FilterPattern;
 }
 
-export interface UseServerDirectivePluginOptions
-  extends Omit<Options, 'mode' | 'env'> {
+export interface UseServerDirectivePluginOptions extends Omit<Options, 'mode' | 'env'> {
   filter?: UseServerDirectivePluginFilter;
 }
 
@@ -22,7 +21,7 @@ const VIRTUAL_MODULE = 'use-server-directive/preload';
 interface DeferredPromise<T> {
   reference: Promise<T>;
   resolve: (value: T) => void;
-  reject: (value: any) => void;
+  reject: (value: unknown) => void;
 }
 
 function createDeferredPromise<T>(): DeferredPromise<T> {
@@ -48,7 +47,7 @@ class Debouncer<T> {
 
   private timeout: ReturnType<typeof setTimeout> | undefined;
 
-  constructor(private source: () => T) {
+  constructor(private readonly source: () => T) {
     this.promise = createDeferredPromise();
     this.defer();
   }
@@ -84,12 +83,10 @@ function invalidateModules(
   }
 }
 
-const useServerDirectivePlugin = (
-  options: UseServerDirectivePluginOptions,
-): Plugin[] => {
+const useServerDirectivePlugin = (options: UseServerDirectivePluginOptions = {}): Plugin[] => {
   const filter = createFilter(
-    options.filter?.include || DEFAULT_INCLUDE,
-    options.filter?.exclude || DEFAULT_EXCLUDE,
+    options.filter?.include ?? DEFAULT_INCLUDE,
+    options.filter?.exclude ?? DEFAULT_EXCLUDE,
   );
 
   let env: Options['env'];
@@ -108,7 +105,7 @@ const useServerDirectivePlugin = (
       name: 'use-server-directive/setup',
       enforce: 'pre',
       configResolved(config) {
-        env = config.mode !== 'production' ? 'development' : 'production';
+        env = config.mode === 'production' ? 'production' : 'development';
       },
       configureServer(server) {
         currentServer = server;
@@ -123,13 +120,11 @@ const useServerDirectivePlugin = (
         }
         return null;
       },
-      load(id, opts) {
+      load(id, opts): Promise<string> | null {
         const mode = opts?.ssr ? 'server' : 'client';
         if (id === VIRTUAL_MODULE) {
           const current = new Debouncer(() =>
-            [...manifest[mode].entries]
-              .map(entry => `import "${entry}";`)
-              .join('\n'),
+            [...manifest[mode].entries].map((entry) => `import "${entry}";`).join('\n'),
           );
           preload[mode] = current;
           return current.promise.reference;
@@ -143,7 +138,7 @@ const useServerDirectivePlugin = (
       async resolveId(source, importer, opts) {
         if (importer) {
           const result = await this.resolve(source, importer, opts);
-          const mode = opts?.ssr ? 'server' : 'client';
+          const mode = opts.ssr ? 'server' : 'client';
           if (result && manifest[mode].files.has(result.id)) {
             return result;
           }
@@ -155,7 +150,7 @@ const useServerDirectivePlugin = (
         const result = manifest[mode].files.get(id);
         if (result) {
           return {
-            code: result.code || '',
+            code: result.code ?? '',
             map: result.map,
           };
         }
@@ -188,7 +183,7 @@ const useServerDirectivePlugin = (
         );
 
         return {
-          code: result.code || '',
+          code: result.code ?? '',
           map: result.map,
         };
       },

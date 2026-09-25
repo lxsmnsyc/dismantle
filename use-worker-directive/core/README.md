@@ -1,8 +1,10 @@
 # `use-worker-directive`
 
-> Universal `use worker` functions
+> Universal `'use worker'` functions
 
-[![NPM](https://img.shields.io/npm/v/use-worker-directive.svg)](https://www.npmjs.com/package/use-worker-directive) [![JavaScript Style Guide](https://badgen.net/badge/code%20style/airbnb/ff5a5f?icon=airbnb)](https://github.com/airbnb/javascript)
+[![NPM](https://img.shields.io/npm/v/use-worker-directive.svg)](https://www.npmjs.com/package/use-worker-directive)
+
+Mark a function or block with `'use worker'`, and it runs in a Web Worker. Built on [`dismantle`](https://github.com/lxsmnsyc/dismantle/tree/main/packages/core).
 
 ## Install
 
@@ -18,118 +20,116 @@ yarn add use-worker-directive
 pnpm add use-worker-directive
 ```
 
-## Features
+## Setup
+
+1. Add a bundler integration. See [Integrations](#integrations).
+2. Import `use-worker-directive/setup` in your client entry.
+
+   ```js
+   import 'use-worker-directive/setup';
+   ```
+
+   This starts the worker and connects it to your worker functions.
+
+## Usage
 
 ### Worker functions
 
-Like the original `"use worker"` directive, the compiler supports functions.
-
 ```js
-async function doStuff(x, y) {
-  "use worker";
-  await foo(x);
-  await bar(y);
+async function hash(text) {
+  'use worker';
+  return expensiveHash(text);
 }
-// also works for arrow functions
 
-const doStuff = async (x, y) => {
-  "use worker";
-  await foo(x);
-  await bar(y);
+const resize = async (image, width) => {
+  'use worker';
+  return resizeImage(image, width);
 };
 ```
 
-The compiler also supports async generators
+Async generators work too. Each yielded value is streamed back.
 
 ```js
-
-async function* doStuff(x, y) {
-  "use worker";
-  yield foo(x);
-  yield bar(y);
-}
-```
-
-> **NOTE**
-> Worker functions are only valid for async functions.
-
-### Worker blocks
-
-The original `"use worker"` is limited to functions, but what if you could mark block statements with the same directives?
-
-```js
-if (someCond()) {
-  'use stuff';
-  await doStuff();
-}
-```
-
-`use-worker-directive` supports worker blocks in almost all statements that supports it:
-
-- `if-else`
-- `try-catch-finally`
-- `for`
-- `for-in`
-- `for-of`
-- `for await`
-- `while`
-- `do-while`
-- labeled statements
-
-Worker blocks also supports `break`, `continue`, `return` and `throw` statements, as well as `yield` expressions and delegations.
-
-```js
-for (const item of items) {
+async function* countPrimes(limit) {
   'use worker';
-  await processItem(item);
-}
-```
-
-> **NOTE**
-> Worker blocks are only supported within async functions and at top-level scope (since modules now support top-level `await`)
-
-### Closure extraction
-
-`use-worker-directive` supports closure extraction
-
-```js
-async function foo() {
-  const prefix = 'Message: ';
-
-  async function postMessage(message) {
-    'use worker';
-    await addMessage(prefix + message);
+  for (let n = 2; n < limit; n++) {
+    if (isPrime(n)) {
+      yield n;
+    }
   }
 }
 ```
 
-### Streaming worker functions
+### Worker blocks
 
-If a worker function returns a value with a `Promise`, `ReadableStream` or `AsyncIterable`, those instances' values are going to be streamed through the response.
+A block can also run in the worker. It works in `if`, `try`, `catch`, `finally`, loops, labeled statements and plain blocks.
 
 ```js
-async function getMessage() {
-  'use worker';
-  return {
-    // `getAsyncData` returns a Promise
-    // On the client-side, this object is going to
-    // be received immedatiely, but the value
-    // to which the Promise resolves into
-    // is going to be streamed after.
-    message: getAsyncData(),
-  };
+async function processAll(items) {
+  for (const item of items) {
+    'use worker';
+    if (item.skip) {
+      continue;
+    }
+    await process(item);
+  }
 }
 ```
 
-### Advanced serialization
+`return`, `break`, `continue`, `throw` and `yield` behave like they do in the original code.
 
-`use-worker-directive` supports a wide range of data types, you can check [the compatibility table here](https://github.com/lxsmnsyc/seroval/blob/main/docs/compatibility.md#supported-types)
+Directives only work in `async` functions and at the top level of a module. They are ignored anywhere else.
 
-### Customizable directive
+### Closures
+
+Worker code can use variables from the code around it.
+
+```js
+async function summarize(items) {
+  let total = 0;
+  const weight = (item) => item.size * 2;
+
+  async function run() {
+    'use worker';
+    for (const item of items) {
+      total += weight(item);
+    }
+  }
+
+  await run();
+  return total;
+}
+```
+
+- `items` is sent with the call.
+- `weight` is copied to the worker, not sent.
+- `total` is sent, and the new value is assigned back after the call.
+
+Only reassignments are synced back. Changes inside an object, like `array.push(item)`, are not.
+
+### Streaming and serialization
+
+Values are serialized with [seroval](https://github.com/lxsmnsyc/seroval). See the [supported types](https://github.com/lxsmnsyc/seroval/blob/main/docs/compatibility.md#supported-types).
+
+Promises, `ReadableStream`s and async iterables inside the result are streamed. The caller gets the result right away, and their values arrive later.
+
+## Options
+
+The compiler and the integrations accept these options.
+
+| Option | Default | Description |
+| --- | --- | --- |
+| `directive` | `'use worker'` | The directive to look for. |
+| `prefix` | `'__worker'` | Added in front of every worker function ID. |
+| `pure` | `false` | Disables closures. Imports and local functions still work. |
 
 ## Integrations
 
-- [Vite](https://github.com/lxsmnsyc/dismantle/tree/main/use-worker-directive/unplugin)
+- [Vite](https://github.com/lxsmnsyc/dismantle/tree/main/use-worker-directive/vite)
+
+## Examples
+
+- [Vite](https://github.com/lxsmnsyc/dismantle/tree/main/use-worker-directive/examples/vite)
 
 ## Sponsors
 

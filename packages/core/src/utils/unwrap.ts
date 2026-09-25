@@ -3,12 +3,18 @@ import type * as t from '@babel/types';
 
 type TypeFilter<V extends t.Node> = (node: t.Node) => node is V;
 
+function isNode(value: unknown): value is t.Node {
+  return typeof value === 'object' && value !== null && 'type' in value;
+}
+
 export function isPathValid<V extends t.Node>(
   path: unknown,
   key: TypeFilter<V>,
 ): path is babel.NodePath<V> {
-  const node = (path as babel.NodePath).node;
-  return node ? key(node) : false;
+  if (typeof path !== 'object' || path === null || !('node' in path)) {
+    return false;
+  }
+  return isNode(path.node) && key(path.node);
 }
 
 export type NestedExpression =
@@ -35,14 +41,9 @@ export function isNestedExpression(node: t.Node): node is NestedExpression {
   }
 }
 
-type TypeCheck<K> = K extends TypeFilter<infer U> ? U : never;
-
-export function unwrapNode<K extends (value: t.Node) => boolean>(
-  node: t.Node,
-  key: K,
-): TypeCheck<K> | undefined {
+export function unwrapNode<V extends t.Node>(node: t.Node, key: TypeFilter<V>): V | undefined {
   if (key(node)) {
-    return node as TypeCheck<K>;
+    return node;
   }
   if (isNestedExpression(node)) {
     return unwrapNode(node.expression, key);

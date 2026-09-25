@@ -13,10 +13,7 @@ import {
   URLPlugin,
   URLSearchParamsPlugin,
 } from 'seroval-plugins/web';
-import {
-  USE_SERVER_DIRECTIVE_ID_HEADER,
-  USE_SERVER_DIRECTIVE_INDEX_HEADER,
-} from '../shared/utils';
+import { USE_SERVER_DIRECTIVE_ID_HEADER, USE_SERVER_DIRECTIVE_INDEX_HEADER } from '../shared/utils';
 
 export type MaybePromise<T> = T | Promise<T>;
 
@@ -41,7 +38,7 @@ async function serverHandler(id: string, init: RequestInit): Promise<Response> {
 declare const $R: Record<string, unknown>;
 
 class SerovalChunkReader {
-  private reader: ReadableStreamDefaultReader<Uint8Array>;
+  private readonly reader: ReadableStreamDefaultReader<Uint8Array>;
   private buffer = new Uint8Array(0);
   private done = false;
   constructor(stream: ReadableStream<Uint8Array>) {
@@ -93,9 +90,7 @@ class SerovalChunkReader {
       await this.readChunk();
     }
     // Extract the exact chunk as defined by the byte header
-    const partial = new TextDecoder().decode(
-      this.buffer.subarray(12, 12 + bytes),
-    );
+    const partial = new TextDecoder().decode(this.buffer.subarray(12, 12 + bytes));
     // The rest goes to the buffer
     this.buffer = this.buffer.subarray(12 + bytes);
 
@@ -107,19 +102,14 @@ class SerovalChunkReader {
   }
 
   async drain(): Promise<void> {
-    while (true) {
-      const result = await this.next();
-      if (result.done) {
-        break;
-      }
+    let result = await this.next();
+    while (!result.done) {
+      result = await this.next();
     }
   }
 }
 
-async function deserializeResponse<T>(
-  id: string,
-  response: Response,
-): Promise<T> {
+async function deserializeResponse(id: string, response: Response): Promise<unknown> {
   const instance = response.headers.get(USE_SERVER_DIRECTIVE_INDEX_HEADER);
   const target = response.headers.get(USE_SERVER_DIRECTIVE_ID_HEADER);
   if (!instance || target !== id) {
@@ -135,16 +125,16 @@ async function deserializeResponse<T>(
   if (!result.done) {
     reader.drain().then(
       () => {
-        delete $R[instance];
+        Reflect.deleteProperty($R, instance);
       },
       () => {
-        delete $R[instance];
+        Reflect.deleteProperty($R, instance);
       },
     );
   }
 
   if (response.ok) {
-    return result.value as T;
+    return result.value;
   }
   if (import.meta.env.DEV) {
     throw result.value;
@@ -152,9 +142,7 @@ async function deserializeResponse<T>(
   throw new Error(`function "${id}" threw an unhandled server-side error.`);
 }
 
-async function serializeFunctionBody<T extends unknown[]>(
-  body: T,
-): Promise<string> {
+async function serializeFunctionBody(body: unknown[]): Promise<string> {
   return JSON.stringify(
     await toJSONAsync(body, {
       plugins: [
@@ -177,10 +165,7 @@ async function serializeFunctionBody<T extends unknown[]>(
 
 let INSTANCE = 0;
 
-async function handler<T extends unknown[], R>(
-  id: string,
-  args: T,
-): Promise<R> {
+async function handler(id: string, args: unknown[]): Promise<unknown> {
   return deserializeResponse(
     id,
     await serverHandler(id, {
@@ -194,8 +179,6 @@ async function handler<T extends unknown[], R>(
   );
 }
 
-export function $$server<T extends unknown[], R>(
-  id: string,
-): (...args: T) => Promise<R> {
-  return (...args: T): Promise<R> => handler(id, args);
+export function $$server(id: string): (...args: unknown[]) => Promise<unknown> {
+  return async (...args) => handler(id, args);
 }

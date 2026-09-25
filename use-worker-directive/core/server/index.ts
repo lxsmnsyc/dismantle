@@ -1,14 +1,9 @@
 import { deserialize } from 'seroval';
-import { sendWorkerData, type SerializedWorkerData } from '../shared/data';
+import { type SerializedWorkerData, sendWorkerData } from '../shared/data';
 
-type ServerHandler<Args extends unknown[], Return> = (
-  ...args: Args
-) => Promise<Return>;
+type ServerHandler<Args extends unknown[], Return> = (...args: Args) => Promise<Return>;
 
-type HandlerRegistration = [
-  id: string,
-  callback: ServerHandler<unknown[], unknown>,
-];
+type HandlerRegistration = [id: string, callback: ServerHandler<unknown[], unknown>];
 
 const REGISTRATIONS = new Map<string, HandlerRegistration>();
 
@@ -23,6 +18,10 @@ export function $$server(
 
 declare const $R: Record<string, unknown>;
 
+function isArgs(value: unknown): value is unknown[] {
+  return Array.isArray(value);
+}
+
 export function $$setup(): void {
   self.onmessage = (event: MessageEvent<SerializedWorkerData>) => {
     if (event.data.type === 'next') {
@@ -36,7 +35,7 @@ export function $$setup(): void {
               self,
               event.data.id,
               event.data.instance,
-              callback.apply(null, result as unknown[]),
+              callback(...(isArgs(result) ? result : [])),
             );
             return;
           }
@@ -44,7 +43,7 @@ export function $$setup(): void {
         throw new Error(`Worker function "${event.data.id}" is not found.`);
       }
     } else {
-      delete $R[event.data.instance];
+      Reflect.deleteProperty($R, event.data.instance);
     }
   };
 }

@@ -1,14 +1,14 @@
-# vite-plugin-use-worker-directive
+# `vite-plugin-use-worker-directive`
 
 > Vite plugin for [`use-worker-directive`](https://github.com/lxsmnsyc/dismantle/tree/main/use-worker-directive/core)
 
-[![NPM](https://img.shields.io/npm/v/vite-plugin-use-worker-directive.svg)](https://www.npmjs.com/package/vite-plugin-use-worker-directive) [![JavaScript Style Guide](https://badgen.net/badge/code%20style/airbnb/ff5a5f?icon=airbnb)](https://github.com/airbnb/javascript)
+[![NPM](https://img.shields.io/npm/v/vite-plugin-use-worker-directive.svg)](https://www.npmjs.com/package/vite-plugin-use-worker-directive)
 
 ## Install
 
 ```bash
-npm install use-worker-directive
-npm install --D vite-plugin-use-worker-directive
+npm i use-worker-directive
+npm i -D vite-plugin-use-worker-directive
 ```
 
 ```bash
@@ -24,15 +24,26 @@ pnpm add -D vite-plugin-use-worker-directive
 ## Usage
 
 ```js
-import useWorkerDirectivePlugin from 'vite-plugin-use-worker-directive';
+// vite.config.js
+import { defineConfig } from 'vite';
+import useWorkerDirective from 'vite-plugin-use-worker-directive';
 
-useWorkerDirectivePlugin({
-  filter: {
-    include: 'src/**/*.{ts,js,tsx,jsx}',
-    exclude: 'node_modules/**/*.{ts,js,tsx,jsx}',
-  },
-})
+export default defineConfig({
+  plugins: [useWorkerDirective()],
+});
 ```
+
+Then import `use-worker-directive/setup` in your client entry. See the [setup of `use-worker-directive`](https://github.com/lxsmnsyc/dismantle/tree/main/use-worker-directive/core#setup).
+
+## Options
+
+| Option | Default | Description |
+| --- | --- | --- |
+| `filter.include` | `'src/**/*.{jsx,tsx,ts,js,mjs,cjs}'` | Files to compile. |
+| `filter.exclude` | `'node_modules/**/*.{jsx,tsx,ts,js,mjs,cjs}'` | Files to skip. |
+| `directive` | `'use worker'` | The directive to look for. |
+| `prefix` | `'__worker'` | Added in front of every function ID. |
+| `pure` | `false` | Disables closures. Imports and local functions still work. |
 
 ## Sponsors
 
