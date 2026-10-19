@@ -12,7 +12,7 @@
 import { execFileSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, readdirSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 /** The package manifest fields this script reads. */
@@ -34,12 +34,10 @@ function isManifest(value: unknown): value is Manifest {
   );
 }
 
-function readManifest(dir: string): Manifest {
+/** Returns the manifest, or undefined if it has no name or version to publish. */
+function readManifest(dir: string): Manifest | undefined {
   const parsed: unknown = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'));
-  if (!isManifest(parsed)) {
-    throw new Error(`${dir}/package.json has no name or version`);
-  }
-  return parsed;
+  return isManifest(parsed) ? parsed : undefined;
 }
 
 function log(message: string): void {
@@ -80,8 +78,9 @@ function listWorkspaceDirs(): string[] {
   if (!isWorkspaceProjectList(parsed)) {
     throw new Error('pnpm ls returned an unexpected shape');
   }
-  const root = join(ROOT);
-  return parsed.map((project) => project.path).filter((path) => join(path) !== root);
+  // `resolve` drops the trailing separator that `ROOT` has, so both sides compare equal.
+  const root = resolve(ROOT);
+  return parsed.map((project) => project.path).filter((path) => resolve(path) !== root);
 }
 
 function isPublished(name: string, version: string): boolean {
@@ -110,7 +109,7 @@ let published = 0;
 
 for (const dir of listWorkspaceDirs()) {
   const pkg = readManifest(dir);
-  if (pkg.private) {
+  if (!pkg || pkg.private) {
     continue;
   }
 
